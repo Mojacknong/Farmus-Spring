@@ -21,9 +21,9 @@ jobs:
 
     - name: Copy application.yml
       env:
-        OCCUPY_DEPLOY: $OCCUPY_DEPLOY
-        OCCUPY_DB: $OCCUPY_DB
-        OCCUPY_AWS: $OCCUPY_AWS
+        OCCUPY_DEPLOY: ${{ secrets.OCCUPY_DEPLOY }}
+        OCCUPY_DB: ${{ secrets.OCCUPY_DB }}
+        OCCUPY_AWS: ${{ secrets.OCCUPY_AWS }}
       run: |
           cd ./src/main/resources
           touch ./application.yml
@@ -41,8 +41,8 @@ jobs:
     - name: Login to DockerHub
       uses: docker/login-action@v3.0.0
       with:
-        username: $DOCKER_USERNAME
-        password: $DOCKER_PASSWORD
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Docker build & push to dockerhub
       run: |
@@ -57,15 +57,15 @@ jobs:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.4
         with:
-          ssh-private-key: $SSH_PRIVATE_KEY
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           
       - name: Deploy to dev
         uses: appleboy/ssh-action@master
         id: deploy-prod
         with:
-            host: $SERVER_IP
-            username: $SSH_USER
-            key: $SSH_PRIVATE_KEY
+            host: ${{ secrets.SERVER_IP }}
+            username: ${{ secrets.SSH_USER }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
             envs: GITHUB_SHA
             script: |
                 sudo docker pull minchogt/farmus-spring
