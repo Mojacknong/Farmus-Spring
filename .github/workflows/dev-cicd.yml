@@ -46,9 +46,9 @@ jobs:
 
     - name: Docker build & push to dockerhub
       run: |
-#          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker build -f Dockerfile -t minchogt/farmus-spring .
           docker push minchogt/farmus-spring
+#          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           
   deploy:
     needs: build
