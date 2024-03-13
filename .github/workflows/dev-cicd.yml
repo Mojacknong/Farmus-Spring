@@ -1,0 +1,67 @@
+name: cicd for development
+
+on:
+  push:
+    branches: [ "dev" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Copy application.yml
+      env:
+        OCCUPY_DEPLOY: $OCCUPY_DEPLOY
+        OCCUPY_DB: $OCCUPY_DB
+        OCCUPY_AWS: $OCCUPY_AWS
+      run: |
+          cd ./src/main/resources
+          touch ./application.yml
+          echo "$OCCUPY_DEPLOY" > ./application.yml
+          touch ./application-db.yml
+          echo "$OCCUPY_DEPLOY" > ./application-db.yml
+          touch ./application-aws.yml
+          echo "$OCCUPY_DEPLOY" > ./application-aws.yml
+          
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+      with:
+        arguments: clean build
+
+    - name: Docker build & push to dockerhub
+      run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker build -f Dockerfile -t minchogt/farmus-spring .
+          docker push minchogt/farmus-spring
+          
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: $SSH_PRIVATE_KEY
+          
+      - name: Deploy to dev
+        uses: appleboy/ssh-action@master
+        id: deploy-prod
+        with:
+            host: $SERVER_IP
+            username: $SSH_USER
+            key: $SSH_PRIVATE_KEY
+            envs: GITHUB_SHA
+            script: |
+                sudo docker pull minchogt/farmus-spring
+                ./
+                docker image prune -f
