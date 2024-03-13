@@ -69,5 +69,5 @@ jobs:
             envs: GITHUB_SHA
             script: |
                 sudo docker pull minchogt/farmus-spring
-                ./
+                ./deploy.sh
                 docker image prune -f
