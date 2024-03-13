@@ -29,10 +29,10 @@ jobs:
           touch ./application.yml
           echo "$OCCUPY_DEPLOY" > ./application.yml
           touch ./application-db.yml
-          echo "$OCCUPY_DEPLOY" > ./application-db.yml
+          echo "$OCCUPY_DB" > ./application-db.yml
           touch ./application-aws.yml
-          echo "$OCCUPY_DEPLOY" > ./application-aws.yml
-          
+          echo "$OCCUPY_AWS" > ./application-aws.yml
+
     - name: Build with Gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
