@@ -1,7 +1,7 @@
-name: cicd for development
+name: ci for development
 
 on:
-  push:
+  pull_request:
     branches: [ "dev" ]
 
 jobs:
@@ -43,25 +43,3 @@ jobs:
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker build -f Dockerfile -t minchogt/farmus-spring .
           docker push minchogt/farmus-spring
-          
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: $SSH_PRIVATE_KEY
-          
-      - name: Deploy to dev
-        uses: appleboy/ssh-action@master
-        id: deploy-prod
-        with:
-            host: $SERVER_IP
-            username: $SSH_USER
-            key: $SSH_PRIVATE_KEY
-            envs: GITHUB_SHA
-            script: |
-                sudo docker pull minchogt/farmus-spring
-                ./
-                docker image prune -f
