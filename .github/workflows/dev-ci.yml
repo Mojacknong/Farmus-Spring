@@ -12,34 +12,39 @@ jobs:
       contents: read
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-    - name: Copy application.yml
-      env:
-        OCCUPY_DEPLOY: $OCCUPY_DEPLOY
-        OCCUPY_DB: $OCCUPY_DB
-        OCCUPY_AWS: $OCCUPY_AWS
-      run: |
+      - name: Copy application.yml
+        env:
+          OCCUPY_DEPLOY: ${{ secrets.OCCUPY_DEPLOY }}
+          OCCUPY_DB: ${{ secrets.OCCUPY_DB }}
+          OCCUPY_AWS: ${{ secrets.OCCUPY_AWS }}
+        run: |
           cd ./src/main/resources
           touch ./application.yml
           echo "$OCCUPY_DEPLOY" > ./application.yml
           touch ./application-db.yml
-          echo "$OCCUPY_DEPLOY" > ./application-db.yml
+          echo "$OCCUPY_DB" > ./application-db.yml
           touch ./application-aws.yml
-          echo "$OCCUPY_DEPLOY" > ./application-aws.yml
-          
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-      with:
-        arguments: clean build
+          echo "$OCCUPY_AWS" > ./application-aws.yml
 
-    - name: Docker build & push to dockerhub
-      run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+        with:
+          arguments: clean build
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker build & push to dockerhub
+        run: |
           docker build -f Dockerfile -t minchogt/farmus-spring .
           docker push minchogt/farmus-spring

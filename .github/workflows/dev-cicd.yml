@@ -53,6 +53,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.4
