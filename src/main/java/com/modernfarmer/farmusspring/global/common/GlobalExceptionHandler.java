@@ -1,18 +1,19 @@
-package com.modernfarmer.farmusspring.global.exception;
+package com.modernfarmer.farmusspring.global.common;
 
-import com.modernfarmer.farmusspring.global.response.ErrorResponse;
+import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
+import com.modernfarmer.farmusspring.global.response.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.Objects;
 
@@ -20,11 +21,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    private final HttpStatus BAD_REQUEST = HttpStatus.BAD_REQUEST;
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleInputFieldException(MethodArgumentNotValidException e, HttpServletRequest request) {
+    public BaseResponseDto<?> handleInputFieldException(MethodArgumentNotValidException e, HttpServletRequest request) {
         log.error("MethodArgumentNotValidException : {} {} errMessage={}\n",
                 request.getMethod(),
                 request.getRequestURI(),
@@ -32,11 +31,11 @@ public class GlobalExceptionHandler {
         FieldError mainError = e.getFieldErrors().get(0);
         String[] errorInfo = Objects.requireNonNull(mainError.getDefaultMessage()).split(":");
         String message = errorInfo[0];
-        return ResponseEntity.badRequest().body(new ErrorResponse(BAD_REQUEST, message));
+        return BaseResponseDto.of(ErrorCode.BAD_REQUEST, message);
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<ErrorResponse> handleBindException(BindException e, HttpServletRequest request) {
+    public BaseResponseDto<?> handleBindException(BindException e, HttpServletRequest request) {
         log.error("BindException : {} {} errMessage={}\n",
                 request.getMethod(),
                 request.getRequestURI(),
@@ -44,37 +43,53 @@ public class GlobalExceptionHandler {
         FieldError mainError = e.getFieldErrors().get(0);
         String[] errorInfo = Objects.requireNonNull(mainError.getDefaultMessage()).split(":");
         String message = errorInfo[0];
-        return ResponseEntity.badRequest().body(new ErrorResponse(BAD_REQUEST, message));
+        return BaseResponseDto.of(ErrorCode.BAD_REQUEST, message);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchExceptionException(MethodArgumentTypeMismatchException e, HttpServletRequest request) {
+    public BaseResponseDto<?> handleMethodArgumentTypeMismatchExceptionException(MethodArgumentTypeMismatchException e, HttpServletRequest request) {
         log.error("MethodArgumentTypeMismatchException : {} {} errMessage={}\n",
                 request.getMethod(),
                 request.getRequestURI(),
                 e.getMessage());
-        return ResponseEntity.badRequest().body(new ErrorResponse(BAD_REQUEST, e.getMessage()));
+        return BaseResponseDto.of(ErrorCode.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedExceptionException(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
+    public BaseResponseDto<?> handleHttpRequestMethodNotSupportedExceptionException(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
         log.error("HttpRequestMethodNotSupportedException : {} {} errMessage={}\n",
                 request.getMethod(),
                 request.getRequestURI(),
                 e.getMessage());
+        return BaseResponseDto.of(ErrorCode.METHOD_NOT_ALLOWED, e.getMessage());
+    }
 
-        return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage()));
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public BaseResponseDto<?> handleNoHandlerFoundException(NoHandlerFoundException e, HttpServletRequest request) {
+        log.error("NoHandlerFoundException : {} {} errMessage={}\n",
+                request.getMethod(),
+                request.getRequestURI(),
+                e.getMessage());
+        return BaseResponseDto.of(ErrorCode.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    public BaseResponseDto<?> handleHttpClientErrorException(HttpClientErrorException e, HttpServletRequest request) {
+        log.error("HttpClientErrorException : {} {} errMessage={}\n",
+                request.getMethod(),
+                request.getRequestURI(),
+                e.getMessage());
+        return BaseResponseDto.of(ErrorCode.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> unhandledException(Exception e, HttpServletRequest request) {
+    public BaseResponseDto<?> unhandledException(Exception e, HttpServletRequest request) {
         log.error("UnhandledException: {} {} errMessage={}\n{}",
                 request.getMethod(),
                 request.getRequestURI(),
                 e.getStackTrace(),
                 e.getMessage()
         );
-        return ResponseEntity.internalServerError()
-                .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "서버와의 접속이 원활하지 않습니다."));
+        return BaseResponseDto.of(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }

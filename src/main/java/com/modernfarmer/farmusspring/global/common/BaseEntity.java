@@ -1,4 +1,4 @@
-package com.modernfarmer.farmusspring.common;
+package com.modernfarmer.farmusspring.global.common;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

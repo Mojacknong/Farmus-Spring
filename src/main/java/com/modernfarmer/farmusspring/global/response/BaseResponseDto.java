@@ -19,20 +19,12 @@ public class BaseResponseDto<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
-    public static <T> BaseResponseDto of(SuccessMessage successMessage, T data){
+    public static <T> BaseResponseDto of(ResponseCode message, T data){
 
         return BaseResponseDto.builder()
-                .code(successMessage.getCode())
-                .message(successMessage.getMessage())
+                .code(message.getCode())
+                .message(message.getMessage())
                 .data(data)
-                .build();
-    }
-
-    public static <T> BaseResponseDto of(ErrorMessage errorMessage){
-
-        return BaseResponseDto.builder()
-                .code(errorMessage.getCode())
-                .message(errorMessage.getMessage())
                 .build();
     }
 }
