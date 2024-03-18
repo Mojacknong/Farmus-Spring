@@ -1,4 +1,4 @@
-package com.modernfarmer.farmusspring.domain.myvegetablegarden.entity;
+package com.modernfarmer.farmusspring.domain.myveggiegarden.entity;
 
 
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
@@ -36,19 +36,19 @@ public class Routine extends BaseEntity {
     private int period;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "my_vegetable_id")
-    private MyVegetable myVegetable;
+    @JoinColumn(name = "my_veggie_id")
+    private MyVeggie myVeggie;
 
 
-    public static Routine createRoutine(Date date, String content, int period, MyVegetable myVegetable){
+    public static Routine createRoutine(Date date, String content, int period, MyVeggie myVeggie){
         Routine newRoutine = Routine.builder()
                 .date(date)
                 .content(content)
                 .period(period)
-                .myVegetable(myVegetable)
+                .myVeggie(myVeggie)
                 .build();
 
-        myVegetable.addRoutine(newRoutine);
+        myVeggie.addRoutine(newRoutine);
         return newRoutine;
 
     }

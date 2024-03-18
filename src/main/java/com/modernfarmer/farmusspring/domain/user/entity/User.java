@@ -1,8 +1,10 @@
 package com.modernfarmer.farmusspring.domain.user.entity;
 
-import com.modernfarmer.farmusspring.domain.myvegetablegarden.entity.DiaryComment;
-import com.modernfarmer.farmusspring.domain.myvegetablegarden.entity.DiaryLike;
-import com.modernfarmer.farmusspring.domain.myvegetablegarden.entity.MyVegetable;
+import com.modernfarmer.farmusspring.domain.farmclub.entity.MissionPostComment;
+import com.modernfarmer.farmusspring.domain.farmclub.entity.MissionPostLike;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,11 +42,9 @@ public class User extends BaseEntity {
     @Column(nullable = true)
     private String level;
 
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<UserFirebaseToken> userFirebaseTokens = new ArrayList<>();
-
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @Builder.Default
@@ -52,17 +52,23 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @Builder.Default
-    private List<MyVegetable> myVegetables = new ArrayList<>();
+    private List<MyVeggie> myVeggies = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<DiaryComment> diaryComments = new ArrayList<>();
 
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<DiaryLike> diaryLikes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @Builder.Default
+    private List<MissionPostComment> missionPostComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @Builder.Default
+    private List<MissionPostLike> missionPostLikes = new ArrayList<>();
 
     public static User createUser(String role, int userNumber, String profileImage){
         User newUser = User.builder()
@@ -83,8 +89,8 @@ public class User extends BaseEntity {
         userMotivations.add(userMotivation);
     }
 
-    public void addMyVegetable(MyVegetable myVegetable) {
-        myVegetables.add(myVegetable);
+    public void addMyVegetable(MyVeggie myVeggie) {
+        myVeggies.add(myVeggie);
     }
 
     public void addDiaryComment(DiaryComment diaryComment) {
@@ -95,5 +101,11 @@ public class User extends BaseEntity {
         diaryLikes.add(diaryLike);
     }
 
+    public void addMissionPostComment(MissionPostComment missionPostComment) {
+        missionPostComments.add(missionPostComment);
+    }
 
+    public void addMissionPostLike(MissionPostLike missionPostLike) {
+        missionPostLikes.add(missionPostLike);
+    }
 }

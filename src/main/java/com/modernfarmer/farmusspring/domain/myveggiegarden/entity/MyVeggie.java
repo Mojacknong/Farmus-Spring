@@ -1,5 +1,6 @@
-package com.modernfarmer.farmusspring.domain.myvegetablegarden.entity;
+package com.modernfarmer.farmusspring.domain.myveggiegarden.entity;
 
+import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -16,13 +17,13 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @SuperBuilder
-@Entity(name = "my_vegetable")
-public class MyVegetable extends BaseEntity {
+@Entity(name = "my_veggie")
+public class MyVeggie extends BaseEntity {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "my_vegetable_id")
+    @Column(name = "my_veggie_id")
     private Long id;
 
     @Column(name = "veggie_nickname")
@@ -31,33 +32,36 @@ public class MyVegetable extends BaseEntity {
     @Column(name = "birth")
     private Date birth;
 
-    @Column(name = "vegetable_id")
-    private String vegetableId;
+    @Column(name = "veggie_info_id")
+    private String veggieInfoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "myVegetable", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "myVeggie", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<Routine> routines = new ArrayList<>();
 
-    @OneToMany(mappedBy = "myVegetable", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "myVeggie", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<Diary> diaries = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_farm_club_id")
+    private UserFarmClub userFarmClub;
 
-    public static MyVegetable createMyVegetable(String nickname, Date birth, String vegetableId, User user){
-        MyVegetable newMyVegetable= MyVegetable.builder()
+    public static MyVeggie createMyVegetable(String nickname, Date birth, String veggieInfoId, User user){
+        MyVeggie newMyVeggie = MyVeggie.builder()
                 .nickname(nickname)
                 .birth(birth)
-                .vegetableId(vegetableId)
+                .veggieInfoId(veggieInfoId)
                 .user(user)
                 .build();
 
-        user.addMyVegetable(newMyVegetable);
+        user.addMyVegetable(newMyVeggie);
 
-        return newMyVegetable;
+        return newMyVeggie;
 
     }
 
@@ -69,4 +73,7 @@ public class MyVegetable extends BaseEntity {
         diaries.add(diary);
     }
 
+    public void setUserFarmClub(UserFarmClub userFarmClub) {
+        this.userFarmClub = userFarmClub;
+    }
 }

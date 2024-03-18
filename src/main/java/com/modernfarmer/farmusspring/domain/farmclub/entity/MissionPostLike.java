@@ -1,4 +1,4 @@
-package com.modernfarmer.farmusspring.domain.myvegetablegarden.entity;
+package com.modernfarmer.farmusspring.domain.farmclub.entity;
 
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
@@ -9,48 +9,35 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-
-
-
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @SuperBuilder
-@Entity(name = "diary_comment")
-public class DiaryComment extends BaseEntity {
-
+@Entity(name = "mission_post_like")
+public class MissionPostLike extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "diary_comment_id")
+    @Column(name = "mission_post_like_id")
     private Long id;
 
-    @Column(name = "comment")
-    private String comment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mission_post_id")
+    private MissionPost missionPost;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "diary_id")
-    private Diary diary;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static DiaryComment createDiaryComment(String content, Diary diary, User user){
-        DiaryComment newDiaryComment = DiaryComment.builder()
-                .comment(content)
+    public static MissionPostLike createMissionPostLike(MissionPost missionPost, User user){
+        MissionPostLike newMissionPostLike = MissionPostLike.builder()
+                .missionPost(missionPost)
                 .user(user)
-                .diary(diary)
                 .build();
 
-        diary.addDiaryComment(newDiaryComment);
-        user.addDiaryComment(newDiaryComment);
+        missionPost.addLike(newMissionPostLike);
+        user.addMissionPostLike(newMissionPostLike);
 
-        return newDiaryComment;
-
+        return newMissionPostLike;
     }
-
-
 }

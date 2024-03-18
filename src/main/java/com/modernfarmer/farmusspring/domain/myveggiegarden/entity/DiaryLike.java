@@ -1,4 +1,4 @@
-package com.modernfarmer.farmusspring.domain.myvegetablegarden.entity;
+package com.modernfarmer.farmusspring.domain.myveggiegarden.entity;
 
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;

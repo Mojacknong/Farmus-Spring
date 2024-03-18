@@ -1,6 +1,7 @@
-package com.modernfarmer.farmusspring.domain.myvegetablegarden.entity;
+package com.modernfarmer.farmusspring.domain.myveggiegarden.entity;
 
 
+import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,8 +38,8 @@ public class Diary extends BaseEntity {
     private String state;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "my_vegetable_id")
-    private MyVegetable myVegetable;
+    @JoinColumn(name = "my_veggie_id")
+    private MyVeggie myVeggie;
 
     @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @Builder.Default
@@ -48,18 +49,20 @@ public class Diary extends BaseEntity {
     @Builder.Default
     private List<DiaryLike> diaryLikes = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "farm_club_id")
+    private FarmClub farmClub;
 
-
-    public static Diary createDiary(String content, Boolean isOpen, String image, String state, MyVegetable myVegetable){
+    public static Diary createDiary(String content, Boolean isOpen, String image, String state, MyVeggie myVeggie){
         Diary newDiary = Diary.builder()
                 .content(content)
                 .isOpen(isOpen)
                 .image(image)
                 .state(state)
-                .myVegetable(myVegetable)
+                .myVeggie(myVeggie)
                 .build();
 
-        myVegetable.addDiary(newDiary);
+        myVeggie.addDiary(newDiary);
 
         return newDiary;
 
