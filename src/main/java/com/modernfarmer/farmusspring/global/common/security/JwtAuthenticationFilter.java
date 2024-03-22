@@ -42,12 +42,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (token != null) {
 
-           //     jwtTokenProvider.validateToken(token);
+                jwtTokenProvider.validateToken(token);
                 log.info(String.valueOf(1));
 
-            //    Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 log.info(String.valueOf(2));
-            //    SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.info(String.valueOf(3));
             }
         }catch (IllegalArgumentException e) {

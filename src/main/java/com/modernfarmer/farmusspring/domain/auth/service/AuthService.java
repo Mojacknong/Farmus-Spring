@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.auth.service;
 
 
 import com.modernfarmer.farmusspring.domain.auth.dto.TokenResponseDto;
+import com.modernfarmer.farmusspring.domain.auth.repository.RedisManager;
 import com.modernfarmer.farmusspring.domain.auth.util.social.SocialLogin;
 import com.modernfarmer.farmusspring.domain.auth.util.social.dto.GoogleUserResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.util.social.dto.KakaoUserResponseDto;
@@ -14,7 +15,6 @@ import com.modernfarmer.farmusspring.global.response.ErrorCode;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,7 +27,7 @@ public class AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisManager redisManager;
 
     private final UserRepository userRepository;
 
@@ -55,7 +55,7 @@ public class AuthService {
                 userLoginData.get().getId(),
                 String.valueOf(userLoginData.get().getRole()));
 
-        redisTemplate.opsForValue().set(String.valueOf(userLoginData.get().getId()), refreshToken);
+        redisManager.setValueByKey(String.valueOf(userLoginData.get().getId()), refreshToken);
 
         log.info("구글 로그인 완료");
 
@@ -96,7 +96,7 @@ public class AuthService {
                 String.valueOf(userLoginData.get().getRole()));
 
 
-        redisTemplate.opsForValue().set(String.valueOf(userLoginData.get().getId()), refreshToken);
+        redisManager.setValueByKey(String.valueOf(userLoginData.get().getId()), refreshToken);
 
         log.info("카카오 로그인 완료");
 
@@ -133,6 +133,16 @@ public class AuthService {
 
             userRepository.save(user);
         }
+    }
+
+    public BaseResponseDto<Void> logout(Long userId) {
+
+        redisManager.deleteValueByKey(String.valueOf(userId));
+
+        log.info("로그아웃 완료");
+
+
+        return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
 
