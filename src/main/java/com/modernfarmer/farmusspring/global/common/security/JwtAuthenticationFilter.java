@@ -10,6 +10,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +20,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
@@ -38,13 +38,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse servletResponse,
                                     FilterChain filterChain) {
         try {
-            String token = jwtTokenProvider.resolveToken(servletRequest);
+            String token = jwtTokenProvider.getToken(servletRequest);
+
             if (token != null) {
 
-                jwtTokenProvider.validateToken(token);
+           //     jwtTokenProvider.validateToken(token);
+                log.info(String.valueOf(1));
 
-                Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            //    Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                log.info(String.valueOf(2));
+            //    SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info(String.valueOf(3));
             }
         }catch (IllegalArgumentException e) {
             // 예외 처리: Invalid access token header

@@ -27,8 +27,8 @@ public class JwtTokenProvider {
 
 
 
-    //@Value("${jwt.secret}")
-    private String secretKey = "sdfsadjkfhasjkfsajkfhsadjkfhsdlfk4235354";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
 
     private final long accessTokenTime = 30L * 1000 * 100; // 1달 토큰 유효
@@ -75,7 +75,7 @@ public class JwtTokenProvider {
         return token;
     }
 
-    public String resolveToken(HttpServletRequest request) {
+    public String getToken(HttpServletRequest request) {
         log.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
 
         String tokenHeader = request.getHeader("Authorization");
@@ -90,7 +90,7 @@ public class JwtTokenProvider {
     public UsernamePasswordAuthenticationToken getAuthentication(String token) {
         log.info("[getAuthentication] 토큰 인증 정보 조회 시작");
 
-        Long userId = Long.valueOf(this.getUserId(token));
+        Long userId = this.getUserId(token);
 
         CustomUser customUser = CustomUser
                 .builder()
@@ -101,10 +101,10 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(customUser, "", customUser.getAuthorities());
     }
 
-    public String getUserRole(HttpServletRequest request) {
+    public String getSocialToken(HttpServletRequest request) {
         log.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
 
-        String tokenRole = request.getHeader("role");
+        String tokenRole = request.getHeader("Authorization");
 
         return tokenRole;
 
