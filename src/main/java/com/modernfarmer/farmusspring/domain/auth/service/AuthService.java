@@ -40,13 +40,18 @@ public class AuthService {
 
     public BaseResponseDto<LoginResponseDto> googleLogin(String googleAccessToken) {
 
-        return googleLogin.loginMethod(googleAccessToken);
+        return BaseResponseDto.of(SuccessCode.SUCCESS,
+                googleLogin.loginMethod(googleAccessToken)
 
+                );
     }
 
     public BaseResponseDto<LoginResponseDto> kakaoLogin(String kakaoAccessToken) {
 
-        return kakaoLogin.loginMethod(kakaoAccessToken);
+        return BaseResponseDto.of(SuccessCode.SUCCESS,
+                kakaoLogin.loginMethod(kakaoAccessToken)
+        );
+
 
     }
 

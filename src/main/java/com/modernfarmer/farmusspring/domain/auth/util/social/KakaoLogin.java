@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.auth.util.social;
 
 
+import com.modernfarmer.farmusspring.domain.auth.dto.LoginResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.repository.RedisManager;
 import com.modernfarmer.farmusspring.domain.auth.util.social.dto.KakaoUserResponseDto;
 import com.modernfarmer.farmusspring.domain.user.repository.UserRepository;
@@ -17,7 +18,7 @@ public class KakaoLogin extends SocialLogin {
     }
 
     @Override
-    public BaseResponseDto loginMethod(String socialToken) {
+    public LoginResponseDto loginMethod(String socialToken) {
         KakaoUserResponseDto socialUserData = getUserData(
                 socialToken,
                 "https://kapi.kakao.com/v2/user/me",

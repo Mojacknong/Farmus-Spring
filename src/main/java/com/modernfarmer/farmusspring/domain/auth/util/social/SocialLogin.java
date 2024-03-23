@@ -31,9 +31,9 @@ abstract public class SocialLogin {
     private final UserRepository userRepository;
 
 
-    public abstract BaseResponseDto<LoginResponseDto> loginMethod(String socialToken);
+    public abstract LoginResponseDto loginMethod(String socialToken);
 
-    public  BaseResponseDto login( SocialUserResponseDto socialUserData2){
+    public  LoginResponseDto login( SocialUserResponseDto socialUserData2){
 
         verifySocialUserData(socialUserData2);
 
@@ -50,13 +50,10 @@ abstract public class SocialLogin {
 
         redisManager.setValueByKey(String.valueOf(userLoginData.get().getId()), refreshToken);
 
-        return BaseResponseDto.of(
-                SuccessCode.SUCCESS,
-                LoginResponseDto.of(
+        return LoginResponseDto.of(
                         accessToken,
                         refreshToken,
                         userLoginData.get().isEarly()
-                )
         );
     }
 
