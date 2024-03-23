@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.auth.controller;
 
+import com.modernfarmer.farmusspring.domain.auth.dto.LoginResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.dto.TokenResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.auth.service.AuthService;
@@ -9,10 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,7 +22,7 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping(value = "/kakao-login")
-    public BaseResponseDto<TokenResponseDto> kakaoLogin(HttpServletRequest request)  {
+    public BaseResponseDto<LoginResponseDto> kakaoLogin(HttpServletRequest request)  {
 
         String accessToken = jwtTokenProvider.getSocialToken(request);
 
@@ -33,7 +31,7 @@ public class AuthController {
 
 
     @PostMapping(value = "/google-login")
-    public BaseResponseDto<TokenResponseDto> googleLogin(HttpServletRequest request)  {
+    public BaseResponseDto<LoginResponseDto> googleLogin(HttpServletRequest request)  {
 
         String accessToken = jwtTokenProvider.getSocialToken(request);
 
@@ -43,8 +41,16 @@ public class AuthController {
     @DeleteMapping(value = "/logout")
     public BaseResponseDto<Void> logout(@AuthenticationPrincipal CustomUser user)  {
 
-        log.info(String.valueOf(user.getUserId()));
-
         return authService.logout(user.getUserId());
+    }
+
+
+    @GetMapping(value = "/reissue-token")
+    public BaseResponseDto<TokenResponseDto> reissueToken(
+            @AuthenticationPrincipal CustomUser user,
+            HttpServletRequest request
+            )  {
+        String refreshToken =  jwtTokenProvider.getToken(request);
+        return authService.reissueToken(user.getUserId(), refreshToken);
     }
 }

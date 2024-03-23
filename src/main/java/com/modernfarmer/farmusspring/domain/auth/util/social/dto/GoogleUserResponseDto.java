@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class GoogleUserResponseDto implements SocialUserResponseDto {
@@ -13,6 +13,8 @@ public class GoogleUserResponseDto implements SocialUserResponseDto {
     public GoogleUserResponseDto(@JsonProperty("id") String id) {
         this.id = id;
     }
+
+
 
     @Override
     public String getId() {

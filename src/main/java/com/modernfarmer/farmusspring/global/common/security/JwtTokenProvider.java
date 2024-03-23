@@ -31,10 +31,8 @@ public class JwtTokenProvider {
     private String secretKey;
 
 
-    private final long accessTokenTime = 30L * 1000 * 100; // 1달 토큰 유효
-
-
-    private final long refreshTokenTime = 30L * 1000 * 2 * 1000; // 1달 토큰 유효
+    private final long accessTokenTime = 60L * 1000;
+    private final long refreshTokenTime = 180L * 1000;
 
     @PostConstruct
     protected void init() {
@@ -102,7 +100,6 @@ public class JwtTokenProvider {
     }
 
     public String getSocialToken(HttpServletRequest request) {
-        log.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
 
         String tokenRole = request.getHeader("Authorization");
 

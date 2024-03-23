@@ -47,7 +47,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
-                                "/api/auth/logout"
+                                "/api/auth/logout",
+                                "/reissue-token"
                         ).permitAll()
                 )
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated());
@@ -61,6 +62,7 @@ public class SecurityConfig {
 		return (web -> web.ignoring()
 
 				.requestMatchers("/api/auth/kakao-login")
+                .requestMatchers("/api/auth/google-login")
 		);
 	}
 

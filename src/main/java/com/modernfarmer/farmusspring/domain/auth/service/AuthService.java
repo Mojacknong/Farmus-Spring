@@ -1,8 +1,11 @@
 package com.modernfarmer.farmusspring.domain.auth.service;
 
 
+import com.modernfarmer.farmusspring.domain.auth.dto.LoginResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.dto.TokenResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.repository.RedisManager;
+import com.modernfarmer.farmusspring.domain.auth.util.social.GoogleLogin;
+import com.modernfarmer.farmusspring.domain.auth.util.social.KakaoLogin;
 import com.modernfarmer.farmusspring.domain.auth.util.social.SocialLogin;
 import com.modernfarmer.farmusspring.domain.auth.util.social.dto.GoogleUserResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.util.social.dto.KakaoUserResponseDto;
@@ -31,121 +34,48 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    private final SocialLogin socialLogin;
+    private final GoogleLogin googleLogin;
 
-    public BaseResponseDto<TokenResponseDto> googleLogin(String googleAccessToken) {
+    private final KakaoLogin kakaoLogin;
 
-        GoogleUserResponseDto  googleUserData = socialLogin.getUserData(
-                googleAccessToken,
-                "https://www.googleapis.com/oauth2/v2/userinfo",
-                GoogleUserResponseDto.class);
+    public BaseResponseDto<LoginResponseDto> googleLogin(String googleAccessToken) {
 
-        verifySocialUserData(googleUserData);
+        return googleLogin.loginMethod(googleAccessToken);
 
-        Optional<User> userData = userRepository.findByUserNumber(String.valueOf(googleUserData.getId()));
-
-        verifyUserDataAndSignUp(userData, googleUserData);
-
-        Optional<User> userLoginData = userRepository.findByUserNumber(String.valueOf(googleUserData.getId()));
-
-        verifySocialUserData(userLoginData);
-
-        String refreshToken = jwtTokenProvider.createRefreshToken(userLoginData.get().getId());
-        String accessToken = jwtTokenProvider.createAccessToken(
-                userLoginData.get().getId(),
-                String.valueOf(userLoginData.get().getRole()));
-
-        redisManager.setValueByKey(String.valueOf(userLoginData.get().getId()), refreshToken);
-
-        log.info("구글 로그인 완료");
-
-        return BaseResponseDto.of(
-                SuccessCode.SUCCESS,
-                TokenResponseDto.of(
-                        jwtTokenProvider.createAccessToken(
-                                userLoginData.get().getId(),
-                                String.valueOf(userLoginData.get().getRole())),
-                        refreshToken,
-                        userLoginData.get().isEarly()
-                )
-        );
     }
 
+    public BaseResponseDto<LoginResponseDto> kakaoLogin(String kakaoAccessToken) {
 
+        return kakaoLogin.loginMethod(kakaoAccessToken);
 
-    public BaseResponseDto<TokenResponseDto> kakaoLogin(String kakaoAccessToken) {
-
-        KakaoUserResponseDto kakaoUserData =  socialLogin.getUserData(
-                kakaoAccessToken,
-                "https://kapi.kakao.com/v2/user/me",
-                KakaoUserResponseDto.class);
-
-        verifySocialUserData(kakaoUserData);
-
-        Optional<User> userData = userRepository.findByUserNumber(String.valueOf(kakaoUserData.getId()));
-
-        verifyUserDataAndSignUp(userData, kakaoUserData);
-
-        Optional<User> userLoginData = userRepository.findByUserNumber(String.valueOf(kakaoUserData.getId()));
-
-        verifySocialUserData(userLoginData);
-
-        String refreshToken = jwtTokenProvider.createRefreshToken(userLoginData.get().getId());
-        String accessToken = jwtTokenProvider.createAccessToken(
-                userLoginData.get().getId(),
-                String.valueOf(userLoginData.get().getRole()));
-
-
-        redisManager.setValueByKey(String.valueOf(userLoginData.get().getId()), refreshToken);
-
-        log.info("카카오 로그인 완료");
-
-        return BaseResponseDto.of(
-                SuccessCode.SUCCESS,
-                TokenResponseDto.of(
-                        accessToken,
-                        refreshToken,
-                        userLoginData.get().isEarly()
-                )
-        );
-    }
-
-    public <T> BaseResponseDto verifySocialUserData(T data){
-
-        if(data == null){
-
-            return BaseResponseDto.of(ErrorCode.BAD_REQUEST, null);
-
-        }
-        return null;
-    }
-
-
-    public <T extends SocialUserResponseDto> void verifyUserDataAndSignUp(Optional<User> data, T socialUserData) {
-        User user;
-
-        if (data.isEmpty()) {
-            user = User.createUser(
-                    "USER",
-                    String.valueOf(socialUserData.getId()),
-                    true
-            );
-
-            userRepository.save(user);
-        }
     }
 
     public BaseResponseDto<Void> logout(Long userId) {
 
         redisManager.deleteValueByKey(String.valueOf(userId));
-
         log.info("로그아웃 완료");
-
-
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
+    public BaseResponseDto<TokenResponseDto> reissueToken(Long userId, String refreshToken) {
 
-
-
+        validateRefreshToken(userId, refreshToken);
+        User user = userRepository.findUserData(Long.valueOf(userId));
+        return BaseResponseDto.of(SuccessCode.SUCCESS,
+                TokenResponseDto.of(
+                        jwtTokenProvider.createAccessToken(Long.valueOf(userId), user.getRole()),
+                        refreshToken
+                ));
     }
+
+
+    private BaseResponseDto validateRefreshToken(Long userId, String refreshToken) {
+
+        String redisRefreshToken = redisManager.getValueByKey(userId);
+        if (refreshToken.equals(redisRefreshToken)) {
+
+            return null;
+        }
+        return BaseResponseDto.of(ErrorCode.WRONG_TOKEN,null);
+    }
+}

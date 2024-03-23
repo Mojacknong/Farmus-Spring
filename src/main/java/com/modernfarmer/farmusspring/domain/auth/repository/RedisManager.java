@@ -18,4 +18,5 @@ public class RedisManager {
         redisTemplate.opsForValue().set(key, value);
     }
 
+    public String getValueByKey(Long key){ return redisTemplate.opsForValue().get(String.valueOf(key));}
 }

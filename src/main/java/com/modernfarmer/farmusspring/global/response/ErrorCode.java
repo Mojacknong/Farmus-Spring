@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode implements ResponseCode {
 
+    // 1000 auth 오류
+    NOT_FOUND_USER(1000, "요청한 유저 정보가 없습니다."),
+    WRONG_TOKEN(1001, "일치하지 않는 토큰입니다."),
+
     // 4xx Client Error
     BAD_REQUEST(400,  "잘못된 요청입니다."),
     UNAUTHORIZED(401,  "인증되지 않은 사용자입니다."),
