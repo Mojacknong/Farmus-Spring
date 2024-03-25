@@ -81,6 +81,6 @@ public class AuthService {
 
             return null;
         }
-        return BaseResponseDto.of(ErrorCode.WRONG_TOKEN,null);
+        return BaseResponseDto.of(ErrorCode.WRONG_TOKEN,"일치하지 않는 토큰입니다.");
     }
 }

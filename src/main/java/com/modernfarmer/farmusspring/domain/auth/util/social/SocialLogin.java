@@ -61,7 +61,7 @@ abstract public class SocialLogin {
 
         if(data == null){
 
-            return BaseResponseDto.of(ErrorCode.NOT_FOUND_USER, null);
+            return BaseResponseDto.of(ErrorCode.NOT_FOUND_USER, "요청한 유저 정보가 없습니다.");
         }
         return null;
     }
