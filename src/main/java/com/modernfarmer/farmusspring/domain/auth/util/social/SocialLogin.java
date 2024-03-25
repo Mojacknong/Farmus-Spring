@@ -33,15 +33,15 @@ abstract public class SocialLogin {
 
     public abstract LoginResponseDto loginMethod(String socialToken);
 
-    public  LoginResponseDto login( SocialUserResponseDto socialUserData2){
+    public  LoginResponseDto login( SocialUserResponseDto socialUserData){
 
-        verifySocialUserData(socialUserData2);
+        verifySocialUserData(socialUserData);
 
-        Optional<User> userData = userRepository.findByUserNumber(String.valueOf(socialUserData2.getId()));
+        Optional<User> userData = userRepository.findByUserNumber(String.valueOf(socialUserData.getId()));
 
-        verifyUserDataAndSignUp(userData, socialUserData2);
+        verifyUserDataAndSignUp(userData, socialUserData);
 
-        Optional<User> userLoginData = userRepository.findByUserNumber(String.valueOf(socialUserData2.getId()));
+        Optional<User> userLoginData = userRepository.findByUserNumber(String.valueOf(socialUserData.getId()));
 
         String refreshToken = jwtTokenProvider.createRefreshToken(userLoginData.get().getId());
         String accessToken = jwtTokenProvider.createAccessToken(
