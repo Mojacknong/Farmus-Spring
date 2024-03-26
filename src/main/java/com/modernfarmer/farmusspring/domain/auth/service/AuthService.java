@@ -3,6 +3,7 @@ package com.modernfarmer.farmusspring.domain.auth.service;
 
 import com.modernfarmer.farmusspring.domain.auth.dto.LoginResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.dto.TokenResponseDto;
+import com.modernfarmer.farmusspring.domain.auth.exception.AuthErrorCode;
 import com.modernfarmer.farmusspring.domain.auth.repository.RedisManager;
 import com.modernfarmer.farmusspring.domain.auth.util.social.GoogleLogin;
 import com.modernfarmer.farmusspring.domain.auth.util.social.KakaoLogin;
@@ -19,7 +20,6 @@ import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 
@@ -81,6 +81,6 @@ public class AuthService {
 
             return null;
         }
-        return BaseResponseDto.of(ErrorCode.WRONG_TOKEN,"일치하지 않는 토큰입니다.");
+        return BaseResponseDto.of(AuthErrorCode.WRONG_TOKEN,"일치하지 않는 토큰입니다.");
     }
 }

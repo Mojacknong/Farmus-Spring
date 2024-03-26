@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode implements ResponseCode {
 
     // 1000 auth 오류
-    NOT_FOUND_USER(1000, "유저 오류입니다."),
-    WRONG_TOKEN(1001, "토큰 오류입니다."),
 
     // 4xx Client Error
     BAD_REQUEST(400,  "잘못된 요청입니다."),

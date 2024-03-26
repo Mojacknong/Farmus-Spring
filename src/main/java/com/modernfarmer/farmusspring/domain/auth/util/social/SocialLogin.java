@@ -2,15 +2,14 @@ package com.modernfarmer.farmusspring.domain.auth.util.social;
 
 import com.modernfarmer.farmusspring.domain.auth.dto.LoginResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.repository.RedisManager;
-import com.modernfarmer.farmusspring.domain.auth.util.social.dto.GoogleUserResponseDto;
-import com.modernfarmer.farmusspring.domain.auth.util.social.dto.KakaoUserResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.util.social.dto.SocialUserResponseDto;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
+import com.modernfarmer.farmusspring.domain.user.exception.UserException;
 import com.modernfarmer.farmusspring.domain.user.repository.UserRepository;
 import com.modernfarmer.farmusspring.global.common.security.JwtTokenProvider;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
-import com.modernfarmer.farmusspring.global.response.ErrorCode;
-import com.modernfarmer.farmusspring.global.response.SuccessCode;
+import com.modernfarmer.farmusspring.domain.user.exception.UserErrorCode;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -33,15 +32,18 @@ abstract public class SocialLogin {
 
     public abstract LoginResponseDto loginMethod(String socialToken);
 
-    public  LoginResponseDto login( SocialUserResponseDto socialUserData){
+    public  LoginResponseDto login(SocialUserResponseDto socialUserData){
 
         verifySocialUserData(socialUserData);
 
-        Optional<User> userData = userRepository.findByUserNumber(String.valueOf(socialUserData.getId()));
+        userRepository.findByUserNumber(String.valueOf(socialUserData.getId()))
+                .orElseGet(() -> {
 
-        verifyUserDataAndSignUp(userData, socialUserData);
+                    socialSignUp(socialUserData);
+                    return null;
+                });
 
-        Optional<User> userLoginData = userRepository.findByUserNumber(String.valueOf(socialUserData.getId()));
+        Optional<User> userLoginData = Optional.ofNullable(userRepository.findByUserNumber(String.valueOf(socialUserData.getId())).orElseThrow(() -> new UserException("해당 유저의 정보가 존재하지 않습니다.")));
 
         String refreshToken = jwtTokenProvider.createRefreshToken(userLoginData.get().getId());
         String accessToken = jwtTokenProvider.createAccessToken(
@@ -57,25 +59,23 @@ abstract public class SocialLogin {
         );
     }
 
-    private  <T> BaseResponseDto verifySocialUserData(T data){
+    private  <T> void verifySocialUserData(T data){
 
         if(data == null){
 
-            return BaseResponseDto.of(ErrorCode.NOT_FOUND_USER, "요청한 유저 정보가 없습니다.");
+            BaseResponseDto.of(UserErrorCode.NOT_FOUND_USER, "요청한 소셜 유저 정보가 없습니다.");
         }
-        return null;
     }
 
-    private  <T extends SocialUserResponseDto> void verifyUserDataAndSignUp(Optional<User> data, T socialUserData) {
-        User user;
-        if (data.isEmpty()) {
-            user = User.createUser(
-                    "USER",
-                    String.valueOf(socialUserData.getId()),
-                    true
-            );
-            userRepository.save(user);
-        }
+    private  <T extends SocialUserResponseDto> void socialSignUp(T socialUserData) {
+
+        User user = User.createUser(
+                "USER",
+                String.valueOf(socialUserData.getId()),
+                true
+        );
+        userRepository.save(user);
+
     }
 
     public  <T> T  getUserData(String accessToken, String apiUrl, Class<T> responseType){
