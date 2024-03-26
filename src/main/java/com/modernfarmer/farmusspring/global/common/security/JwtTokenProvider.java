@@ -1,43 +1,44 @@
-package com.modernfarmer.farmusspring.global.common;
+package com.modernfarmer.farmusspring.global.common.security;
 
 
-
-
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 
+
+
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
+
 
 
     @Value("${jwt.secret}")
     private String secretKey;
 
 
-    private final long accessTokenTime = 30L * 1000 * 100; // 1달 토큰 유효
-
-
-    private final long refreshTokenTime = 30L * 1000 * 2 * 1000; // 1달 토큰 유효
+    private final long accessTokenTime = 60L * 1000;
+    private final long refreshTokenTime = 180L * 1000;
 
     @PostConstruct
     protected void init() {
-        LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 시작", StandardCharsets.UTF_8);
+        log.info("[init] JwtTokenProvider 내 secretKey 초기화 시작", StandardCharsets.UTF_8);
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
-        LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 완료");
+        log.info("[init] JwtTokenProvider 내 secretKey 초기화 완료");
     }
 
     public String createAccessToken(Long userId, String roles) {            // 토큰 생성
@@ -53,7 +54,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret 값 세팅
                 .compact();
 
-        LOGGER.info("[createToken] 토큰 생성 완료");
+        log.info("[createToken] 토큰 생성 완료");
         return token;
     }
 
@@ -68,12 +69,12 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret 값 세팅
                 .compact();
 
-        LOGGER.info("[createToken] 토큰 생성 완료");
+        log.info("[createToken] 토큰 생성 완료");
         return token;
     }
 
-    public String resolveToken(HttpServletRequest request) {
-        LOGGER.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
+    public String getToken(HttpServletRequest request) {
+        log.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
 
         String tokenHeader = request.getHeader("Authorization");
 
@@ -84,33 +85,53 @@ public class JwtTokenProvider {
             throw new IllegalArgumentException("Invalid access token header");
         }
     }
+    public UsernamePasswordAuthenticationToken getAuthentication(String token) {
+        log.info("[getAuthentication] 토큰 인증 정보 조회 시작");
 
-    public String getUserRole(HttpServletRequest request) {
-        LOGGER.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
+        Long userId = this.getUserId(token);
 
-        String tokenRole = request.getHeader("role");
+        CustomUser customUser = CustomUser
+                .builder()
+                .userId(userId)
+                .build();
+
+
+        return new UsernamePasswordAuthenticationToken(customUser, "", customUser.getAuthorities());
+    }
+
+    public String getSocialToken(HttpServletRequest request) {
+
+        String tokenRole = request.getHeader("Authorization");
 
         return tokenRole;
 
     }
 
-    public String getUserId(HttpServletRequest request) {
-        LOGGER.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
+    public Long getUserId(String token) {
+        log.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
 
-        String tokenUser = request.getHeader("user");
+        String info = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody()
+                .getSubject();
 
-        return tokenUser;
+        Long userId = Long.valueOf(info);
+
+        return userId;
 
     }
 
-
+    public boolean validateToken(String token) {                         // 토큰 유효성 확인
+        log.info("[validateToken] 토큰 유효 체크 시작");
+        Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+        log.info("[validateToken] 토큰 유효 체크 완료");
+        return true;
+    }
 
     public boolean validateRefreshToken(String token) {                         // 토큰 유효성 확인
-        LOGGER.info("[validateRefreshToken] 토큰 유효 체크 시작");
+        log.info("[validateRefreshToken] 토큰 유효 체크 시작");
         Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 
         if (!claims.getBody().isEmpty()) {
-            LOGGER.info("[validateRefreshToken] 토큰 유효 체크 완료");
+            log.info("[validateRefreshToken] 토큰 유효 체크 완료");
             return true;
         }
         return false;
