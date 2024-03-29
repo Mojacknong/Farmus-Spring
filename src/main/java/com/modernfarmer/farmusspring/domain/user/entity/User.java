@@ -31,9 +31,12 @@ public class User extends BaseEntity {
     private String role;
 
     @Column(nullable = false)
-    private int userNumber;
+    private String userNumber;
 
     @Column(nullable = false)
+    private boolean early;
+
+    @Column(nullable = true)
     private String profileImage;
 
     @Column(nullable = true)
@@ -70,11 +73,11 @@ public class User extends BaseEntity {
     @Builder.Default
     private List<MissionPostLike> missionPostLikes = new ArrayList<>();
 
-    public static User createUser(String role, int userNumber, String profileImage){
+    public static User createUser(String role, String userNumber, boolean early){
         User newUser = User.builder()
                 .role(role)
                 .userNumber(userNumber)
-                .profileImage(profileImage)
+                .early(early)
                 .build();
 
         return newUser;
