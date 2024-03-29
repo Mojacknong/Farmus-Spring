@@ -45,23 +45,24 @@ public class User extends BaseEntity {
     @Column(nullable = true)
     private String level;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<UserFirebaseToken> userFirebaseTokens = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @Builder.Default
     private List<UserMotivation> userMotivations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<MyVeggie> myVeggies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<DiaryComment> diaryComments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<DiaryLike> diaryLikes = new ArrayList<>();
 
@@ -83,6 +84,7 @@ public class User extends BaseEntity {
         return newUser;
 
     }
+
 
     public void addUserFirebaseToken(UserFirebaseToken userFirebaseToken) {
         userFirebaseTokens.add(userFirebaseToken);

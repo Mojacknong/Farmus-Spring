@@ -22,6 +22,8 @@ import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 
@@ -39,7 +41,7 @@ public class AuthService {
     private final GoogleLogin googleLogin;
 
     private final KakaoLogin kakaoLogin;
-
+    @Transactional
     public BaseResponseDto<LoginResponseDto> googleLogin(String googleAccessToken) {
 
         return BaseResponseDto.of(SuccessCode.SUCCESS,
@@ -47,7 +49,7 @@ public class AuthService {
 
                 );
     }
-
+    @Transactional
     public BaseResponseDto<LoginResponseDto> kakaoLogin(String kakaoAccessToken) {
 
         return BaseResponseDto.of(SuccessCode.SUCCESS,
@@ -56,14 +58,20 @@ public class AuthService {
 
 
     }
-
+    @Transactional
     public BaseResponseDto<Void> logout(Long userId) {
 
-        redisManager.deleteValueByKey(String.valueOf(userId));
+        tokenDelete(userId);
         log.info("로그아웃 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
+
+    private void tokenDelete(Long userId){
+        redisManager.deleteValueByKey(String.valueOf(userId));
+    }
+
+    @Transactional
     public BaseResponseDto<TokenResponseDto> reissueToken(Long userId, String refreshToken) {
 
         validateRefreshToken(userId, refreshToken);

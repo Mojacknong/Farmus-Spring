@@ -4,6 +4,7 @@ package com.modernfarmer.farmusspring.domain.user.repository;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,12 @@ public interface UserRepository  extends JpaRepository<User, Long> {
     @Query("SELECT a FROM user AS a  WHERE a.id = :userId")
     User findUserData(@Param("userId") Long userId);
 
+    @Modifying
+    @Query("update user as u set u.level= :level where u.id = :userId")
+    void insertUserLevel(@Param("userId") Long userId, @Param("level") String level);
 
+    @Modifying
+    @Query("update user as u set u.early = false where u.id = :userId")
+    void updateEarly( @Param("userId") Long userId);
 
 }
