@@ -4,6 +4,8 @@ package com.modernfarmer.farmusspring.domain.auth.service;
 import com.modernfarmer.farmusspring.domain.auth.dto.LoginResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.dto.TokenResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.exception.AuthErrorCode;
+import com.modernfarmer.farmusspring.domain.auth.exception.AuthExceptionHandler;
+import com.modernfarmer.farmusspring.domain.auth.exception.AuthRefreshTokenValidateException;
 import com.modernfarmer.farmusspring.domain.auth.repository.RedisManager;
 import com.modernfarmer.farmusspring.domain.auth.util.social.GoogleLogin;
 import com.modernfarmer.farmusspring.domain.auth.util.social.KakaoLogin;
@@ -74,13 +76,12 @@ public class AuthService {
     }
 
 
-    private BaseResponseDto validateRefreshToken(Long userId, String refreshToken) {
+    private void validateRefreshToken(Long userId, String refreshToken) {
 
         String redisRefreshToken = redisManager.getValueByKey(userId);
-        if (refreshToken.equals(redisRefreshToken)) {
+        if (!refreshToken.equals(redisRefreshToken)) {
 
-            return null;
+            throw new AuthRefreshTokenValidateException("일치하지 않는 토큰입니다.");
         }
-        return BaseResponseDto.of(AuthErrorCode.WRONG_TOKEN,"일치하지 않는 토큰입니다.");
     }
 }

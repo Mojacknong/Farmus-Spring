@@ -4,7 +4,7 @@ import com.modernfarmer.farmusspring.domain.auth.dto.LoginResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.repository.RedisManager;
 import com.modernfarmer.farmusspring.domain.auth.util.social.dto.SocialUserResponseDto;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
-import com.modernfarmer.farmusspring.domain.user.exception.UserException;
+import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
 import com.modernfarmer.farmusspring.domain.user.repository.UserRepository;
 import com.modernfarmer.farmusspring.global.common.security.JwtTokenProvider;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -43,7 +43,7 @@ abstract public class SocialLogin {
                     return null;
                 });
 
-        Optional<User> userLoginData = Optional.ofNullable(userRepository.findByUserNumber(String.valueOf(socialUserData.getId())).orElseThrow(() -> new UserException("해당 유저의 정보가 존재하지 않습니다.")));
+        Optional<User> userLoginData = Optional.ofNullable(userRepository.findByUserNumber(String.valueOf(socialUserData.getId())).orElseThrow(() -> new UserNotFoundException("해당 유저의 정보가 존재하지 않습니다.")));
 
         String refreshToken = jwtTokenProvider.createRefreshToken(userLoginData.get().getId());
         String accessToken = jwtTokenProvider.createAccessToken(
