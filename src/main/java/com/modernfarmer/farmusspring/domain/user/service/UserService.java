@@ -86,10 +86,6 @@ public class UserService {
         userRepository.selectProfileAndNickname(userId,imageUrl,nickname);
     }
 
-
-
-
-
     private Optional<User> selectUser(Long userId){
         Optional<User> user = Optional.ofNullable(userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다.")));
         return user;

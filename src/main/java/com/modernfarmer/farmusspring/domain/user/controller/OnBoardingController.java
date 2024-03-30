@@ -30,7 +30,7 @@ public class OnBoardingController {
                                                 @Validated @RequestBody SetMotivationRequest setMotivationRequest
     )  {
         return onBoardingService.settingMotivation(
-                user.getUserId(),
+                User.createUserObject(user.getUserId()),
                 setMotivationRequest);
     }
 

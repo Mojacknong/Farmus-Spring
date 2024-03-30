@@ -25,9 +25,7 @@ public class OnBoardingService {
     private final UserRepository userRepository;
 
     @Transactional
-    public BaseResponseDto<Void> settingMotivation(Long userId, SetMotivationRequest setMotivationRequest) {
-
-        User user = findUser(userId);
+    public BaseResponseDto<Void> settingMotivation(User user, SetMotivationRequest setMotivationRequest) {
 
         insertMotivation(user, setMotivationRequest);
 
@@ -57,7 +55,7 @@ public class OnBoardingService {
     }
 
 
-    @Transactional
+
     public void insertMotivation(User user, SetMotivationRequest setMotivationRequest) {
         for (String motivation : setMotivationRequest.getMotivation()) {
             insertOneMotivation(user, motivation);
@@ -67,6 +65,7 @@ public class OnBoardingService {
     public void insertOneMotivation(User user, String motivation) {
         UserMotivation newMotivation = UserMotivation.createUserMotivation(motivation, user);
         user.addUserMotivation(newMotivation);
+
     }
 
     private void insertLevel(Long userId, String level){

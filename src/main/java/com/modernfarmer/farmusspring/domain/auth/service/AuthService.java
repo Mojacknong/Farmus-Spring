@@ -62,14 +62,9 @@ public class AuthService {
     @Transactional
     public BaseResponseDto<Void> logout(Long userId) {
 
-        redisTokenDelete(userId);
+        deleteredisToken(userId);
         log.info("로그아웃 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
-    }
-
-
-    private void redisTokenDelete(Long userId){
-        redisManager.deleteValueByKey(String.valueOf(userId));
     }
 
     @Transactional
@@ -84,6 +79,12 @@ public class AuthService {
                 ));
     }
 
+    private void deleteredisToken(Long userId){
+        redisManager.deleteValueByKey(String.valueOf(userId));
+    }
+    private String getRedisToken(Long key){return redisManager.getValueByKey(key);}
+
+
     private User findUser(Long userId) {
         return userRepository.findUserData(Long.valueOf(userId));
     }
@@ -91,10 +92,12 @@ public class AuthService {
 
     private void validateRefreshToken(Long userId, String refreshToken) {
 
-        String redisRefreshToken = redisManager.getValueByKey(userId);
+        String redisRefreshToken = getRedisToken(userId);
         if (!refreshToken.equals(redisRefreshToken)) {
 
             throw new AuthRefreshTokenValidateException("일치하지 않는 토큰입니다.");
         }
     }
+
+
 }
