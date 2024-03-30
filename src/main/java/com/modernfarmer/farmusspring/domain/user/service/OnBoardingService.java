@@ -1,25 +1,20 @@
 package com.modernfarmer.farmusspring.domain.user.service;
 
 
-import com.modernfarmer.farmusspring.domain.auth.dto.LoginResponseDto;
-import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.user.dto.request.SetLevelRequest;
 import com.modernfarmer.farmusspring.domain.user.dto.request.SetMotivationRequest;
 import com.modernfarmer.farmusspring.domain.user.dto.response.SetLevelResponse;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.entity.UserMotivation;
+import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
 import com.modernfarmer.farmusspring.domain.user.repository.UserMotivationRepository;
 import com.modernfarmer.farmusspring.domain.user.repository.UserRepository;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -30,7 +25,9 @@ public class OnBoardingService {
     private final UserRepository userRepository;
 
     @Transactional
-    public BaseResponseDto<Void> settingMotiavation(User user, SetMotivationRequest setMotivationRequest) {
+    public BaseResponseDto<Void> settingMotivation(Long userId, SetMotivationRequest setMotivationRequest) {
+
+        User user = findUser(userId);
 
         insertMotivation(user, setMotivationRequest);
 
@@ -60,16 +57,16 @@ public class OnBoardingService {
     }
 
 
+    @Transactional
     public void insertMotivation(User user, SetMotivationRequest setMotivationRequest) {
-
-        List<UserMotivation> userMotivations = new ArrayList<>();
         for (String motivation : setMotivationRequest.getMotivation()) {
-
-            UserMotivation userMotivation = UserMotivation.createUserMotivation(motivation, user);
-            userMotivations.add(userMotivation);
-        //    userMotivationRepository.insertMotivation(motivation, user.getId());
+            insertOneMotivation(user, motivation);
+        }
     }
-        userMotivationRepository.saveAll(userMotivations);
+
+    public void insertOneMotivation(User user, String motivation) {
+        UserMotivation newMotivation = UserMotivation.createUserMotivation(motivation, user);
+        user.addUserMotivation(newMotivation);
     }
 
     private void insertLevel(Long userId, String level){
@@ -116,6 +113,8 @@ public class OnBoardingService {
         return "알 수 없음";
     }
 
-
+    public User findUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 없습니다."));
+    }
 
 }

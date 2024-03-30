@@ -26,17 +26,11 @@ public class OnBoardingController {
 
 
     @PostMapping(value = "/on-boarding/motivation")
-    public BaseResponseDto<Void> settingMotiavation(@AuthenticationPrincipal CustomUser user,
+    public BaseResponseDto<Void> settingMotivation(@AuthenticationPrincipal CustomUser user,
                                                 @Validated @RequestBody SetMotivationRequest setMotivationRequest
     )  {
-
-        User aa = User.createUser("USER","2678968131",true);
-
-        User bb = User.createUserObject(user.getUserId());
-
-
-        return onBoardingService.settingMotiavation(
-                aa,
+        return onBoardingService.settingMotivation(
+                user.getUserId(),
                 setMotivationRequest);
     }
 

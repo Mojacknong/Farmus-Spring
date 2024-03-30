@@ -31,12 +31,24 @@ public class UserMotivation extends BaseEntity {
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 
     public static UserMotivation createUserMotivation(String motivation, User user){
         UserMotivation newUserMotivation = UserMotivation.builder()
+                .motivation(motivation)
+                .user(user)
+                .build();
+
+        user.addUserMotivation(newUserMotivation);
+
+        return newUserMotivation;
+
+    }
+
+    public static UserMotivation createUserMotivationWithId(Long id, String motivation, User user){
+        UserMotivation newUserMotivation = UserMotivation.builder()
+                .id(id)
                 .motivation(motivation)
                 .user(user)
                 .build();

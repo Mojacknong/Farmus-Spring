@@ -51,7 +51,7 @@ public class User extends BaseEntity {
     @Builder.Default
     private List<UserFirebaseToken> userFirebaseTokens = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserMotivation> userMotivations = new ArrayList<>();
 
