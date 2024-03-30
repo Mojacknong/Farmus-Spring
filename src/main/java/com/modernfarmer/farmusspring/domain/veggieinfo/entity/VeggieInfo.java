@@ -1,4 +1,4 @@
-package com.modernfarmer.farmusspring.domain.veggie.entity;
+package com.modernfarmer.farmusspring.domain.veggieinfo.entity;
 
 import com.modernfarmer.farmusspring.global.common.BaseDocument;
 import lombok.AllArgsConstructor;
@@ -31,6 +31,10 @@ public class VeggieInfo extends BaseDocument {
     private List<Step> steps;
 
     private String veggieImage;
+
+    private String period;
+
+    private List<String> help;
 
     @AllArgsConstructor
     @NoArgsConstructor
