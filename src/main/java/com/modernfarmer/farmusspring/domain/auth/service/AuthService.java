@@ -41,6 +41,7 @@ public class AuthService {
     private final GoogleLogin googleLogin;
 
     private final KakaoLogin kakaoLogin;
+
     @Transactional
     public BaseResponseDto<LoginResponseDto> googleLogin(String googleAccessToken) {
 

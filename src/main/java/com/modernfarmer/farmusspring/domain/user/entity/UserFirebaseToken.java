@@ -8,8 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,6 +29,7 @@ public class UserFirebaseToken extends BaseEntity {
     @Column(name = "token")
     private String token;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "user_id")

@@ -26,26 +26,26 @@ public class OnBoardingController {
 
 
     @PostMapping(value = "/on-boarding/motivation")
-    public BaseResponseDto<Void> setMotiavation(@AuthenticationPrincipal CustomUser user,
+    public BaseResponseDto<Void> settingMotiavation(@AuthenticationPrincipal CustomUser user,
                                                 @Validated @RequestBody SetMotivationRequest setMotivationRequest
     )  {
 
         User aa = User.createUser("USER","2678968131",true);
 
-        User bb = User.builder().id(user.getUserId()).build();
+        User bb = User.createUserObject(user.getUserId());
 
 
-        return onBoardingService.setMotiavation(
-                bb,
+        return onBoardingService.settingMotiavation(
+                aa,
                 setMotivationRequest);
     }
 
     @PostMapping(value = "/on-boarding/level")
-    public BaseResponseDto<SetLevelResponse> setLevel(@AuthenticationPrincipal CustomUser user,
+    public BaseResponseDto<SetLevelResponse> settingLevel(@AuthenticationPrincipal CustomUser user,
                                                       @Validated @RequestBody SetLevelRequest setLevelRequest
                                                       )  {
 
-        return onBoardingService.setLevel(user.getUserId(), setLevelRequest);
+        return onBoardingService.settingLevel(user.getUserId(), setLevelRequest);
     }
 
 

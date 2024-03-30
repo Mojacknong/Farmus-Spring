@@ -24,21 +24,20 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @Service
-
 public class OnBoardingService {
 
     private final UserMotivationRepository userMotivationRepository;
     private final UserRepository userRepository;
 
     @Transactional
-    public BaseResponseDto<Void> setMotiavation(User user, SetMotivationRequest setMotivationRequest) {
-        log.info(String.valueOf(user.getId()));
+    public BaseResponseDto<Void> settingMotiavation(User user, SetMotivationRequest setMotivationRequest) {
+
         insertMotivation(user, setMotivationRequest);
 
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
     @Transactional
-    public BaseResponseDto<SetLevelResponse> setLevel(Long userId, SetLevelRequest setLevelRequest){
+    public BaseResponseDto<SetLevelResponse> settingLevel(Long userId, SetLevelRequest setLevelRequest){
 
         String level = measureLevel(setLevelRequest.getTime(), setLevelRequest.getSkill());
 
@@ -62,7 +61,6 @@ public class OnBoardingService {
 
 
     public void insertMotivation(User user, SetMotivationRequest setMotivationRequest) {
-
 
         List<UserMotivation> userMotivations = new ArrayList<>();
         for (String motivation : setMotivationRequest.getMotivation()) {

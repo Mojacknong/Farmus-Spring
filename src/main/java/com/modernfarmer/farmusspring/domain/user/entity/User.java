@@ -11,6 +11,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,23 +47,23 @@ public class User extends BaseEntity {
     private String level;
 
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<UserFirebaseToken> userFirebaseTokens = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<UserMotivation> userMotivations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<MyVeggie> myVeggies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<DiaryComment> diaryComments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<DiaryLike> diaryLikes = new ArrayList<>();
 
@@ -84,7 +85,13 @@ public class User extends BaseEntity {
         return newUser;
 
     }
+    public static User createUserObject(Long userId){
+        User userObject = User.builder()
+                .id(userId)
+                .build();
+        return userObject;
 
+    }
 
     public void addUserFirebaseToken(UserFirebaseToken userFirebaseToken) {
         userFirebaseTokens.add(userFirebaseToken);
@@ -113,4 +120,6 @@ public class User extends BaseEntity {
     public void addMissionPostLike(MissionPostLike missionPostLike) {
         missionPostLikes.add(missionPostLike);
     }
+
+
 }
