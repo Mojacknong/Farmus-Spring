@@ -61,13 +61,13 @@ public class AuthService {
     @Transactional
     public BaseResponseDto<Void> logout(Long userId) {
 
-        tokenDelete(userId);
+        redisTokenDelete(userId);
         log.info("로그아웃 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
 
-    private void tokenDelete(Long userId){
+    private void redisTokenDelete(Long userId){
         redisManager.deleteValueByKey(String.valueOf(userId));
     }
 
@@ -75,12 +75,16 @@ public class AuthService {
     public BaseResponseDto<TokenResponseDto> reissueToken(Long userId, String refreshToken) {
 
         validateRefreshToken(userId, refreshToken);
-        User user = userRepository.findUserData(Long.valueOf(userId));
+        User user = findUser(userId);
         return BaseResponseDto.of(SuccessCode.SUCCESS,
                 TokenResponseDto.of(
                         jwtTokenProvider.createAccessToken(Long.valueOf(userId), user.getRole()),
                         refreshToken
                 ));
+    }
+
+    private User findUser(Long userId) {
+        return userRepository.findUserData(Long.valueOf(userId));
     }
 
 

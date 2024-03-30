@@ -32,7 +32,7 @@ public class OnBoardingService {
 
     @Transactional
     public BaseResponseDto<Void> setMotiavation(User user, SetMotivationRequest setMotivationRequest) {
-
+        log.info(String.valueOf(user.getId()));
         insertMotivation(user, setMotivationRequest);
 
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
@@ -63,16 +63,15 @@ public class OnBoardingService {
 
     public void insertMotivation(User user, SetMotivationRequest setMotivationRequest) {
 
+
         List<UserMotivation> userMotivations = new ArrayList<>();
         for (String motivation : setMotivationRequest.getMotivation()) {
 
             UserMotivation userMotivation = UserMotivation.createUserMotivation(motivation, user);
             userMotivations.add(userMotivation);
-       //     userMotivationRepository.insertMotivation(motivation, user.getId());
-        }
-
+        //    userMotivationRepository.insertMotivation(motivation, user.getId());
+    }
         userMotivationRepository.saveAll(userMotivations);
-
     }
 
     private void insertLevel(Long userId, String level){

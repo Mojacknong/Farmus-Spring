@@ -29,7 +29,7 @@ public class UserMotivation extends BaseEntity {
     @Column(name = "motivation")
     private String motivation;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "user_id")
     private User user;
@@ -40,7 +40,9 @@ public class UserMotivation extends BaseEntity {
                 .user(user)
                 .build();
 
-        user.addUserMotivation(newUserMotivation);
+    //    user.addUserMotivation(newUserMotivation);
+
+
 
         return newUserMotivation;
 
