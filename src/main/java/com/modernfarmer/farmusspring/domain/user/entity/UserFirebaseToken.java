@@ -31,7 +31,6 @@ public class UserFirebaseToken extends BaseEntity {
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 
