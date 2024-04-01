@@ -8,8 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,13 +29,26 @@ public class UserMotivation extends BaseEntity {
     @Column(name = "motivation")
     private String motivation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
     public static UserMotivation createUserMotivation(String motivation, User user){
         UserMotivation newUserMotivation = UserMotivation.builder()
+                .motivation(motivation)
+                .user(user)
+                .build();
+
+        user.addUserMotivation(newUserMotivation);
+
+        return newUserMotivation;
+
+    }
+
+    public static UserMotivation createUserMotivationWithId(Long id, String motivation, User user){
+        UserMotivation newUserMotivation = UserMotivation.builder()
+                .id(id)
                 .motivation(motivation)
                 .user(user)
                 .build();

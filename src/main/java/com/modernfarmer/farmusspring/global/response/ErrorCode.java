@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode implements ResponseCode {
 
+    // 1000 auth 오류
+
     // 4xx Client Error
     BAD_REQUEST(400,  "잘못된 요청입니다."),
     UNAUTHORIZED(401,  "인증되지 않은 사용자입니다."),
