@@ -35,6 +35,12 @@ public class FarmClub extends BaseEntity {
     private String difficulty;
 
     @Column(nullable = false)
+    private String veggieImage;
+
+    @Column(nullable = false)
+    private String veggieName;
+
+    @Column(nullable = false)
     private int maxUser;
 
     @Column(nullable = false)
