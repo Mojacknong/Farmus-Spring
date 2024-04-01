@@ -26,10 +26,10 @@ public class S3Service {
 
     private final AmazonS3Client s3Client;
 
-    @Value("${prod-s3.bucket}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
-    @Value("${prod-s3.uploadPath}")
+    @Value("${cloud.aws.s3.uploadPath}")
     private String uploadPath;
 
     public String uploadPdf(MultipartFile file, String fileType) {
