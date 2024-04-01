@@ -22,6 +22,8 @@ import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 
@@ -40,6 +42,7 @@ public class AuthService {
 
     private final KakaoLogin kakaoLogin;
 
+    @Transactional
     public BaseResponseDto<LoginResponseDto> googleLogin(String googleAccessToken) {
 
         return BaseResponseDto.of(SuccessCode.SUCCESS,
@@ -47,7 +50,7 @@ public class AuthService {
 
                 );
     }
-
+    @Transactional
     public BaseResponseDto<LoginResponseDto> kakaoLogin(String kakaoAccessToken) {
 
         return BaseResponseDto.of(SuccessCode.SUCCESS,
@@ -56,18 +59,19 @@ public class AuthService {
 
 
     }
-
+    @Transactional
     public BaseResponseDto<Void> logout(Long userId) {
 
-        redisManager.deleteValueByKey(String.valueOf(userId));
+        deleteredisToken(userId);
         log.info("로그아웃 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
+    @Transactional
     public BaseResponseDto<TokenResponseDto> reissueToken(Long userId, String refreshToken) {
 
         validateRefreshToken(userId, refreshToken);
-        User user = userRepository.findUserData(Long.valueOf(userId));
+        User user = findUser(userId);
         return BaseResponseDto.of(SuccessCode.SUCCESS,
                 TokenResponseDto.of(
                         jwtTokenProvider.createAccessToken(Long.valueOf(userId), user.getRole()),
@@ -75,13 +79,25 @@ public class AuthService {
                 ));
     }
 
+    private void deleteredisToken(Long userId){
+        redisManager.deleteValueByKey(String.valueOf(userId));
+    }
+    private String getRedisToken(Long key){return redisManager.getValueByKey(key);}
+
+
+    private User findUser(Long userId) {
+        return userRepository.findUserData(Long.valueOf(userId));
+    }
+
 
     private void validateRefreshToken(Long userId, String refreshToken) {
 
-        String redisRefreshToken = redisManager.getValueByKey(userId);
+        String redisRefreshToken = getRedisToken(userId);
         if (!refreshToken.equals(redisRefreshToken)) {
 
             throw new AuthRefreshTokenValidateException("일치하지 않는 토큰입니다.");
         }
     }
+
+
 }

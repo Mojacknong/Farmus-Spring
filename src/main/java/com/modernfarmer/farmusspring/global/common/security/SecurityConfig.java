@@ -48,7 +48,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
                                 "/api/auth/logout",
-                                "/reissue-token"
+                                "/api/auth/reissue-token",
+                                "/api/user/on-boarding/motivation",
+                                "/api/user/on-boarding/level",
+                                "/api/user/on-boarding/complete",
+                                "/api/user",
+                                "/api/user/profile-image",
+                                "/api/user/profile"
                         ).permitAll()
                 )
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated());
