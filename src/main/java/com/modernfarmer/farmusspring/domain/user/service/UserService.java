@@ -75,7 +75,7 @@ public class UserService {
     }
 
     private String getImageUrl(MultipartFile multipartFile) throws IOException {
-        return s3Service.uploadFiles(multipartFile, "userprofileimage");
+        return s3Service.uploadImage(multipartFile, "userprofileimage");
     }
 
     private void updateNickname(String nickname, Long userId){

@@ -127,45 +127,5 @@ public class S3Service {
         return getResourceUrl(savedFileName);
     }
 
-    public String uploadFiles(
-            MultipartFile multipartFile, String dirName) throws IOException {
-        File uploadFile = convert(multipartFile).orElseThrow(() ->
-                new IllegalArgumentException("error: MultipartFile -> File convert fail"));
-        return upload(uploadFile, dirName);
-    }
-
-    public String upload(File uploadFile, String filePath) {
-        String fileName = filePath + "/" + UUID.randomUUID() + uploadFile.getName();
-        String uploadImageUrl = putS3(uploadFile, fileName);
-        removeNewFile(uploadFile);
-        return uploadImageUrl;
-    }
-
-    private String putS3(File uploadFile, String fileName) {
-        s3Client.putObject(
-                new PutObjectRequest(bucketName, fileName, uploadFile)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucketName, fileName).toString();
-    }
-
-    private void removeNewFile(File targetFile) {
-        if (targetFile.delete()) {
-            System.out.println("File delete success");
-            return;
-        }
-        System.out.println("File delete fail");
-    }
-
-    private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(System.getProperty("user.dir") + "/" + file.getOriginalFilename());
-        if (convertFile.createNewFile()) {
-            try (FileOutputStream fileOutputStream = new FileOutputStream(convertFile)) {
-                fileOutputStream.write(file.getBytes());
-            }
-            return Optional.of(convertFile);
-        }
-        return Optional.empty();
-    }
-
 
 }
