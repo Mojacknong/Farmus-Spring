@@ -5,13 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor(staticName = "of")
-@NoArgsConstructor
-@Getter
-public class InfoForRegister {
 
-    private String name;
-    private String veggieImage;
-    private String period;
-    private Difficulty difficulty;
+public record InfoForRegister (
+    String veggieInfoId,
+    String veggieName,
+    String veggieImage,
+    String period,
+    Difficulty difficulty
+){
 }
