@@ -54,7 +54,9 @@ public class SecurityConfig {
                                 "/api/user/on-boarding/complete",
                                 "/api/user",
                                 "/api/user/profile-image",
-                                "/api/user/profile"
+                                "/api/user/profile",
+                                "/api/veggie-info",
+                                "/api/veggie-info/**"
                         ).permitAll()
                 )
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated());

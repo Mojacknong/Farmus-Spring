@@ -4,13 +4,14 @@ import com.modernfarmer.farmusspring.domain.veggieinfo.enums.Difficulty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 
 
 public record InfoForRegister (
-    String veggieInfoId,
-    String veggieName,
+    String _id,
+    String name,
+    Difficulty difficulty,
     String veggieImage,
-    String period,
-    Difficulty difficulty
+    String period
 ){
 }
