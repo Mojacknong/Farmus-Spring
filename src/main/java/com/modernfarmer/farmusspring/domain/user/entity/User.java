@@ -11,6 +11,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +32,12 @@ public class User extends BaseEntity {
     private String role;
 
     @Column(nullable = false)
-    private int userNumber;
+    private String userNumber;
 
     @Column(nullable = false)
+    private boolean early;
+
+    @Column(nullable = true)
     private String profileImage;
 
     @Column(nullable = true)
@@ -42,23 +46,24 @@ public class User extends BaseEntity {
     @Column(nullable = true)
     private String level;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<UserFirebaseToken> userFirebaseTokens = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserMotivation> userMotivations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<MyVeggie> myVeggies = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<DiaryComment> diaryComments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<DiaryLike> diaryLikes = new ArrayList<>();
 
@@ -70,14 +75,21 @@ public class User extends BaseEntity {
     @Builder.Default
     private List<MissionPostLike> missionPostLikes = new ArrayList<>();
 
-    public static User createUser(String role, int userNumber, String profileImage){
+    public static User createUser(String role, String userNumber, boolean early){
         User newUser = User.builder()
                 .role(role)
                 .userNumber(userNumber)
-                .profileImage(profileImage)
+                .early(early)
                 .build();
 
         return newUser;
+
+    }
+    public static User createUserObject(Long userId){
+        User userObject = User.builder()
+                .id(userId)
+                .build();
+        return userObject;
 
     }
 
@@ -108,4 +120,6 @@ public class User extends BaseEntity {
     public void addMissionPostLike(MissionPostLike missionPostLike) {
         missionPostLikes.add(missionPostLike);
     }
+
+
 }

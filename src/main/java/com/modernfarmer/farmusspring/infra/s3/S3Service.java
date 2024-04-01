@@ -11,10 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,10 +26,10 @@ public class S3Service {
 
     private final AmazonS3Client s3Client;
 
-    @Value("${prod-s3.bucket}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
-    @Value("${prod-s3.uploadPath}")
+    @Value("${cloud.aws.s3.uploadPath}")
     private String uploadPath;
 
     public String uploadPdf(MultipartFile file, String fileType) {
@@ -123,4 +126,6 @@ public class S3Service {
         }
         return getResourceUrl(savedFileName);
     }
+
+
 }
