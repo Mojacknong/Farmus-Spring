@@ -24,7 +24,7 @@ public class MyVeggieDiaryService {
     private final MyVeggieGardenService myVeggieGardenService;
 
     @Transactional
-    public BaseResponseDto<Void> settingMyVeggiDiary(
+    public BaseResponseDto<Void> settingMyVeggieDiary(
             MultipartFile multipartFile,
             String content,
             boolean isOpen,
@@ -33,7 +33,7 @@ public class MyVeggieDiaryService {
     ) throws IOException {
 
         String imageUrl = getImageUrl(multipartFile);
-        addMyyVeggiDiary(
+        addMyyVeggieDiary(
                 content,
                 isOpen,
                 imageUrl,
@@ -43,7 +43,7 @@ public class MyVeggieDiaryService {
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
-    private void addMyyVeggiDiary(
+    private void addMyyVeggieDiary(
             String content,
             boolean isOpen,
             String image,
@@ -51,6 +51,7 @@ public class MyVeggieDiaryService {
             Long myVeggieId
     ){
         MyVeggie myVeggie = myVeggieGardenService.getMyVeggie(myVeggieId);
+
 
         Diary newDiary = Diary.createDiary(
                 content,

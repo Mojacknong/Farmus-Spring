@@ -20,14 +20,14 @@ public class MyVeggieDiaryController {
     private final MyVeggieDiaryService myVeggieDiaryService;
 
     @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public BaseResponseDto<Void> settingMyVeggiDiary(
+    public BaseResponseDto<Void> settingMyVeggieDiary(
             @RequestPart(value = "file", required = false) MultipartFile multipartFile,
             @RequestParam("content") String content,
             @RequestParam("isOpen") boolean isOpen,
             @RequestParam("state") String state,
             @RequestParam("myVeggieId") Long myVeggieId
     ) throws IOException {
-        return  myVeggieDiaryService.settingMyVeggiDiary(
+        return  myVeggieDiaryService.settingMyVeggieDiary(
                 multipartFile,
                 content,
                 isOpen,
