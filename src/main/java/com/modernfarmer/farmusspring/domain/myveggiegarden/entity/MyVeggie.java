@@ -43,7 +43,7 @@ public class MyVeggie extends BaseEntity {
     @Builder.Default
     private List<Routine> routines = new ArrayList<>();
 
-    @OneToMany(mappedBy = "myVeggie", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "myVeggie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Diary> diaries = new ArrayList<>();
 

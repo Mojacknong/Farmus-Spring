@@ -20,6 +20,8 @@ import java.io.IOException;
 public class MyVeggieDiaryService {
 
     private final S3Service s3Service;
+    private final MyVeggieRepository myVeggieRepository;
+    private final MyVeggieGardenService myVeggieGardenService;
 
     @Transactional
     public BaseResponseDto<Void> settingMyVeggiDiary(
@@ -31,13 +33,12 @@ public class MyVeggieDiaryService {
     ) throws IOException {
 
         String imageUrl = getImageUrl(multipartFile);
-        log.info(String.valueOf(MyVeggie.builder().id(myVeggieId).build().getId()));
         addMyyVeggiDiary(
                 content,
                 isOpen,
                 imageUrl,
                 state,
-                MyVeggie.builder().id(myVeggieId).build()
+                myVeggieId
         );
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
@@ -47,8 +48,10 @@ public class MyVeggieDiaryService {
             boolean isOpen,
             String image,
             String state,
-            MyVeggie myVeggie
+            Long myVeggieId
     ){
+        MyVeggie myVeggie = myVeggieGardenService.getMyVeggie(myVeggieId);
+
         Diary newDiary = Diary.createDiary(
                 content,
                 isOpen,

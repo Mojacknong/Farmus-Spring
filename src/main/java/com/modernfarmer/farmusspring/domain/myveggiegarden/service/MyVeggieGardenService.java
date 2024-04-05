@@ -26,7 +26,10 @@ public class MyVeggieGardenService {
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
-
+    public MyVeggie getMyVeggie(Long userId){
+        return myVeggieRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("채소가 존재하지 않습니다."));
+    }
 
     private void addMyyVeggi(Long userId, SettingMyVeggiRequest settingMyVeggiRequest){
 
@@ -38,7 +41,5 @@ public class MyVeggieGardenService {
         );
         myVeggieRepository.save(newMyVeggie);
     }
-
-
 
 }
