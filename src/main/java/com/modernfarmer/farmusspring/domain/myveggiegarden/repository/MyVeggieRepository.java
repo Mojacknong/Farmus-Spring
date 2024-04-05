@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
 
+    MyVeggie findMyVeggieById(Long id);
+
 }

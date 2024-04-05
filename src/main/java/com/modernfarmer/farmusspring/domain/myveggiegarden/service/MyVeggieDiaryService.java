@@ -13,11 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
 @Service
 public class MyVeggieDiaryService {
+    private final MyVeggieRepository myVeggieRepository;
 
     private final S3Service s3Service;
 
@@ -32,17 +34,22 @@ public class MyVeggieDiaryService {
 
         String imageUrl = getImageUrl(multipartFile);
         log.info(String.valueOf(MyVeggie.builder().id(myVeggieId).build().getId()));
+
+        MyVeggie myVeggie = myVeggieRepository.findMyVeggieById(myVeggieId);
+
+  //      log.info(myVeggie.getNickname());
         addMyyVeggiDiary(
                 content,
                 isOpen,
                 imageUrl,
                 state,
-                MyVeggie.builder().id(myVeggieId).build()
+             //   MyVeggie.builder().id(myVeggieId).build()
+                myVeggie
         );
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
-
-    private void addMyyVeggiDiary(
+    @Transactional
+    public void addMyyVeggiDiary(
             String content,
             boolean isOpen,
             String image,
@@ -56,7 +63,9 @@ public class MyVeggieDiaryService {
                 state,
                 myVeggie
         );
+        log.info("start");
         myVeggie.addDiary(newDiary);
+        log.info("finish");
     }
 
     private String getImageUrl(MultipartFile multipartFile) throws IOException {
