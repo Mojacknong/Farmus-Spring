@@ -33,7 +33,7 @@ public class MyVeggie extends BaseEntity {
     private Date birth;
 
     @Column(name = "veggie_info_id")
-    private String veggieInfoId;
+    private Long veggieInfoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -51,7 +51,7 @@ public class MyVeggie extends BaseEntity {
     @JoinColumn(name = "user_farm_club_id")
     private UserFarmClub userFarmClub;
 
-    public static MyVeggie createMyVegetable(String nickname, Date birth, String veggieInfoId, User user){
+    public static MyVeggie createMyVegetable(String nickname, Date birth, Long veggieInfoId, User user){
         MyVeggie newMyVeggie = MyVeggie.builder()
                 .nickname(nickname)
                 .birth(birth)

@@ -56,7 +56,9 @@ public class SecurityConfig {
                                 "/api/user/profile-image",
                                 "/api/user/profile",
                                 "/api/veggie-info",
-                                "/api/veggie-info/**"
+                                "/api/veggie-info/**",
+                                "api/my-veggie",
+                                "api/my-veggie/diary"
                         ).permitAll()
                 )
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated());
