@@ -36,22 +36,7 @@ public class MyVeggieGardenController {
 
     }
 
-    @PostMapping(value = "/diary", produces = MediaType.APPLICATION_JSON_VALUE)
-    public BaseResponseDto<Void> settingMyVeggiDiary(
-            @RequestPart(value = "file", required = false) MultipartFile multipartFile,
-            @RequestParam("content") String content,
-            @RequestParam("isOpen") boolean isOpen,
-            @RequestParam("state") String state,
-            @RequestParam("myVeggieId") Long myVeggieId
-    ) throws IOException {
-        return  myVeggieGardenService.settingMyVeggiDiary(
-                multipartFile,
-                content,
-                isOpen,
-                state,
-                myVeggieId
-        );
-    }
+
 
 
 }
