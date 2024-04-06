@@ -1,7 +1,8 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggiRequest;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListDto;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -11,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -25,6 +29,25 @@ public class MyVeggieGardenService {
         addMyyVeggie(userId, settingMyVeggiRequest);
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
+
+    @Transactional
+    public BaseResponseDto<Void> selectMyVeggieList(Long userId) {
+        List<MyVeggie> myVeggieList = bringMyVeggieData(userId);
+        List<SelectMyVeggieListDto> selectMyVeggieLists = processingSimpleMyVeggieData(myVeggieList);
+        return BaseResponseDto.of(SuccessCode.SUCCESS,SelectMyVeggieListResponse.of(selectMyVeggieLists));
+    }
+
+    private List<MyVeggie> bringMyVeggieData(Long userId){
+        return myVeggieRepository.findMyVeggieUserId(userId);
+    }
+
+    private List<SelectMyVeggieListDto> processingSimpleMyVeggieData(List<MyVeggie> myVeggieList){
+        return myVeggieList.stream()
+                .map(myVeggie -> new SelectMyVeggieListDto(myVeggie.getVeggieInfoId(),myVeggie.getNickname()))
+                .collect(Collectors.toList());
+    }
+
+
 
     public MyVeggie getMyVeggie(Long userId){
         return myVeggieRepository.findById(userId)

@@ -25,12 +25,17 @@ public class MyVeggieGardenController {
             @AuthenticationPrincipal CustomUser user,
             @Validated @RequestBody SettingMyVeggiRequest settingMyVeggi
             ){
-
         return  myVeggieGardenService.settingMyVeggie(
                 user.getUserId(),
                 settingMyVeggi
         );
+    }
 
+    @GetMapping(value = "/simple-list")
+    public BaseResponseDto<Void> selectMyVeggieList(
+            @AuthenticationPrincipal CustomUser user
+    ){
+        return myVeggieGardenService.selectMyVeggieList(user.getUserId());
     }
 
 
