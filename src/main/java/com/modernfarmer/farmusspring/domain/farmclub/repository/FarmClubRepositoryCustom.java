@@ -6,5 +6,5 @@ import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import java.util.List;
 
 public interface FarmClubRepositoryCustom {
-    List<SearchFarmClubResponseDto> findByConditions(List<String> difficulties, boolean isBefore, boolean isAfter, String keyword);
+    List<SearchFarmClubResponseDto> findByConditions(List<String> difficulties, String keyword);
 }

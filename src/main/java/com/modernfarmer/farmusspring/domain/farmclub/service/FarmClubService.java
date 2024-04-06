@@ -23,9 +23,7 @@ public class FarmClubService {
         return null;
     }
 
-    public List<SearchFarmClubResponseDto> searchFarmClub(String keyword) {
-        // 몽고에서 이미지, 난이도 가져오기
-
-        return null;
+    public List<SearchFarmClubResponseDto> searchFarmClub(List<String> difficulties, String keyword) {
+        return farmClubRepository.findByConditions(difficulties,  keyword);
     }
 }

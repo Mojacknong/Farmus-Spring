@@ -16,7 +16,7 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom{
     private EntityManager em;
 
     @Override
-    public List<SearchFarmClubResponseDto> findByConditions(List<String> difficulties, boolean isBefore, boolean isAfter, String keyword) {
+    public List<SearchFarmClubResponseDto> findByConditions(List<String> difficulties, String keyword) {
         QFarmClub farmClub = QFarmClub.farmClub;
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
@@ -29,9 +29,8 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom{
                                 farmClub.difficulty,
                                 farmClub.startedAt))
                 .from(farmClub)
-                .where(farmClub.difficulty.in(difficulties)
-                        .and(isBefore ? farmClub.startedAt.after(LocalDate.now()) : null)
-                        .and(isAfter ? farmClub.startedAt.before(LocalDate.now()) : null))
+                .where(farmClub.difficulty.in(difficulties))
+                .where(farmClub.name.contains(keyword))
                 .fetch();
     }
 }
