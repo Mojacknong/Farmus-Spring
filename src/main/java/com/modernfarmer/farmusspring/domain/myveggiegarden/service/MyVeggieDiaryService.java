@@ -20,7 +20,6 @@ import java.io.IOException;
 public class MyVeggieDiaryService {
 
     private final S3Service s3Service;
-    private final MyVeggieRepository myVeggieRepository;
     private final MyVeggieGardenService myVeggieGardenService;
 
     @Transactional

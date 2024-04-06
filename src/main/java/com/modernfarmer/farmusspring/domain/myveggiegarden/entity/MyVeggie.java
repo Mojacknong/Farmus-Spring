@@ -39,7 +39,7 @@ public class MyVeggie extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "myVeggie", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "myVeggie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Routine> routines = new ArrayList<>();
 

@@ -20,9 +20,9 @@ public class MyVeggieGardenService {
     private final MyVeggieRepository myVeggieRepository;
 
     @Transactional
-    public BaseResponseDto<Void> settingMyVeggi(Long userId, SettingMyVeggiRequest settingMyVeggiRequest) {
+    public BaseResponseDto<Void> settingMyVeggie(Long userId, SettingMyVeggiRequest settingMyVeggiRequest) {
 
-        addMyyVeggi(userId, settingMyVeggiRequest);
+        addMyyVeggie(userId, settingMyVeggiRequest);
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
@@ -31,7 +31,7 @@ public class MyVeggieGardenService {
                 .orElseThrow(() -> new IllegalArgumentException("채소가 존재하지 않습니다."));
     }
 
-    private void addMyyVeggi(Long userId, SettingMyVeggiRequest settingMyVeggiRequest){
+    private void addMyyVeggie(Long userId, SettingMyVeggiRequest settingMyVeggiRequest){
 
         MyVeggie newMyVeggie = MyVeggie.createMyVegetable(
                 settingMyVeggiRequest.getNickname(),
