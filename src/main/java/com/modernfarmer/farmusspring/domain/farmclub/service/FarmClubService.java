@@ -2,7 +2,9 @@ package com.modernfarmer.farmusspring.domain.farmclub.service;
 
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateFarmClubRequestDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.CreateFarmClubResponseDto;
+import com.modernfarmer.farmusspring.domain.farmclub.dto.res.GetFarmClubResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.SearchFarmClubResponseDto;
+import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.FarmClubRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +25,17 @@ public class FarmClubService {
         return null;
     }
 
+    public GetFarmClubResponseDto getFarmClub(Long id) {
+        FarmClub farmClub = getFarmClubEntity(id);
+
+        return null;
+    }
+
     public List<SearchFarmClubResponseDto> searchFarmClub(List<String> difficulties, String keyword) {
         return farmClubRepository.findByConditions(difficulties,  keyword);
+    }
+
+    private FarmClub getFarmClubEntity(Long id) {
+        return farmClubRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팜클럽입니다."));
     }
 }

@@ -39,4 +39,12 @@ public class FarmClubController {
 
         return null;
     }
+
+    @GetMapping("/{id}")
+    public BaseResponseDto<?> getFarmClub(
+            @PathVariable Long id
+    ) {
+
+        return null;
+    }
 }
