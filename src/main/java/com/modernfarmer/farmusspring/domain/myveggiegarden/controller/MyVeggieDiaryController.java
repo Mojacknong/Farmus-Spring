@@ -1,5 +1,9 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.CheckTodayDiaryResponse;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectDiaryOneResponse;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListResponse;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieDiaryService;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -35,4 +39,20 @@ public class MyVeggieDiaryController {
                 myVeggieId
         );
     }
+
+    @GetMapping(value = "/{myVeggieId}/check")
+    public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(
+            @PathVariable("myVeggieId") Long myVeggieId
+    )  {
+        return myVeggieDiaryService.checkTodayDiary(MyVeggie.builder().id(myVeggieId).build());
+    }
+
+    @GetMapping(value = "/{myVeggieId}/one")
+    public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(
+            @PathVariable("myVeggieId") Long myVeggieId
+    )  {
+        return myVeggieDiaryService.selectDiaryOne(MyVeggie.builder().id(myVeggieId).build());
+    }
+
+
 }

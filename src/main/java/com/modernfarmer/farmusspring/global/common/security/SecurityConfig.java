@@ -75,6 +75,8 @@ public class SecurityConfig {
 				.requestMatchers("/api/auth/kakao-login")
                 .requestMatchers("/api/auth/google-login")
                 .requestMatchers("/api/my-veggie/routine")
+                .requestMatchers("/api/my-veggie/diary/{myVeggieId}/one")
+                .requestMatchers("/api/my-veggie/diary/check")
 		);
 	}
 
