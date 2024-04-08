@@ -11,7 +11,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SettingMyVeggiRequest {
+public class SettingMyVeggieRequest {
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
     private String nickname;

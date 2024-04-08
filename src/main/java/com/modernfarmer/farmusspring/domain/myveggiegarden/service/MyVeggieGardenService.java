@@ -1,6 +1,6 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggiRequest;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
@@ -24,9 +24,9 @@ public class MyVeggieGardenService {
     private final MyVeggieRepository myVeggieRepository;
 
     @Transactional
-    public BaseResponseDto<Void> settingMyVeggie(Long userId, SettingMyVeggiRequest settingMyVeggiRequest) {
+    public BaseResponseDto<Void> settingMyVeggie(Long userId, SettingMyVeggieRequest settingMyVeggieRequest) {
 
-        addMyyVeggie(userId, settingMyVeggiRequest);
+        addMyyVeggie(userId, settingMyVeggieRequest);
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
@@ -54,7 +54,7 @@ public class MyVeggieGardenService {
                 .orElseThrow(() -> new IllegalArgumentException("채소가 존재하지 않습니다."));
     }
 
-    private void addMyyVeggie(Long userId, SettingMyVeggiRequest settingMyVeggiRequest){
+    private void addMyyVeggie(Long userId, SettingMyVeggieRequest settingMyVeggiRequest){
 
         MyVeggie newMyVeggie = MyVeggie.createMyVegetable(
                 settingMyVeggiRequest.getNickname(),

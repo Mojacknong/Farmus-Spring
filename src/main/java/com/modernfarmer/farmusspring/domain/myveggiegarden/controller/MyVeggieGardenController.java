@@ -2,7 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggiRequest;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +21,9 @@ public class MyVeggieGardenController {
     private final MyVeggieGardenService myVeggieGardenService;
 
     @PostMapping(value = "/")
-    public BaseResponseDto<Void> settingMyVeggi(
+    public BaseResponseDto<Void> settingMyVeggie(
             @AuthenticationPrincipal CustomUser user,
-            @Validated @RequestBody SettingMyVeggiRequest settingMyVeggi
+            @Validated @RequestBody SettingMyVeggieRequest settingMyVeggi
             ){
         return  myVeggieGardenService.settingMyVeggie(
                 user.getUserId(),
