@@ -3,8 +3,11 @@ package com.modernfarmer.farmusspring.domain.farmclub.controller;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateFarmClubRequestDto;
 import com.modernfarmer.farmusspring.domain.farmclub.service.FarmClubService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
+import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,9 +22,7 @@ public class FarmClubController {
     public BaseResponseDto<?> createFarmClub(
             @RequestBody CreateFarmClubRequestDto requestDto
     ) {
-
-
-        return null;
+        return BaseResponseDto.of(SuccessCode.CREATED, farmClubService.createFarmClub(requestDto));
     }
 
     @PostMapping("/register")
@@ -34,10 +35,10 @@ public class FarmClubController {
 
     @GetMapping("/search")
     public BaseResponseDto<?> searchFarmClub(
+            @RequestParam List<String> difficulties,
             @RequestParam String keyword
     ) {
-
-        return null;
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.searchFarmClub(difficulties, keyword));
     }
 
     @GetMapping("/{id}")

@@ -1,12 +1,11 @@
 package com.modernfarmer.farmusspring.domain.farmclub.repository;
 
+import com.modernfarmer.farmusspring.domain.farmclub.dto.res.QSearchFarmClubResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.SearchFarmClubResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.QFarmClub;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.joda.time.LocalDate;
 
 import java.util.List;
 
@@ -21,13 +20,7 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom{
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         return queryFactory
-                .select(Projections.constructor(SearchFarmClubResponseDto.class,
-                                farmClub.id,
-                                farmClub.name,
-                                farmClub.description,
-                                farmClub.veggieImage,
-                                farmClub.difficulty,
-                                farmClub.startedAt))
+                .select(new QSearchFarmClubResponseDto(farmClub))
                 .from(farmClub)
                 .where(farmClub.difficulty.in(difficulties))
                 .where(farmClub.name.contains(keyword))

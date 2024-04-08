@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(withDefaults())
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
@@ -56,7 +56,9 @@ public class SecurityConfig {
                                 "/api/user/profile-image",
                                 "/api/user/profile",
                                 "/api/veggie-info",
-                                "/api/veggie-info/**"
+                                "/api/veggie-info/**",
+                                "/api/farm-club",
+                                "/api/farm-club/**"
                         ).permitAll()
                 )
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated());
