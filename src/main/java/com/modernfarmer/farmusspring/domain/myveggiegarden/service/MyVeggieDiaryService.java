@@ -4,6 +4,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.CheckTod
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectDiaryOneResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.MyVeggieGardenSuccessCode;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.MyVeggieGardenErrorCode;
@@ -65,7 +66,7 @@ public class MyVeggieDiaryService {
     )  {
         List<Diary> diaryList = selectDiaryByMyVeggie(myVeggie);
         if(checkNullDiaryList(diaryList)) {
-            return BaseResponseDto.of(MyVeggieGardenErrorCode.NOT_FOUND_DIARY, null);
+            return BaseResponseDto.of(MyVeggieGardenSuccessCode.NOT_FOUND_DIARY, null);
         }
         return BaseResponseDto.of(SuccessCode.SUCCESS,
                 SelectDiaryOneResponse.of(

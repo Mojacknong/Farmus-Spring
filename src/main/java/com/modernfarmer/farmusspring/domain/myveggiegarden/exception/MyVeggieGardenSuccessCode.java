@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum MyVeggieGardenErrorCode implements ResponseCode {
+public enum MyVeggieGardenSuccessCode implements ResponseCode {
 
-    ;
 
+    NOT_FOUND_DIARY(3000, "해당 일기가 존재하지 않습니다.");
     private final int code;
     private final String message;
 }
