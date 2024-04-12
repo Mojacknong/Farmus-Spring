@@ -31,8 +31,7 @@ public class FarmClubController {
     public BaseResponseDto<?> registerFarmClub(
             @RequestBody CreateFarmClubRequestDto requestDto
     ) {
-
-        return null;
+        return BaseResponseDto.of(SuccessCode.CREATED, farmClubService.createFarmClub(requestDto));
     }
 
     @GetMapping("/search")
