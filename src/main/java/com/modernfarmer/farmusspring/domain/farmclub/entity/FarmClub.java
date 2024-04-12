@@ -46,7 +46,7 @@ public class FarmClub extends BaseEntity {
     @Column(nullable = false)
     private LocalDate startedAt;
 
-    @OneToMany(mappedBy = "farmClub")
+    @OneToMany(mappedBy = "farmClub", cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserFarmClub> userFarmClubs = new ArrayList<>();
 
