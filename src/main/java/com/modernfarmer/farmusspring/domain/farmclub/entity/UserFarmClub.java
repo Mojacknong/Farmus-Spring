@@ -42,10 +42,10 @@ public class UserFarmClub extends BaseEntity {
     @JoinColumn(name = "my_veggie_id")
     private MyVeggie myVeggie;
 
-    public static UserFarmClub createUserFarmClub(Long userId, int currentStep, String currentStepName, FarmClub farmClub, MyVeggie myVeggie){
+    public static UserFarmClub createUserFarmClub(Long userId, String currentStepName, FarmClub farmClub, MyVeggie myVeggie){
         UserFarmClub newUserFarmClub = UserFarmClub.builder()
                 .userId(userId)
-                .currentStep(currentStep)
+                .currentStep(1)
                 .currentStepName(currentStepName)
                 .farmClub(farmClub)
                 .myVeggie(myVeggie)
