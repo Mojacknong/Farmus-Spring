@@ -12,6 +12,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.FarmClubRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.InfoForCreateFarmClub;
+import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.service.VeggieInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class FarmClubService {
     private final FarmClubRepository farmClubRepository;
     private final FarmClubHelper farmClubHelper;
     private final VeggieInfoService veggieInfoService;
+    private final VeggieInfoHelper veggieInfoHelper;
 
     public CreateFarmClubResponseDto createFarmClub(CreateFarmClubRequestDto request) {
         // 몽고에서 이미지, 난이도 가져오기
@@ -42,8 +44,8 @@ public class FarmClubService {
 
     public GetFarmClubResponseDto getFarmClub(Long id) {
         FarmClub farmClub = farmClubHelper.getFarmClubEntity(id);
-
-        return null;
+        List<String> help = veggieInfoHelper.getVeggieInfoHelp(farmClub.getVeggieInfoId());
+        return GetFarmClubResponseDto.of(farmClub, farmClub.getUserFarmClubs().size(), help);
     }
 
     @Transactional
