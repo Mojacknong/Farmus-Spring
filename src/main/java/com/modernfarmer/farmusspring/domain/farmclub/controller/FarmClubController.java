@@ -46,7 +46,6 @@ public class FarmClubController {
     public BaseResponseDto<?> getFarmClub(
             @PathVariable Long id
     ) {
-
-        return null;
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getFarmClub(id));
     }
 }
