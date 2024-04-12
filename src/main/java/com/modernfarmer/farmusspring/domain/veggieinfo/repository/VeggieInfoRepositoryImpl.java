@@ -3,6 +3,7 @@ package com.modernfarmer.farmusspring.domain.veggieinfo.repository;
 
 import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.InfoForCreateFarmClub;
 import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.InfoForRegister;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -44,5 +45,17 @@ public class VeggieInfoRepositoryImpl implements CustomVeggieInfoRepository{
                 .include("difficulty");
 
         return mongoTemplate.findOne(query, InfoForCreateFarmClub.class, "veggie_info");
+    }
+
+    @Override
+    public List<StepVo> getVeggieInfoStepList(String veggieInfoId) {
+        // Query to get all steps from veggieInfo collection
+        // and return as List<StepVo>
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(veggieInfoId))
+                .fields()
+                .include("steps");
+
+        return mongoTemplate.find(query, StepVo.class, "veggie_info");
     }
 }
