@@ -1,11 +1,16 @@
 package com.modernfarmer.farmusspring.domain.farmclub.service;
 
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateFarmClubRequestDto;
+import com.modernfarmer.farmusspring.domain.farmclub.dto.req.RegisterFarmClubRequestDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.CreateFarmClubResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.GetFarmClubResponseDto;
+import com.modernfarmer.farmusspring.domain.farmclub.dto.res.RegisterFarmClubResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.SearchFarmClubResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
+import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
+import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.FarmClubRepository;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.InfoForCreateFarmClub;
 import com.modernfarmer.farmusspring.domain.veggieinfo.service.VeggieInfoService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +26,7 @@ import java.util.List;
 public class FarmClubService {
 
     private final FarmClubRepository farmClubRepository;
+    private final FarmClubHelper farmClubHelper;
     private final VeggieInfoService veggieInfoService;
 
     public CreateFarmClubResponseDto createFarmClub(CreateFarmClubRequestDto request) {
@@ -34,29 +40,29 @@ public class FarmClubService {
     }
 
     public GetFarmClubResponseDto getFarmClub(Long id) {
-        FarmClub farmClub = getFarmClubEntity(id);
+        FarmClub farmClub = farmClubHelper.getFarmClubEntity(id);
 
         return null;
     }
 
-    public List<SearchFarmClubResponseDto> searchFarmClub(List<String> difficulties, String keyword) {
-        return farmClubRepository.findByConditions(difficulties,  keyword);
-    }
-
-    private FarmClub getFarmClubEntity(Long id) {
-        return farmClubRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팜클럽입니다."));
+    public RegisterFarmClubResponseDto registerFarmClub(RegisterFarmClubRequestDto request) {
+        // 채소 id로 채소 불러옴
+        FarmClub farmClub = farmClubHelper.getFarmClubEntity(request.farmClubId());
+        return null;
     }
 
     private FarmClub createFarmClubEntity(CreateFarmClubRequestDto request, InfoForCreateFarmClub veggieInfo) {
-        return FarmClub.builder()
-                .name(request.farmClubName())
-                .description(request.farmClubDescription())
-                .maxUser(request.maxMemberCount())
-                .startedAt(LocalDate.parse(request.startDate()))
-                .veggieInfoId(request.veggieInfoId())
-                .veggieName(veggieInfo.name())
-                .difficulty(veggieInfo.difficulty().name())
-                .veggieImage(veggieInfo.veggieImage())
-                .build();
+        return FarmClub.createFarmClub(
+                request.veggieInfoId(),
+                request.farmClubName(),
+                request.farmClubDescription(),
+                veggieInfo.difficulty(),
+                veggieInfo.veggieImage(),
+                request.maxMemberCount(),
+                LocalDate.now());
+    }
+
+    private UserFarmClub createUserFarmClubEntity(Long userId, String stepName, FarmClub farmClub, MyVeggie myVeggie) {
+        return UserFarmClub.createUserFarmClub(userId, stepName, farmClub, myVeggie);
     }
 }

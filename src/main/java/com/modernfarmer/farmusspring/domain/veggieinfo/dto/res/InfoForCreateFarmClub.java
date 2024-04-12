@@ -6,6 +6,6 @@ public record InfoForCreateFarmClub(
     String _id,
     String name,
     String veggieImage,
-    Difficulty difficulty
+    String difficulty
 ) {
 }
