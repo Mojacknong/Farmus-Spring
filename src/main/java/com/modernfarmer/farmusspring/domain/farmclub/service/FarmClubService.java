@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -45,9 +46,15 @@ public class FarmClubService {
         return null;
     }
 
-    public RegisterFarmClubResponseDto registerFarmClub(RegisterFarmClubRequestDto request) {
+    @Transactional
+    public RegisterFarmClubResponseDto registerFarmClub(RegisterFarmClubRequestDto request, Long userId) {
         // 채소 id로 채소 불러옴
+        MyVeggie myVeggie = null;
         FarmClub farmClub = farmClubHelper.getFarmClubEntity(request.farmClubId());
+        // 채소정보 id로 채소의 첫 스텝명 불러옴
+        String stepName = "";
+//        UserFarmClub userFarmClub = createUserFarmClubEntity(userId, stepName, farmClub, myVeggie);
+//        farmClub.addUserFarmClub(userFarmClub);
         return null;
     }
 
