@@ -2,10 +2,7 @@ package com.modernfarmer.farmusspring.domain.farmclub.service;
 
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateFarmClubRequestDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.RegisterFarmClubRequestDto;
-import com.modernfarmer.farmusspring.domain.farmclub.dto.res.CreateFarmClubResponseDto;
-import com.modernfarmer.farmusspring.domain.farmclub.dto.res.GetFarmClubResponseDto;
-import com.modernfarmer.farmusspring.domain.farmclub.dto.res.RegisterFarmClubResponseDto;
-import com.modernfarmer.farmusspring.domain.farmclub.dto.res.SearchFarmClubResponseDto;
+import com.modernfarmer.farmusspring.domain.farmclub.dto.res.*;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
@@ -58,6 +55,10 @@ public class FarmClubService {
 //        UserFarmClub userFarmClub = createUserFarmClubEntity(userId, stepName, farmClub, myVeggie);
 //        farmClub.addUserFarmClub(userFarmClub);
         return null;
+    }
+
+    public List<GetMyFarmClubListResponseDto> getMyFarmClubList(Long userId) {
+        return farmClubRepository.findMyFarmClubList(userId);
     }
 
     private FarmClub createFarmClubEntity(CreateFarmClubRequestDto request, InfoForCreateFarmClub veggieInfo) {
