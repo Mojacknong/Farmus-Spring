@@ -57,4 +57,12 @@ public class FarmClubController {
             ) {
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getMyFarmClubList(user.getUserId()));
     }
+
+    @GetMapping("/me/{farmClubId}")
+    public BaseResponseDto<?> getMyFarmClub(
+            @PathVariable Long farmClubId,
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getMyFarmClub(farmClubId, user.getUserId()));
+    }
 }
