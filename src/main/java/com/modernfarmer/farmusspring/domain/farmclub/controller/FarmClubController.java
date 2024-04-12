@@ -1,11 +1,13 @@
 package com.modernfarmer.farmusspring.domain.farmclub.controller;
 
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateFarmClubRequestDto;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.service.FarmClubService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,5 +49,12 @@ public class FarmClubController {
             @PathVariable Long id
     ) {
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getFarmClub(id));
+    }
+
+    @GetMapping("/me")
+    public BaseResponseDto<?> getMyFarmClubList(
+            @AuthenticationPrincipal CustomUser user
+            ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getMyFarmClubList(user.getUserId()));
     }
 }
