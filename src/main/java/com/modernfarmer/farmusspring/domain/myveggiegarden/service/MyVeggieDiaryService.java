@@ -65,7 +65,7 @@ public class MyVeggieDiaryService {
             MyVeggie myVeggie
     )  {
         List<Diary> diaryList = selectDiaryByMyVeggie(myVeggie);
-        if(checkNullDiaryList(diaryList)) {
+        if(diaryList.isEmpty()) {
             return BaseResponseDto.of(MyVeggieGardenSuccessCode.NOT_FOUND_DIARY, null);
         }
         return BaseResponseDto.of(SuccessCode.SUCCESS,
@@ -78,7 +78,6 @@ public class MyVeggieDiaryService {
 
 
 
-
     public boolean verifyDiaryState(Diary diary){
 
         if(diary == null){
@@ -87,13 +86,6 @@ public class MyVeggieDiaryService {
         return  false;
     }
 
-    public boolean checkNullDiaryList(List<Diary> diaries){
-
-        if(diaries.isEmpty()){
-            return true;
-        }
-        return  false;
-    }
 
     public Diary selectTodayDiary(MyVeggie myVeggie){
         return myVeggieRepository.findDiariesByMyVeggieAndToday(myVeggie);
