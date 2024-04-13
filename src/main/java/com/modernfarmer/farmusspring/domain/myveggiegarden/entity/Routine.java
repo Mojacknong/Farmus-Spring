@@ -35,17 +35,22 @@ public class Routine extends BaseEntity {
     @Column(name = "period")
     private int period;
 
+    @Column(name = "notify")
+    private boolean notify;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "my_veggie_id")
     private MyVeggie myVeggie;
 
 
-    public static Routine createRoutine(Date date, String content, int period, MyVeggie myVeggie){
+    public static Routine createRoutine(Date date, String content, int period, MyVeggie myVeggie, boolean notify){
         Routine newRoutine = Routine.builder()
                 .date(date)
                 .content(content)
                 .period(period)
                 .myVeggie(myVeggie)
+                .notify(notify)
                 .build();
 
         myVeggie.addRoutine(newRoutine);

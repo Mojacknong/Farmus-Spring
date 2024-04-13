@@ -56,7 +56,10 @@ public class SecurityConfig {
                                 "/api/user/profile-image",
                                 "/api/user/profile",
                                 "/api/veggie-info",
-                                "/api/veggie-info/**"
+                                "/api/veggie-info/**",
+                                "api/my-veggie",
+                                "api/my-veggie/diary",
+                                "/api/my-veggie/simple-list"
                         ).permitAll()
                 )
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated());
@@ -71,6 +74,9 @@ public class SecurityConfig {
 
 				.requestMatchers("/api/auth/kakao-login")
                 .requestMatchers("/api/auth/google-login")
+                .requestMatchers("/api/my-veggie/routine")
+                .requestMatchers("/api/my-veggie/diary/{myVeggieId}/one")
+                .requestMatchers("/api/my-veggie/diary/check")
 		);
 	}
 
