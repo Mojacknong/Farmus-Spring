@@ -60,6 +60,8 @@ public class MyVeggieGardenService {
                 settingMyVeggiRequest.getNickname(),
                 settingMyVeggiRequest.getBirh(),
                 settingMyVeggiRequest.getVeggiInfoId(),
+                settingMyVeggiRequest.getVeggieName(),
+                settingMyVeggiRequest.getVeggieImage(),
                 User.builder().id(userId).build()
         );
         myVeggieRepository.save(newMyVeggie);

@@ -21,4 +21,10 @@ public class SettingMyVeggieRequest {
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
     private Long veggiInfoId;
+
+    @NotNull(message = "null 값을 가지면 안됩니다.")
+    private String veggieName;
+
+    @NotNull(message = "null 값을 가지면 안됩니다.")
+    private String veggieImage;
 }
