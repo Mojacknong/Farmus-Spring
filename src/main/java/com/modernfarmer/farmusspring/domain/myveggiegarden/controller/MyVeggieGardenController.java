@@ -4,6 +4,7 @@ import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieProfileResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class MyVeggieGardenController {
     }
 
     @GetMapping(value = "/{myVeggieId}/profile")
-    public BaseResponseDto<Void> selectMyVeggieProfile(
+    public BaseResponseDto<SelectMyVeggieProfileResponse> selectMyVeggieProfile(
             @PathVariable("myVeggieId") Long myVeggieId
     ){
         return myVeggieGardenService.selectMyVeggieProfile(myVeggieId);

@@ -4,7 +4,9 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyV
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListResponse;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieProfileResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
 
+
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +27,7 @@ import java.util.stream.Collectors;
 public class MyVeggieGardenService {
 
     private final MyVeggieRepository myVeggieRepository;
+    private final DateManager dateManager;
 
     @Transactional
     public BaseResponseDto<Void> settingMyVeggie(Long userId, SettingMyVeggieRequest settingMyVeggieRequest) {
@@ -45,10 +50,38 @@ public class MyVeggieGardenService {
     }
 
     @Transactional
-    public BaseResponseDto<Void> selectMyVeggieProfile(Long myVeggieId) {
-        deleteMyVeggieById((deleteMyVeggieRequest.getMyVeggieId()));
-        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    public BaseResponseDto<SelectMyVeggieProfileResponse> selectMyVeggieProfile(Long myVeggieId) {
+        MyVeggie myVeggie = selectMyVeggieAndFarmClub(myVeggieId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS,
+                SelectMyVeggieProfileResponse.of(
+                        myVeggie.getVeggieName(),
+                        myVeggie.getVeggieImage(),
+                        dateManager.dateParsing(myVeggie.getBirth()),
+                        dateManager.dayBetween(myVeggie.getBirth(), new Date()),
+                        checkFarmClubAffiliation(myVeggie)
+                        ));
     }
+
+    public int checkFarmClubAffiliation(MyVeggie myVeggie){
+        if(myVeggie.getUserFarmClub() == null)
+            return -1;
+        return myVeggie.getUserFarmClub().getCurrentStep();
+    }
+
+
+    public MyVeggie selectMyVeggieAndFarmClub(Long myVeggieId){
+        return myVeggieRepository.findMyVeggieAndFarmClub(myVeggieId);
+
+    }
+
+//    public boolean farmClubNullCheck(int data){
+//
+//        if(data == null){
+//            return false;
+//        }
+//    }
+
+
 
 
 

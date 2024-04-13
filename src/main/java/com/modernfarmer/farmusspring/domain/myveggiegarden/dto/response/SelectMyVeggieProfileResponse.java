@@ -9,4 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(staticName = "of")
 @Getter
 public class SelectMyVeggieProfileResponse {
+
+    private String veggieName;
+    private String veggieImage;
+    private String createdVeggie;
+    private int period;
+    private int step;
 }

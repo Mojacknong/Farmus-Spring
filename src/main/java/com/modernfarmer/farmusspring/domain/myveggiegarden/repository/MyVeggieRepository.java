@@ -26,6 +26,10 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     List<MyVeggie> findMyVeggieUserId(@Param("userId") Long userId);
 
 
+    @Query("SELECT mv FROM my_veggie AS mv LEFT JOIN  mv.userFarmClub WHERE mv.id= :myVeggieId")
+    MyVeggie findMyVeggieAndFarmClub(@Param("myVeggieId") Long myVeggieId);
+
+
 
 
 
