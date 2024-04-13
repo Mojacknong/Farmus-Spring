@@ -77,6 +77,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/my-veggie/routine")
                 .requestMatchers("/api/my-veggie/diary/{myVeggieId}/one")
                 .requestMatchers("/api/my-veggie/diary/check")
+                .requestMatchers("/api/my-veggie/{myVeggieId}/profile")
 		);
 	}
 

@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -20,7 +21,7 @@ public class MyVeggieGardenController {
 
     private final MyVeggieGardenService myVeggieGardenService;
 
-    @PostMapping(value = "/")
+    @PostMapping(value = "")
     public BaseResponseDto<Void> settingMyVeggie(
             @AuthenticationPrincipal CustomUser user,
             @Validated @RequestBody SettingMyVeggieRequest settingMyVeggi
@@ -31,6 +32,14 @@ public class MyVeggieGardenController {
         );
     }
 
+    @DeleteMapping(value = "")
+    public BaseResponseDto<Void> deleteMyVeggie(
+            @Validated @RequestBody DeleteMyVeggieRequest deleteMyVeggieRequest
+            ){
+        return  myVeggieGardenService.deleteMyVeggie(deleteMyVeggieRequest);
+    }
+
+
     @GetMapping(value = "/simple-list")
     public BaseResponseDto<Void> selectMyVeggieList(
             @AuthenticationPrincipal CustomUser user
@@ -38,6 +47,12 @@ public class MyVeggieGardenController {
         return myVeggieGardenService.selectMyVeggieList(user.getUserId());
     }
 
+    @GetMapping(value = "/{myVeggieId}/profile")
+    public BaseResponseDto<Void> selectMyVeggieProfile(
+            @PathVariable("myVeggieId") Long myVeggieId
+    ){
+        return myVeggieGardenService.selectMyVeggieProfile(myVeggieId);
+    }
 
 
 

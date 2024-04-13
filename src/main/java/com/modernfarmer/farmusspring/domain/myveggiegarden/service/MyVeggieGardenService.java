@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListResponse;
@@ -35,6 +36,26 @@ public class MyVeggieGardenService {
         List<MyVeggie> myVeggieList = bringMyVeggieData(userId);
         List<SelectMyVeggieListDto> selectMyVeggieLists = processingSimpleMyVeggieData(myVeggieList);
         return BaseResponseDto.of(SuccessCode.SUCCESS,SelectMyVeggieListResponse.of(selectMyVeggieLists));
+    }
+
+    @Transactional
+    public BaseResponseDto<Void> deleteMyVeggie(DeleteMyVeggieRequest deleteMyVeggieRequest) {
+        deleteMyVeggieById((deleteMyVeggieRequest.getMyVeggieId()));
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @Transactional
+    public BaseResponseDto<Void> selectMyVeggieProfile(Long myVeggieId) {
+        deleteMyVeggieById((deleteMyVeggieRequest.getMyVeggieId()));
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+
+
+
+
+    public void deleteMyVeggieById(Long myVeggieId) {
+        myVeggieRepository.deleteById(myVeggieId);
     }
 
     private List<MyVeggie> bringMyVeggieData(Long userId){
