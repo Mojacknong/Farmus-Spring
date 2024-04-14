@@ -5,6 +5,7 @@ import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyDetailMyVeggie;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieProfileResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -53,7 +54,7 @@ public class MyVeggieGardenController {
 
 
     @GetMapping(value = "/simple-list")
-    public BaseResponseDto<Void> selectMyVeggieList(
+    public BaseResponseDto<List<SelectMyVeggieListResponse>> selectMyVeggieList(
             @AuthenticationPrincipal CustomUser user
     ){
         return myVeggieGardenService.selectMyVeggieList(user.getUserId());

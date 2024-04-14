@@ -17,10 +17,4 @@ public class MyDetailMyVeggie {
     String birthDay;
     int period;
     Long myVeggieId;
-
-
-
-
-
-
 }

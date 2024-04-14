@@ -1,15 +1,23 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response;
 
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
-@NoArgsConstructor
+import java.util.List;
+
+
 @AllArgsConstructor
 @Getter
+@Component
 public class SelectMyVeggieListDto {
 
-    public Long myVeggieId;
-    public String nickname;
+    public List<SelectMyVeggieListResponse> processData(List<MyVeggie> myVeggieList){
+        return myVeggieList.stream()
+                .map(myVeggie -> SelectMyVeggieListResponse.of(myVeggie.getVeggieInfoId(),myVeggie.getNickname()))
+                .toList();
+    }
 }

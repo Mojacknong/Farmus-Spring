@@ -12,6 +12,9 @@ import java.util.List;
 @Getter
 public class SelectMyVeggieListResponse {
 
-    List<SelectMyVeggieListDto> simpleMyVeggieList;
+   // List<SelectMyVeggieListDto> simpleMyVeggieList;
+   public Long myVeggieId;
+   public String nickname;
+
 
 }

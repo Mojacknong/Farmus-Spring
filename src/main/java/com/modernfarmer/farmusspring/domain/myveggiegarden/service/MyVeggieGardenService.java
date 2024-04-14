@@ -25,6 +25,8 @@ public class MyVeggieGardenService {
 
     private final MyVeggieRepository myVeggieRepository;
     private final DateManager dateManager;
+    private final MyDetailMyVeggieDto myDetailMyVeggieDto;
+    private final SelectMyVeggieListDto selectMyVeggieListDto;
 
 
     @Transactional
@@ -35,10 +37,10 @@ public class MyVeggieGardenService {
     }
 
     @Transactional
-    public BaseResponseDto<Void> selectMyVeggieList(Long userId) {
+    public BaseResponseDto<List<SelectMyVeggieListResponse>> selectMyVeggieList(Long userId) {
         List<MyVeggie> myVeggieList = bringMyVeggieData(userId);
-        List<SelectMyVeggieListDto> selectMyVeggieLists = processSimpleMyVeggieData(myVeggieList);
-        return BaseResponseDto.of(SuccessCode.SUCCESS,SelectMyVeggieListResponse.of(selectMyVeggieLists));
+        List<SelectMyVeggieListResponse> selectMyVeggieLists = selectMyVeggieListDto.processData(myVeggieList);
+        return BaseResponseDto.of(SuccessCode.SUCCESS,selectMyVeggieLists);
     }
 
     @Transactional
@@ -65,24 +67,12 @@ public class MyVeggieGardenService {
     public BaseResponseDto<List<MyDetailMyVeggie>> selectDetailMyVeggieList(Long userId) {
 
         List<MyVeggie> myVeggieList = bringMyVeggieData(userId);
-        List<MyDetailMyVeggieDto> selectMyVeggieList = processMyDetailMyVeggieListData(myVeggieList);
+        List<MyDetailMyVeggie> selectMyVeggieList = myDetailMyVeggieDto.processData(myVeggieList);
         return BaseResponseDto.of(SuccessCode.SUCCESS,selectMyVeggieList);
     }
 
 
-    List<MyDetailMyVeggieDto> processMyDetailMyVeggieListData(List<MyVeggie> myVeggieList){
 
-        return myVeggieList.stream()
-                .map(myVeggie -> new MyDetailMyVeggieDto(
-                        myVeggie.getNickname(),
-                        myVeggie.getVeggieImage(),
-                        myVeggie.getVeggieName(),
-                        dateManager.dateParsing(myVeggie.getBirth()),
-                        dateManager.dayBetween(myVeggie.getBirth(), new Date()),
-                        myVeggie.getId()
-                ))
-                .toList();
-    }
 
     public int checkFarmClubAffiliation(MyVeggie myVeggie){
         if(myVeggie.getUserFarmClub() == null)
@@ -105,11 +95,7 @@ public class MyVeggieGardenService {
         return myVeggieRepository.findMyVeggieUserId(userId);
     }
 
-    private List<SelectMyVeggieListDto> processSimpleMyVeggieData(List<MyVeggie> myVeggieList){
-        return myVeggieList.stream()
-                .map(myVeggie -> new SelectMyVeggieListDto(myVeggie.getVeggieInfoId(),myVeggie.getNickname()))
-                .toList();
-    }
+
 
 
 
