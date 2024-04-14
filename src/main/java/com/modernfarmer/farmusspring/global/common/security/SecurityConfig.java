@@ -59,7 +59,8 @@ public class SecurityConfig {
                                 "/api/veggie-info/**",
                                 "api/my-veggie",
                                 "api/my-veggie/diary",
-                                "/api/my-veggie/simple-list"
+                                "/api/my-veggie/simple-list",
+                                "/api/my-veggie/list"
                         ).permitAll()
                 )
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated());

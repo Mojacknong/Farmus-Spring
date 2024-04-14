@@ -4,6 +4,7 @@ import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyDetailMyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieProfileResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Slf4j
@@ -32,6 +35,14 @@ public class MyVeggieGardenController {
                 settingMyVeggi
         );
     }
+
+    @GetMapping(value = "/list")
+    public BaseResponseDto<List<MyDetailMyVeggie>> selectDetailMyVeggieList(
+            @AuthenticationPrincipal CustomUser user
+    ){
+        return myVeggieGardenService.selectDetailMyVeggieList(user.getUserId());
+    }
+
 
     @DeleteMapping(value = "")
     public BaseResponseDto<Void> deleteMyVeggie(

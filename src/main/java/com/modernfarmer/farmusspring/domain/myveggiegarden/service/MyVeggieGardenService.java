@@ -2,9 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListDto;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListResponse;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieProfileResponse;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
@@ -19,7 +17,6 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRe
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -28,6 +25,7 @@ public class MyVeggieGardenService {
 
     private final MyVeggieRepository myVeggieRepository;
     private final DateManager dateManager;
+
 
     @Transactional
     public BaseResponseDto<Void> settingMyVeggie(Long userId, SettingMyVeggieRequest settingMyVeggieRequest) {
@@ -39,7 +37,7 @@ public class MyVeggieGardenService {
     @Transactional
     public BaseResponseDto<Void> selectMyVeggieList(Long userId) {
         List<MyVeggie> myVeggieList = bringMyVeggieData(userId);
-        List<SelectMyVeggieListDto> selectMyVeggieLists = processingSimpleMyVeggieData(myVeggieList);
+        List<SelectMyVeggieListDto> selectMyVeggieLists = processSimpleMyVeggieData(myVeggieList);
         return BaseResponseDto.of(SuccessCode.SUCCESS,SelectMyVeggieListResponse.of(selectMyVeggieLists));
     }
 
@@ -62,6 +60,30 @@ public class MyVeggieGardenService {
                         ));
     }
 
+
+    @Transactional
+    public BaseResponseDto<List<MyDetailMyVeggie>> selectDetailMyVeggieList(Long userId) {
+
+        List<MyVeggie> myVeggieList = bringMyVeggieData(userId);
+        List<MyDetailMyVeggieDto> selectMyVeggieList = processMyDetailMyVeggieListData(myVeggieList);
+        return BaseResponseDto.of(SuccessCode.SUCCESS,selectMyVeggieList);
+    }
+
+
+    List<MyDetailMyVeggieDto> processMyDetailMyVeggieListData(List<MyVeggie> myVeggieList){
+
+        return myVeggieList.stream()
+                .map(myVeggie -> new MyDetailMyVeggieDto(
+                        myVeggie.getNickname(),
+                        myVeggie.getVeggieImage(),
+                        myVeggie.getVeggieName(),
+                        dateManager.dateParsing(myVeggie.getBirth()),
+                        dateManager.dayBetween(myVeggie.getBirth(), new Date()),
+                        myVeggie.getId()
+                ))
+                .toList();
+    }
+
     public int checkFarmClubAffiliation(MyVeggie myVeggie){
         if(myVeggie.getUserFarmClub() == null)
             return -1;
@@ -74,18 +96,6 @@ public class MyVeggieGardenService {
 
     }
 
-//    public boolean farmClubNullCheck(int data){
-//
-//        if(data == null){
-//            return false;
-//        }
-//    }
-
-
-
-
-
-
 
     public void deleteMyVeggieById(Long myVeggieId) {
         myVeggieRepository.deleteById(myVeggieId);
@@ -95,10 +105,10 @@ public class MyVeggieGardenService {
         return myVeggieRepository.findMyVeggieUserId(userId);
     }
 
-    private List<SelectMyVeggieListDto> processingSimpleMyVeggieData(List<MyVeggie> myVeggieList){
+    private List<SelectMyVeggieListDto> processSimpleMyVeggieData(List<MyVeggie> myVeggieList){
         return myVeggieList.stream()
                 .map(myVeggie -> new SelectMyVeggieListDto(myVeggie.getVeggieInfoId(),myVeggie.getNickname()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
