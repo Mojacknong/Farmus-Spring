@@ -19,8 +19,4 @@ public class FarmClubHelper {
     public FarmClub getFarmClubEntity(Long id) {
         return farmClubRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팜클럽입니다."));
     }
-
-    public List<SearchFarmClubResponseDto> searchFarmClub(List<String> difficulties, String keyword) {
-        return farmClubRepository.findByConditions(difficulties,  keyword);
-    }
 }

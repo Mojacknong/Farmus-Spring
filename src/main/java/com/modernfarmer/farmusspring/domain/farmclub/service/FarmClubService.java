@@ -50,6 +50,10 @@ public class FarmClubService {
         return GetFarmClubResponseDto.of(farmClub, farmClub.getUserFarmClubs().size(), help);
     }
 
+    public List<SearchFarmClubResponseDto> searchFarmClub(List<String> difficulties, String keyword) {
+        return farmClubRepository.findByConditions(difficulties,  keyword);
+    }
+
     @Transactional
     public RegisterFarmClubResponseDto registerFarmClub(RegisterFarmClubRequestDto request, Long userId) {
         // 채소 id로 채소 불러옴
