@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(withDefaults())
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
-//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
@@ -57,8 +57,9 @@ public class SecurityConfig {
                                 "/api/user/profile",
                                 "/api/veggie-info",
                                 "/api/veggie-info/**",
-                                "/api/farm-club",
-                                "/api/farm-club/**"
+                                "api/my-veggie",
+                                "api/my-veggie/diary",
+                                "/api/my-veggie/simple-list"
                         ).permitAll()
                 )
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated());
@@ -73,6 +74,9 @@ public class SecurityConfig {
 
 				.requestMatchers("/api/auth/kakao-login")
                 .requestMatchers("/api/auth/google-login")
+                .requestMatchers("/api/my-veggie/routine")
+                .requestMatchers("/api/my-veggie/diary/{myVeggieId}/one")
+                .requestMatchers("/api/my-veggie/diary/check")
 		);
 	}
 
