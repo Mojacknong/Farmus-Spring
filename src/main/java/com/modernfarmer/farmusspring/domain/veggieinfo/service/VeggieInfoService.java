@@ -1,6 +1,5 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.service;
 
-import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.InfoForCreateFarmClub;
 import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.InfoForRegister;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.repository.VeggieInfoRepository;
@@ -19,11 +18,6 @@ public class VeggieInfoService {
     public List<InfoForRegister> getVeggieInfoListForRegister() {
         // Get all veggie info list for register
         return veggieInfoRepository.getVeggieInfoListForRegister();
-    }
-
-    public InfoForCreateFarmClub getVeggieInfoForCreateFarmClub(String veggieInfoId) {
-        // Get veggie info for create farm club
-        return veggieInfoRepository.getVeggieInfoForCreateFarmClub(veggieInfoId);
     }
 
     public String getFirstStepName(String veggieInfoId) {

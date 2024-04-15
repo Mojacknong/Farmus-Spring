@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.helper;
 
+import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.CreateFarmClubVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.exception.custom.VeggieInfoNotFoundException;
 import com.modernfarmer.farmusspring.domain.veggieinfo.repository.VeggieInfoRepository;
@@ -23,6 +24,11 @@ public class VeggieInfoHelper {
                 .orElseThrow(() -> new VeggieInfoNotFoundException("존재하지 않는 채소 정보 아이디입니다."));
 
         return veggieInfo.getHelp();
+    }
+
+    public CreateFarmClubVo getVeggieInfoForCreateFarmClub(String veggieInfoId) {
+        // Get veggie info for create farm club
+        return veggieInfoRepository.getVeggieInfoForCreateFarmClub(veggieInfoId);
     }
 
     public List<StepVo> getStepList(String veggieInfoId) {

@@ -11,9 +11,8 @@ import com.modernfarmer.farmusspring.domain.farmclub.repository.MissionPostRepos
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListWithStepCountsAndImages;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
-import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.InfoForCreateFarmClub;
+import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.CreateFarmClubVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
-import com.modernfarmer.farmusspring.domain.veggieinfo.service.VeggieInfoService;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +28,15 @@ import java.util.List;
 @Slf4j
 public class FarmClubService {
 
-    private final FarmClubRepository farmClubRepository;
     private final FarmClubHelper farmClubHelper;
-    private final VeggieInfoService veggieInfoService;
     private final VeggieInfoHelper veggieInfoHelper;
+
     private final MissionPostRepository missionPostRepository;
+    private final FarmClubRepository farmClubRepository;
 
     public CreateFarmClubResponseDto createFarmClub(CreateFarmClubRequestDto request) {
         // 몽고에서 이미지, 난이도 가져오기
-        InfoForCreateFarmClub veggieInfo = veggieInfoService.getVeggieInfoForCreateFarmClub(request.veggieInfoId());
+        CreateFarmClubVo veggieInfo = veggieInfoHelper.getVeggieInfoForCreateFarmClub(request.veggieInfoId());
         FarmClub farmClub = createFarmClubEntity(request, veggieInfo);
         Long newFarmClubId = farmClubRepository.save(farmClub).getId();
         // 채소 id로 팜클럽에 가입하는 메서드 추가
@@ -88,7 +87,7 @@ public class FarmClubService {
         return tips.get((int) (Math.random() * tips.size()));
     }
 
-    private FarmClub createFarmClubEntity(CreateFarmClubRequestDto request, InfoForCreateFarmClub veggieInfo) {
+    private FarmClub createFarmClubEntity(CreateFarmClubRequestDto request, CreateFarmClubVo veggieInfo) {
         return FarmClub.createFarmClub(
                 request.veggieInfoId(),
                 request.farmClubName(),
