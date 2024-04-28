@@ -208,4 +208,6 @@ application-prod.yml
 application-db.yml
 application-aws.yml
 
+**/generated
+
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij+all,windows,macos

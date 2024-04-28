@@ -35,12 +35,18 @@ public class FarmClub extends BaseEntity {
     private String difficulty;
 
     @Column(nullable = false)
+    private String veggieImage;
+
+    @Column(nullable = false)
+    private String veggieName;
+
+    @Column(nullable = false)
     private int maxUser;
 
     @Column(nullable = false)
     private LocalDate startedAt;
 
-    @OneToMany(mappedBy = "farmClub")
+    @OneToMany(mappedBy = "farmClub", cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserFarmClub> userFarmClubs = new ArrayList<>();
 
@@ -48,12 +54,13 @@ public class FarmClub extends BaseEntity {
     @Builder.Default
     private List<Diary> diaries = new ArrayList<>();
 
-    public static FarmClub createFarmClub(String veggieInfoId, String name, String description, String difficulty, int maxUser, LocalDate startedAt){
+    public static FarmClub createFarmClub(String veggieInfoId, String name, String description, String difficulty, String veggieImage, int maxUser, LocalDate startedAt){
         return FarmClub.builder()
                 .veggieInfoId(veggieInfoId)
                 .name(name)
                 .description(description)
                 .difficulty(difficulty)
+                .veggieImage(veggieImage)
                 .maxUser(maxUser)
                 .startedAt(startedAt)
                 .build();
