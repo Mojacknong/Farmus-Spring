@@ -3,6 +3,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.repository;
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,7 +30,8 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     @Query("SELECT mv FROM my_veggie AS mv LEFT JOIN  mv.userFarmClub WHERE mv.id= :myVeggieId")
     MyVeggie findMyVeggieAndFarmClub(@Param("myVeggieId") Long myVeggieId);
 
-
+    @Query("SELECT r FROM routine AS r  WHERE r.myVeggie = :myVeggie ")
+    List<Routine> findMyVeggieRoutineById(@Param("myVeggie") MyVeggie myVeggie);
 
 
 
