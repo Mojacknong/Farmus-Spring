@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyVeggieRequest;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.MyVeggieUpdate;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
@@ -71,6 +72,10 @@ public class MyVeggieGardenService {
         return BaseResponseDto.of(SuccessCode.SUCCESS,selectMyVeggieList);
     }
 
+    @Transactional
+    public void myVeggieUpdate(MyVeggieUpdate myVeggieUpdate) {
+        myVeggieRepository.updateMyVeggie(myVeggieUpdate.getMyVeggieId(), myVeggieUpdate.getNickname(), myVeggieUpdate.getBirth());
+    }
 
 
 

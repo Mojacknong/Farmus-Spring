@@ -3,12 +3,14 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyVeggieRequest;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.MyVeggieUpdate;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyDetailMyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieProfileResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
+import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -67,6 +69,12 @@ public class MyVeggieGardenController {
         return myVeggieGardenService.selectMyVeggieProfile(myVeggieId);
     }
 
+    @PutMapping(value = "")
+    public BaseResponseDto<?> updateMyVeggie(
+            @Validated @RequestBody MyVeggieUpdate myVeggieUpdate){
 
+        myVeggieGardenService.myVeggieUpdate(myVeggieUpdate);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
 
 }

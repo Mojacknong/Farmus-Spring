@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-@Slf4j
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -44,7 +44,6 @@ public class MyVeggieRoutine {
 
     private Boolean signRoutineCheck(Date date){
         check = true;
-        log.info(String.valueOf(LocalDate.now()));
         if (date.equals(LocalDate.now())) {
            check = false;
         }
