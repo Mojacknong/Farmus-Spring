@@ -8,10 +8,10 @@ import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.FarmClubRepository;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.MissionPostRepository;
-import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListWithStepCountsAndImages;
+import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListWithStepCountsAndImagesVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
-import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.CreateFarmClubVo;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.CreateFarmClubVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +75,7 @@ public class FarmClubService {
         String veggieInfoId = farmClubInfo.veggieInfoId();
         List<StepVo> stepList = veggieInfoHelper.getStepList(veggieInfoId);
         String randomTip = getRandomTip(stepList);
-        List<GetMissionPostListWithStepCountsAndImages> missionList =
+        List<GetMissionPostListWithStepCountsAndImagesVo> missionList =
                 missionPostRepository.getMissionPostStepNumAndImage(farmClubId);
 
         return GetMyFarmClubResponseDto.of(farmClubInfo, GetMyFarmClubResponseDto.createSteps(stepList, missionList), randomTip);

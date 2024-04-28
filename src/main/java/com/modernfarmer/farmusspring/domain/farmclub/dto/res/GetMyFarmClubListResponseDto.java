@@ -2,7 +2,9 @@ package com.modernfarmer.farmusspring.domain.farmclub.dto.res;
 
 import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 
+@Builder
 public record GetMyFarmClubListResponseDto(
         Long farmClubId,
         String farmClubImage,
@@ -10,7 +12,12 @@ public record GetMyFarmClubListResponseDto(
         String veggieName
 ) {
     public static GetMyFarmClubListResponseDto of(Long farmClubId, String farmClubImage, String farmClubName, String veggieName) {
-        return new GetMyFarmClubListResponseDto(farmClubId, farmClubImage, farmClubName, veggieName);
+        return GetMyFarmClubListResponseDto.builder()
+                .farmClubId(farmClubId)
+                .farmClubImage(farmClubImage)
+                .farmClubName(farmClubName)
+                .veggieName(veggieName)
+                .build();
     }
 
     @QueryProjection

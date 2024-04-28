@@ -1,8 +1,8 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.repository;
 
 
-import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.CreateFarmClubVo;
-import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.InfoForRegister;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.CreateFarmClubVo;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.InfoForRegisterVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,7 +19,7 @@ public class VeggieInfoRepositoryImpl implements CustomVeggieInfoRepository{
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public List<InfoForRegister> getVeggieInfoListForRegister() {
+    public List<InfoForRegisterVo> getVeggieInfoListForRegister() {
         // Query to get all name, difficulty, veggieImage, period from veggieInfo collection
         // and return as List<InfoForRegister>
         Query query = new Query();
@@ -30,7 +30,7 @@ public class VeggieInfoRepositoryImpl implements CustomVeggieInfoRepository{
                 .include("veggieImage")
                 .include("period");
 
-        return mongoTemplate.find(query, InfoForRegister.class, "veggie_info");
+        return mongoTemplate.find(query, InfoForRegisterVo.class, "veggie_info");
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.service;
 
-import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.InfoForRegister;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.InfoForRegisterVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.repository.VeggieInfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class VeggieInfoService {
 
     private final VeggieInfoRepository veggieInfoRepository;
 
-    public List<InfoForRegister> getVeggieInfoListForRegister() {
+    public List<InfoForRegisterVo> getVeggieInfoListForRegister() {
         // Get all veggie info list for register
         return veggieInfoRepository.getVeggieInfoListForRegister();
     }

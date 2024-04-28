@@ -1,6 +1,6 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.helper;
 
-import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.CreateFarmClubVo;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.CreateFarmClubVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.exception.custom.VeggieInfoNotFoundException;
 import com.modernfarmer.farmusspring.domain.veggieinfo.repository.VeggieInfoRepository;

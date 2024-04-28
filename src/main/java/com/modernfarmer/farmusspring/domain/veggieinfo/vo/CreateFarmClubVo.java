@@ -1,4 +1,4 @@
-package com.modernfarmer.farmusspring.domain.veggieinfo.dto.res;
+package com.modernfarmer.farmusspring.domain.veggieinfo.vo;
 
 public record CreateFarmClubVo(
     String _id,

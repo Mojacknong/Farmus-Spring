@@ -1,8 +1,8 @@
 package com.modernfarmer.farmusspring.domain.farmclub.repository;
 
 
-import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListWithStepCountsAndImages;
-import com.modernfarmer.farmusspring.domain.farmclub.vo.QGetMissionPostListWithStepCountsAndImages;
+import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListWithStepCountsAndImagesVo;
+import com.modernfarmer.farmusspring.domain.farmclub.vo.QGetMissionPostListWithStepCountsAndImagesVo;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -20,7 +20,7 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
     private EntityManager em;
 
     @Override
-    public List<GetMissionPostListWithStepCountsAndImages> getMissionPostStepNumAndImage(Long farmClubId) {
+    public List<GetMissionPostListWithStepCountsAndImagesVo> getMissionPostStepNumAndImage(Long farmClubId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         return queryFactory
@@ -30,7 +30,7 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .where(farmClub.id.eq(farmClubId))
                 .transform(
                         GroupBy.groupBy(missionPost.stepNum)
-                                .list(new QGetMissionPostListWithStepCountsAndImages(
+                                .list(new QGetMissionPostListWithStepCountsAndImagesVo(
                                         missionPost.stepNum.count(),
                                         GroupBy.list(missionPost.image)
                                 ))
