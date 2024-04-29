@@ -77,4 +77,6 @@ public class MyVeggieGardenController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
+
+
 }

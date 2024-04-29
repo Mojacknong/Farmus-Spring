@@ -41,10 +41,7 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
                                  @Param("nickname") String nickanme,
                                  @Param("birth") Date birth);
 
-
-
     @Query("SELECT mv FROM my_veggie AS mv LEFT JOIN  mv.routines WHERE mv.user.id= :userId")
     List<MyVeggie> findMyVeggieAndRoutine(@Param("userId") Long userId);
-
 
 }
