@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.AllDairy;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.CheckTodayDiaryResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieDiaryCount;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectDiaryOneResponse;
@@ -66,6 +67,15 @@ public class MyVeggieDiaryService {
         List<Diary> diaryList = myVeggieRepository.findDiariesByMyVeggie(myVeggie);
         return new MyVeggieDiaryCount().processData(diaryList);
     }
+
+    @Transactional
+    public List<AllDairy> selectDiaryAll(MyVeggie myVeggie) {
+
+        List<Diary> diaryList = selectDiaryByMyVeggie(myVeggie);
+        return new AllDairy().processData(diaryList);
+    }
+
+
 
     @Transactional
     public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(

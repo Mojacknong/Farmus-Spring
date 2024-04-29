@@ -3,6 +3,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.util;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 
@@ -18,6 +19,5 @@ public class DateManager {
         long differenceDays = differenceMillis / (1000 * 60 * 60 * 24);
         return (int) differenceDays;
     }
-
 
 }
