@@ -5,6 +5,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,8 @@ public class MyVeggieRoutine {
                 routine.getPeriod()
         );
     }
+
+
 
     public List<MyVeggieRoutine> processData(List<Routine> routineList){
         return routineList.stream()

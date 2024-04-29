@@ -1,6 +1,8 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRoutineReqeuest;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyRoutineList;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieRoutine;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
@@ -9,6 +11,7 @@ import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +43,15 @@ public class MyVeggieRoutineController {
         List<MyVeggieRoutine> result = myVeggieRoutineService.selectMyVeggieRoutineById(myVeggie);
 
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
+    }
 
+    @GetMapping(value = "/list")
+    public BaseResponseDto<?> selectMyVeggieRoutine(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+
+        List<MyRoutineList> result = myVeggieRoutineService.selectMyVeggieRoutine(user.getUserId());
+
+        return BaseResponseDto.of(SuccessCode.SUCCESS, result);
     }
 }
