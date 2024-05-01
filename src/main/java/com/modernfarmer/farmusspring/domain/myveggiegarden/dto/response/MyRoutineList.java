@@ -28,7 +28,7 @@ public class MyRoutineList {
     }
 
 
-    public List<MyRoutineList> processData(List<MyVeggie> myVeggieList){
+    public static List<MyRoutineList> processData(List<MyVeggie> myVeggieList){
         return myVeggieList.stream()
                 .map(myVeggie -> {
 
@@ -37,7 +37,7 @@ public class MyRoutineList {
                 .toList();
     }
 
-    private List<MyVeggieRoutine> checkRoutine(MyVeggie myVeggie){
+    private static List<MyVeggieRoutine> checkRoutine(MyVeggie myVeggie){
 
         if(myVeggie.getRoutines().isEmpty()){
             return new ArrayList<>();

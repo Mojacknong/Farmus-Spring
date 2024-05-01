@@ -40,14 +40,14 @@ public class MyVeggieRoutineService {
     public List<MyVeggieRoutine> selectMyVeggieRoutineById(MyVeggie myVeggie) {
 
         List<Routine> routineList = myVeggieRepository.findMyVeggieRoutineById(myVeggie);
-        return new MyVeggieRoutine().processData(routineList);
+        return  MyVeggieRoutine.processData(routineList);
     }
 
     @Transactional
     public List<MyRoutineList> selectMyVeggieRoutine(Long userId) {
 
         List<MyVeggie> myVeggieList = myVeggieRepository.findMyVeggieAndRoutine(userId);
-        return new MyRoutineList().processData(myVeggieList);
+        return MyRoutineList.processData(myVeggieList);
     }
 
 

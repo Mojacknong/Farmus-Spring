@@ -29,12 +29,12 @@ public class AllDairy {
         );
     }
 
-    public List<AllDairy> processData(List<Diary> diaryList){
+    public static List<AllDairy> processData(List<Diary> diaryList){
         return diaryList.stream()
                 .map(diary -> AllDairy.of(diary, formatDate(diary.getCreatedDate())))
                 .toList();
     }
-    public String formatDate(LocalDateTime date) {
+    public static String formatDate(LocalDateTime date) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
         String formattedDate = date.format(formatter);

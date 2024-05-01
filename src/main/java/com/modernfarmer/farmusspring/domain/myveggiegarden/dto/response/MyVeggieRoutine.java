@@ -34,9 +34,10 @@ public class MyVeggieRoutine {
 
 
 
-    public List<MyVeggieRoutine> processData(List<Routine> routineList){
+    public static List<MyVeggieRoutine> processData(List<Routine> routineList){
         return routineList.stream()
                 .map(routine -> {
+                    boolean check;
 
                     check = signRoutineCheck(routine.getDate());
                     return MyVeggieRoutine.of(routine, check);
@@ -45,8 +46,8 @@ public class MyVeggieRoutine {
     }
 
 
-    private Boolean signRoutineCheck(Date date){
-        check = true;
+    private static Boolean signRoutineCheck(Date date){
+        boolean check = true;
         if (date.equals(LocalDate.now())) {
            check = false;
         }

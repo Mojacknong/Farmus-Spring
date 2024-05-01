@@ -26,13 +26,13 @@ public class MyVeggieDiaryCount {
         );
     }
 
-    public MyVeggieDiaryCount processData(List<Diary> diaryList){
+    public static MyVeggieDiaryCount processData(List<Diary> diaryList){
 
         return MyVeggieDiaryCount.of(diaryList.size(),selectPublicDiaryCount(diaryList));
 
     }
 
-    public int selectPublicDiaryCount(List<Diary> diaryList){
+    public static int selectPublicDiaryCount(List<Diary> diaryList){
         return (int) diaryList.stream()
                 .filter(diary -> diary.getIsOpen())
                 .count();

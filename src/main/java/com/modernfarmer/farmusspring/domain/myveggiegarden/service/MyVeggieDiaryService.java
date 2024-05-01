@@ -65,14 +65,14 @@ public class MyVeggieDiaryService {
     public MyVeggieDiaryCount selectDiaryCount(MyVeggie myVeggie) {
 
         List<Diary> diaryList = myVeggieRepository.findDiariesByMyVeggie(myVeggie);
-        return new MyVeggieDiaryCount().processData(diaryList);
+        return MyVeggieDiaryCount.processData(diaryList);
     }
 
     @Transactional
     public List<AllDairy> selectDiaryAll(MyVeggie myVeggie) {
 
         List<Diary> diaryList = selectDiaryByMyVeggie(myVeggie);
-        return new AllDairy().processData(diaryList);
+        return AllDairy.processData(diaryList);
     }
 
 
