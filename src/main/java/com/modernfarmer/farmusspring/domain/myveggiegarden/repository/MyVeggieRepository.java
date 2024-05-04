@@ -20,6 +20,9 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
 
     Optional<MyVeggie> findById(Long id);
 
+    @Query("SELECT d FROM diary AS d WHERE d.id = :diaryId ")
+    Diary findDiaryById(@Param("diaryId") Long diaryId);
+
     @Query("SELECT d FROM diary AS d WHERE d.myVeggie = :myVeggie ORDER BY d.createdDate DESC")
     List<Diary> findDiariesByMyVeggie(MyVeggie myVeggie);
 

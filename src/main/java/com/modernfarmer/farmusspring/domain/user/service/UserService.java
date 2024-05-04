@@ -1,5 +1,7 @@
 package com.modernfarmer.farmusspring.domain.user.service;
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryNotFoundException;
 import com.modernfarmer.farmusspring.domain.user.dto.response.UserProfileResponse;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
@@ -63,6 +65,19 @@ public class UserService {
 
 
 
+    public User selectUserById(Long userId){
+        User user = userRepository.findUserData(userId);
+        checkUserData(user);
+        return user;
+    }
+
+
+    public void checkUserData(User user){
+        if(user == null) {
+            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+        }
+    }
+
     private void updateUserProfileAccordingToProfileImage(MultipartFile multipartFile, String nickName, Long userId) throws IOException {
         if(multipartFile.isEmpty()){
 
@@ -86,7 +101,7 @@ public class UserService {
         userRepository.selectProfileAndNickname(userId,imageUrl,nickname);
     }
 
-    private Optional<User> selectUser(Long userId){
+    public Optional<User> selectUser(Long userId){
         Optional<User> user = Optional.ofNullable(userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다.")));
         return user;
     }

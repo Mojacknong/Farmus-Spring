@@ -5,9 +5,13 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.CheckTod
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieDiaryCount;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectDiaryOneResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryNotFoundException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.MyVeggieGardenSuccessCode;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
+import com.modernfarmer.farmusspring.domain.user.entity.User;
+import com.modernfarmer.farmusspring.domain.user.service.UserService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.MyVeggieGardenErrorCode;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
@@ -20,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -30,6 +35,7 @@ public class MyVeggieDiaryService {
     private final S3Service s3Service;
     private final MyVeggieGardenService myVeggieGardenService;
     private final MyVeggieRepository myVeggieRepository;
+    private final UserService userService;
 
     @Transactional
     public BaseResponseDto<Void> settingMyVeggieDiary(
@@ -76,6 +82,18 @@ public class MyVeggieDiaryService {
     }
 
 
+    @Transactional
+    public void pressLike(Long userId, Long diaryId) {
+        // 유저 엔티티
+        User userData = userService.selectUserById(userId);
+
+        // 성장 일기 엔티티
+        Diary diaryData = selectDiaryById(diaryId);
+
+        // 좋아요 데이터삽입
+        insertLike(userData, diaryData);
+    }
+
 
     @Transactional
     public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(
@@ -91,6 +109,11 @@ public class MyVeggieDiaryService {
                         diaryList.get(0).getContent(),
                         diaryList.get(0).getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                 ));
+    }
+
+    public void insertLike(User user, Diary diary){
+        DiaryLike newDiary = DiaryLike.createDiaryLike(diary, user);
+        diary.addDiaryLike(newDiary);
     }
 
 
@@ -110,6 +133,18 @@ public class MyVeggieDiaryService {
 
     public List<Diary> selectDiaryByMyVeggie(MyVeggie myVeggie){
         return myVeggieRepository.findDiariesByMyVeggie(myVeggie);
+    }
+
+    public Diary selectDiaryById(Long diaryId){
+        Diary diaryData =  myVeggieRepository.findDiaryById(diaryId);
+        checkDiaryData(diaryData);
+        return diaryData;
+    }
+
+    public void checkDiaryData(Diary diary){
+        if(diary == null) {
+            throw new DiaryNotFoundException("해당 일기는 존재하지 않습니다.");
+        }
     }
 
 

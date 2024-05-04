@@ -1,6 +1,9 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.LikePress;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieDiaryService;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
@@ -9,6 +12,8 @@ import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +28,7 @@ public class MyVeggieDiaryController {
 
     private final MyVeggieDiaryService myVeggieDiaryService;
 
-    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public BaseResponseDto<Void> settingMyVeggieDiary(
             @RequestPart(value = "file", required = false) MultipartFile multipartFile,
             @RequestParam("content") String content,
@@ -72,5 +77,13 @@ public class MyVeggieDiaryController {
         List<AllDairy> result = myVeggieDiaryService.selectDiaryAll(myVeggie);
 
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
+    }
+
+    @PostMapping(value = "/like")
+    public BaseResponseDto<?> pressLike(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody LikePress likePress)  {
+        myVeggieDiaryService.pressLike(user.getUserId(), likePress.getDiaryId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 }
