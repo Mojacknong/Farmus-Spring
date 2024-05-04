@@ -21,4 +21,16 @@ public class MyVeggieGardenExceptionHandler {
                 e.getMessage());
         return BaseResponseDto.of(UserErrorCode.NOT_FOUND_USER, e);
     }
+
+    @ExceptionHandler(DiaryNotFoundException.class)
+    public BaseResponseDto<?> handleDiaryNotFoundException(TestException e, HttpServletRequest request) {
+        log.error("DiaryException : {} {} errMessage={}\n",
+                request.getMethod(),
+                request.getRequestURI(),
+                e.getMessage());
+        return BaseResponseDto.of(UserErrorCode.NOT_FOUND_USER, e);
+    }
+
+
+
 }
