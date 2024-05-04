@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 public class SelectMyVeggieListDto {
 
-    public List<SelectMyVeggieListResponse> processData(List<MyVeggie> myVeggieList){
+    public static List<SelectMyVeggieListResponse> processData(List<MyVeggie> myVeggieList){
         return myVeggieList.stream()
                 .map(myVeggie -> SelectMyVeggieListResponse.of(myVeggie.getVeggieInfoId(),myVeggie.getNickname()))
                 .toList();

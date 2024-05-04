@@ -3,6 +3,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.util;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -10,14 +11,21 @@ import java.util.Date;
 @Component
 public class DateManager {
 
-    public String dateParsing(Date date){
+    public String parsingDotDate(Date date){
         SimpleDateFormat format = new SimpleDateFormat("yy.MM.dd");
         return format.format(date);
     }
-    public int dayBetween(Date startDate, Date endDate) {
+    public int calculateDay(Date startDate, Date endDate) {
         long differenceMillis = endDate.getTime() - startDate.getTime();
         long differenceDays = differenceMillis / (1000 * 60 * 60 * 24);
         return (int) differenceDays;
+    }
+
+    public static String formatDate(LocalDateTime date) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
+        String formattedDate = date.format(formatter);
+        return formattedDate;
     }
 
 }

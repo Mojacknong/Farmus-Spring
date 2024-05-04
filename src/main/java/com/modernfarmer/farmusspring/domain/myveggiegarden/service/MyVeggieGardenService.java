@@ -27,7 +27,7 @@ public class MyVeggieGardenService {
     private final MyVeggieRepository myVeggieRepository;
     private final DateManager dateManager;
     private final MyDetailMyVeggieDto myDetailMyVeggieDto;
-    private final SelectMyVeggieListDto selectMyVeggieListDto;
+
 
 
     @Transactional
@@ -40,7 +40,7 @@ public class MyVeggieGardenService {
     @Transactional
     public BaseResponseDto<List<SelectMyVeggieListResponse>> selectMyVeggieList(Long userId) {
         List<MyVeggie> myVeggieList = bringMyVeggieData(userId);
-        List<SelectMyVeggieListResponse> selectMyVeggieLists = selectMyVeggieListDto.processData(myVeggieList);
+        List<SelectMyVeggieListResponse> selectMyVeggieLists = SelectMyVeggieListDto.processData(myVeggieList);
         return BaseResponseDto.of(SuccessCode.SUCCESS,selectMyVeggieLists);
     }
 
@@ -57,8 +57,8 @@ public class MyVeggieGardenService {
                 SelectMyVeggieProfileResponse.of(
                         myVeggie.getVeggieName(),
                         myVeggie.getVeggieImage(),
-                        dateManager.dateParsing(myVeggie.getBirth()),
-                        dateManager.dayBetween(myVeggie.getBirth(), new Date()),
+                        dateManager.parsingDotDate(myVeggie.getBirth()),
+                        dateManager.calculateDay(myVeggie.getBirth(), new Date()),
                         checkFarmClubAffiliation(myVeggie)
                         ));
     }

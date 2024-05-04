@@ -4,11 +4,9 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager.formatDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,11 +32,6 @@ public class AllDairy {
                 .map(diary -> AllDairy.of(diary, formatDate(diary.getCreatedDate())))
                 .toList();
     }
-    public static String formatDate(LocalDateTime date) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
-        String formattedDate = date.format(formatter);
-        return formattedDate;
-    }
 
 }

@@ -27,8 +27,8 @@ public class MyDetailMyVeggieDto {
                         myVeggie.getNickname(),
                         myVeggie.getVeggieImage(),
                         myVeggie.getVeggieName(),
-                        dateManager.dateParsing(myVeggie.getBirth()),
-                        dateManager.dayBetween(myVeggie.getBirth(), new Date()),
+                        dateManager.parsingDotDate(myVeggie.getBirth()),
+                        dateManager.calculateDay(myVeggie.getBirth(), new Date()),
                         myVeggie.getId()
 
                 )).toList();
