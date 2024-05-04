@@ -12,7 +12,6 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-@Component
 public class SelectMyVeggieListDto {
 
     public List<SelectMyVeggieListResponse> processData(List<MyVeggie> myVeggieList){
