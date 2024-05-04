@@ -35,6 +35,13 @@ public class MyVeggie extends BaseEntity {
     @Column(name = "veggie_info_id")
     private Long veggieInfoId;
 
+    @Column(name = "veggie_name")
+    private String veggieName;
+
+    @Column(name = "veggie_image")
+    private String veggieImage;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -51,11 +58,16 @@ public class MyVeggie extends BaseEntity {
     @JoinColumn(name = "user_farm_club_id")
     private UserFarmClub userFarmClub;
 
-    public static MyVeggie createMyVegetable(String nickname, Date birth, Long veggieInfoId, User user){
+    public static MyVeggie createMyVegetable(String nickname, Date birth, Long veggieInfoId,
+                                             String veggieName,
+                                             String veggieImage,
+                                             User user){
         MyVeggie newMyVeggie = MyVeggie.builder()
                 .nickname(nickname)
                 .birth(birth)
                 .veggieInfoId(veggieInfoId)
+                .veggieName(veggieName)
+                .veggieImage(veggieImage)
                 .user(user)
                 .build();
 

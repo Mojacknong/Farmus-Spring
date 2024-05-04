@@ -5,16 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Getter
-public class SelectMyVeggieListResponse {
+public class SelectMyVeggieProfileResponse {
 
-   // List<SelectMyVeggieListDto> simpleMyVeggieList;
-   public Long myVeggieId;
-   public String nickname;
-
-
+    private String veggieName;
+    private String veggieImage;
+    private String createdVeggie;
+    private int period;
+    private int step;
 }

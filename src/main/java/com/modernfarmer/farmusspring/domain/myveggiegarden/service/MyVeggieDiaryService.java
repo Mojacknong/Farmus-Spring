@@ -1,6 +1,8 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.AllDairy;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.CheckTodayDiaryResponse;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieDiaryCount;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectDiaryOneResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
@@ -59,6 +61,21 @@ public class MyVeggieDiaryService {
         boolean state = verifyDiaryState(diary);
         return BaseResponseDto.of(SuccessCode.SUCCESS,CheckTodayDiaryResponse.of(state));
     }
+    @Transactional
+    public MyVeggieDiaryCount selectDiaryCount(MyVeggie myVeggie) {
+
+        List<Diary> diaryList = myVeggieRepository.findDiariesByMyVeggie(myVeggie);
+        return MyVeggieDiaryCount.processData(diaryList);
+    }
+
+    @Transactional
+    public List<AllDairy> selectDiaryAll(MyVeggie myVeggie) {
+
+        List<Diary> diaryList = selectDiaryByMyVeggie(myVeggie);
+        return AllDairy.processData(diaryList);
+    }
+
+
 
     @Transactional
     public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(
@@ -95,6 +112,7 @@ public class MyVeggieDiaryService {
         return myVeggieRepository.findDiariesByMyVeggie(myVeggie);
     }
 
+
     private void addMyyVeggieDiary(
             String content,
             boolean isOpen,
@@ -103,8 +121,6 @@ public class MyVeggieDiaryService {
             Long myVeggieId
     ){
         MyVeggie myVeggie = myVeggieGardenService.getMyVeggie(myVeggieId);
-
-
         Diary newDiary = Diary.createDiary(
                 content,
                 isOpen,

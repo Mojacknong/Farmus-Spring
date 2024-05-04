@@ -1,12 +1,11 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.CheckTodayDiaryResponse;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectDiaryOneResponse;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListResponse;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieDiaryService;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
+import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -54,5 +54,23 @@ public class MyVeggieDiaryController {
         return myVeggieDiaryService.selectDiaryOne(MyVeggie.builder().id(myVeggieId).build());
     }
 
+    @GetMapping(value = "/{myVeggieId}/count")
+    public BaseResponseDto<MyVeggieDiaryCount> selectDiaryCount(
+            @PathVariable("myVeggieId") Long myVeggieId
+    )  {
+        MyVeggie myVeggie = MyVeggie.builder().id(myVeggieId).build();
+        MyVeggieDiaryCount result = myVeggieDiaryService.selectDiaryCount(myVeggie);
 
+        return BaseResponseDto.of(SuccessCode.SUCCESS, result);
+    }
+
+    @GetMapping(value = "/{myVeggieId}/all")
+    public BaseResponseDto<MyVeggieDiaryCount> selectDiaryAll(
+            @PathVariable("myVeggieId") Long myVeggieId
+    )  {
+        MyVeggie myVeggie = MyVeggie.builder().id(myVeggieId).build();
+        List<AllDairy> result = myVeggieDiaryService.selectDiaryAll(myVeggie);
+
+        return BaseResponseDto.of(SuccessCode.SUCCESS, result);
+    }
 }
