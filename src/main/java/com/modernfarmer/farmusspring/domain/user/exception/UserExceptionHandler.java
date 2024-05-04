@@ -13,7 +13,7 @@ public class UserExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public BaseResponseDto<?> handleUserNotFoundException(TestException e, HttpServletRequest request) {
-        log.error("TestException : {} {} errMessage={}\n",
+        log.error("UserException : {} {} errMessage={}\n",
                 request.getMethod(),
                 request.getRequestURI(),
                 e.getMessage());
