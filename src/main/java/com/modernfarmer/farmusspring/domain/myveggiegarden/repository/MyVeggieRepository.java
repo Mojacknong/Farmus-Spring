@@ -44,4 +44,11 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     @Query("SELECT mv FROM my_veggie AS mv LEFT JOIN  mv.routines WHERE mv.user.id= :userId")
     List<MyVeggie> findMyVeggieAndRoutine(@Param("userId") Long userId);
 
+
+    @Query("SELECT r FROM routine AS r  WHERE r.id = :routineId ")
+    Optional<Routine> findRoutineById(@Param("routineId") Long routineId);
+
+    @Modifying
+    @Query("UPDATE routine AS r SET r.date = :date WHERE r.id = :routineId")
+    void updateRoutinePeriod(@Param("routineId") Long routineId, @Param("date") Date date);
 }
