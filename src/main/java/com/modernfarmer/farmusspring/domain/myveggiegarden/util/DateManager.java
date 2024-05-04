@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -26,6 +27,14 @@ public class DateManager {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
         String formattedDate = date.format(formatter);
         return formattedDate;
+    }
+
+
+    public Date addDate(Date date, int addDate){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DAY_OF_MONTH, addDate); // 3일을 더함
+        return cal.getTime();
     }
 
 }
