@@ -8,6 +8,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryCommentNotFoundException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryNotFoundException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.MyVeggieGardenSuccessCode;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
@@ -97,6 +98,12 @@ public class MyVeggieDiaryService {
         insertComment(content, userData, diaryData);
     }
 
+    @Transactional
+    public void deleteComment(User user, Long diaryCommentId) {
+        Optional<DiaryComment> diaryCommentData = myVeggieRepository.findDiaryCommentByIdAndUserId(diaryCommentId, user);
+        validateDiaryComment(diaryCommentData);
+        myVeggieRepository.deleteDiaryCommentByIdAndUserId(diaryCommentId, user);
+    }
 
     @Transactional
     public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(
@@ -151,6 +158,12 @@ public class MyVeggieDiaryService {
     public void checkDiaryData(Diary diary){
         if(diary == null) {
             throw new DiaryNotFoundException("해당 일기는 존재하지 않습니다.");
+        }
+    }
+
+    public void validateDiaryComment(Optional<DiaryComment> diaryComment){
+        if(diaryComment.isEmpty()){
+            throw new DiaryCommentNotFoundException("해당 유저는 댓글 삭제 권한이 없습니다.");
         }
     }
 

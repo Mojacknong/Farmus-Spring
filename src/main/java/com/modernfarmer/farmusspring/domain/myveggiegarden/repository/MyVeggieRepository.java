@@ -2,8 +2,10 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.repository;
 
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
+import com.modernfarmer.farmusspring.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -50,6 +52,14 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
 
     @Query("SELECT r FROM routine AS r  WHERE r.id = :routineId ")
     Optional<Routine> findRoutineById(@Param("routineId") Long routineId);
+
+    @Query("SELECT dc FROM diary_comment AS dc WHERE dc.id = :diaryCommentId AND dc.user = :user")
+    Optional<DiaryComment> findDiaryCommentByIdAndUserId(@Param("diaryCommentId") Long diaryCommentId, @Param("user") User user);
+
+
+    @Modifying
+    @Query("DELETE FROM diary_comment AS dc WHERE dc.id = :diaryCommentId AND dc.user = :user")
+    void deleteDiaryCommentByIdAndUserId(@Param("diaryCommentId") Long diaryCommentId, @Param("user") User user);
 
     @Modifying
     @Query("UPDATE routine AS r SET r.date = :date WHERE r.id = :routineId")

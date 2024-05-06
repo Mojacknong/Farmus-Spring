@@ -42,12 +42,9 @@ public class DiaryComment extends BaseEntity {
                 .user(user)
                 .diary(diary)
                 .build();
-
         diary.addDiaryComment(newDiaryComment);
         user.addDiaryComment(newDiaryComment);
-
         return newDiaryComment;
-
     }
 
 

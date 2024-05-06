@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentDelete;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentWrite;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.LikePress;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
@@ -8,6 +9,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieDiaryService;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
+import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -94,6 +96,16 @@ public class MyVeggieDiaryController {
             @AuthenticationPrincipal CustomUser user,
             @Validated @RequestBody CommentWrite commentWrite)  {
         myVeggieDiaryService.writeComment(user.getUserId(), commentWrite.getDiaryId(), commentWrite.getContent());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+
+    @DeleteMapping(value = "/comment")
+    public BaseResponseDto<?> deleteComment(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody CommentDelete commentDelete)  {
+        User userObject = User.builder().id(user.getUserId()).build();
+        myVeggieDiaryService.deleteComment(userObject, commentDelete.getDiaryCommentId());
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 }

@@ -63,9 +63,7 @@ public class Diary extends BaseEntity {
                 .build();
 
         myVeggie.addDiary(newDiary);
-
         return newDiary;
-
     }
 
     public void addDiaryComment(DiaryComment diaryComment) {
@@ -75,4 +73,6 @@ public class Diary extends BaseEntity {
     public void addDiaryLike(DiaryLike diaryLike) {
         diaryLikes.add(diaryLike);
     }
+
+
 }
