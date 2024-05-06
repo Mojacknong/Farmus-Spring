@@ -1,8 +1,7 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.exception;
 
+
 import com.modernfarmer.farmusspring.domain.test.exception.TestException;
-import com.modernfarmer.farmusspring.domain.user.exception.UserErrorCode;
-import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -14,23 +13,30 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class MyVeggieGardenExceptionHandler {
 
     @ExceptionHandler(RoutineNotFountException.class)
-    public BaseResponseDto<?> handleRoutineNotFoundException(TestException e, HttpServletRequest request) {
+    public BaseResponseDto<?> handleRoutineNotFoundException(RoutineNotFountException e, HttpServletRequest request) {
         log.error("RoutineException : {} {} errMessage={}\n",
                 request.getMethod(),
                 request.getRequestURI(),
                 e.getMessage());
-        return BaseResponseDto.of(UserErrorCode.NOT_FOUND_USER, e);
+        return BaseResponseDto.of(MyVeggieGardenErrorCode.NOT_FOUND_ROUTINE, e);
     }
 
     @ExceptionHandler(DiaryNotFoundException.class)
-    public BaseResponseDto<?> handleDiaryNotFoundException(TestException e, HttpServletRequest request) {
+    public BaseResponseDto<?> handleDiaryNotFoundException(DiaryNotFoundException e, HttpServletRequest request) {
         log.error("DiaryException : {} {} errMessage={}\n",
                 request.getMethod(),
                 request.getRequestURI(),
                 e.getMessage());
-        return BaseResponseDto.of(UserErrorCode.NOT_FOUND_USER, e);
+        return BaseResponseDto.of(MyVeggieGardenErrorCode.NOT_FOUND_DIARY, e);
     }
 
-
+    @ExceptionHandler(DiaryCommentNotFoundException.class)
+    public BaseResponseDto<?> handleDiaryCommentNotFoundException(DiaryCommentNotFoundException e, HttpServletRequest request) {
+        log.error("DiaryCommentException : {} {} errMessage={}\n",
+                request.getMethod(),
+                request.getRequestURI(),
+                e.getMessage());
+        return BaseResponseDto.of(MyVeggieGardenErrorCode.NOT_FOUND_DIARY_COMMENT, e);
+    }
 
 }
