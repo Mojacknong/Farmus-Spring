@@ -5,6 +5,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.CheckTod
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieDiaryCount;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectDiaryOneResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryNotFoundException;
@@ -84,14 +85,16 @@ public class MyVeggieDiaryService {
 
     @Transactional
     public void pressLike(Long userId, Long diaryId) {
-        // 유저 엔티티
         User userData = userService.selectUserById(userId);
-
-        // 성장 일기 엔티티
         Diary diaryData = selectDiaryById(diaryId);
-
-        // 좋아요 데이터삽입
         insertLike(userData, diaryData);
+    }
+
+    @Transactional
+    public void writeComment(Long userId, Long diaryId, String content) {
+        User userData = userService.selectUserById(userId);
+        Diary diaryData = selectDiaryById(diaryId);
+        insertComment(content, userData, diaryData);
     }
 
 
@@ -111,12 +114,16 @@ public class MyVeggieDiaryService {
                 ));
     }
 
+
+    public void insertComment(String content, User user, Diary diary){
+        DiaryComment diaryComment = DiaryComment.createDiaryComment(content, diary, user);
+        diary.addDiaryComment(diaryComment);
+    }
+
     public void insertLike(User user, Diary diary){
         DiaryLike newDiary = DiaryLike.createDiaryLike(diary, user);
         diary.addDiaryLike(newDiary);
     }
-
-
 
     public boolean verifyDiaryState(Diary diary){
 

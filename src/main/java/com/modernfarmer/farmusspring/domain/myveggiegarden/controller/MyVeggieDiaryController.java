@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentWrite;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.LikePress;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
@@ -84,6 +85,15 @@ public class MyVeggieDiaryController {
             @AuthenticationPrincipal CustomUser user,
             @Validated @RequestBody LikePress likePress)  {
         myVeggieDiaryService.pressLike(user.getUserId(), likePress.getDiaryId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+
+    @PostMapping(value = "/comment")
+    public BaseResponseDto<?> writeComment(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody CommentWrite commentWrite)  {
+        myVeggieDiaryService.writeComment(user.getUserId(), commentWrite.getDiaryId(), commentWrite.getContent());
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 }

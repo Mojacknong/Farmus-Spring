@@ -29,12 +29,10 @@ public class DiaryComment extends BaseEntity {
     private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 
