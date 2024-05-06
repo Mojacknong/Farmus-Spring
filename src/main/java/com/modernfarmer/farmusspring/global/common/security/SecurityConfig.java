@@ -59,7 +59,8 @@ public class SecurityConfig {
                                 "/api/veggie-info/**",
                                 "api/my-veggie",
                                 "api/my-veggie/diary",
-                                "/api/my-veggie/simple-list"
+                                "/api/my-veggie/simple-list",
+                                "/api/my-veggie/list"
                         ).permitAll()
                 )
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated());
@@ -77,6 +78,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/my-veggie/routine")
                 .requestMatchers("/api/my-veggie/diary/{myVeggieId}/one")
                 .requestMatchers("/api/my-veggie/diary/check")
+                .requestMatchers("/api/my-veggie/{myVeggieId}/profile")
 		);
 	}
 
