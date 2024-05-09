@@ -2,6 +2,8 @@ package com.modernfarmer.farmusspring.domain.farmclub.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateFarmClubRequestDto;
+import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateMissionPostCommentRequestDto;
+import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateMissionPostLikeRequestDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateMissionPostRequestDto;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.service.FarmClubService;
@@ -75,5 +77,40 @@ public class FarmClubController {
             @RequestPart(value = "image") MultipartFile image
     ) {
         return BaseResponseDto.of(SuccessCode.CREATED, missionPostService.createMissionPost(requestDto, image));
+    }
+
+    @PostMapping("/mission/comment")
+    public BaseResponseDto<?> createMissionPostComment(
+            @AuthenticationPrincipal CustomUser user,
+            @RequestBody CreateMissionPostCommentRequestDto requestDto
+            ) {
+        return BaseResponseDto.of(SuccessCode.CREATED, missionPostService.createMissionPostComment(user.getUserId(), requestDto));
+    }
+
+    @PostMapping("/mission/like")
+    public BaseResponseDto<?> createMissionPostLike(
+            @AuthenticationPrincipal CustomUser user,
+            @RequestBody CreateMissionPostLikeRequestDto requestDto
+            ) {
+        return BaseResponseDto.of(SuccessCode.CREATED, missionPostService.createMissionPostLike(user.getUserId(), requestDto.missionPostId()));
+    }
+
+    @GetMapping("/{id}/mission")
+    public BaseResponseDto<?> getMissionPostList(
+            @PathVariable Long id
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, missionPostService.getMissionPostList(id));
+    }
+
+    @GetMapping("/mission/{id}")
+    public BaseResponseDto<?> getMissionPostComments(
+            @PathVariable Long id
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, missionPostService.getMissionPostComment(id));
+    }
+
+    @GetMapping("/help")
+    public BaseResponseDto<?> getFarmClubHelp() {
+        return null;
     }
 }

@@ -3,7 +3,7 @@ package com.modernfarmer.farmusspring.domain.farmclub.repository;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.*;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.QFarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.FarmClubErrorCode;
-import com.modernfarmer.farmusspring.domain.farmclub.exception.custom.EntityNotFoundException;
+import com.modernfarmer.farmusspring.domain.farmclub.exception.custom.FarmClubEntityNotFoundException;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.QGetMyFarmClubVo_BaseInfo;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -75,7 +75,7 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
 
             return GetMyFarmClubVo.of(baseInfo, userFarmClubCount, daySinceStart);
         } else {
-            throw new EntityNotFoundException("내 팜클럽을 불러오는 도중 에러가 발생했습니다.", FarmClubErrorCode.FARM_CLUB_NOT_FOUND);
+            throw new FarmClubEntityNotFoundException("내 팜클럽을 불러오는 도중 에러가 발생했습니다.", FarmClubErrorCode.FARM_CLUB_NOT_FOUND);
         }
     }
 
