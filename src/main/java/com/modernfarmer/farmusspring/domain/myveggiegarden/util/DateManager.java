@@ -16,6 +16,12 @@ public class DateManager {
         SimpleDateFormat format = new SimpleDateFormat("yy.MM.dd");
         return format.format(date);
     }
+
+
+    public static String parsingDotDateTime(LocalDateTime date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
+        return date.format(formatter);
+    }
     public int calculateDay(Date startDate, Date endDate) {
         long differenceMillis = endDate.getTime() - startDate.getTime();
         long differenceDays = differenceMillis / (1000 * 60 * 60 * 24);
