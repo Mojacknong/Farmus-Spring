@@ -38,5 +38,12 @@ public class MyVeggieGardenExceptionHandler {
                 e.getMessage());
         return BaseResponseDto.of(MyVeggieGardenErrorCode.NOT_FOUND_DIARY_COMMENT, e);
     }
-
+    @ExceptionHandler(DiaryLikeNotFoundException.class)
+    public BaseResponseDto<?> handleDiaryLikeNotFoundException(DiaryLikeNotFoundException e, HttpServletRequest request) {
+        log.error("DiaryLikeException : {} {} errMessage={}\n",
+                request.getMethod(),
+                request.getRequestURI(),
+                e.getMessage());
+        return BaseResponseDto.of(MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like, e);
+    }
 }
