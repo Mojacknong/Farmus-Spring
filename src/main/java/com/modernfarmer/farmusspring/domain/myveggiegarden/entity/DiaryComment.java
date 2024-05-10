@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.entity;
 
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
+import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -46,6 +47,7 @@ public class DiaryComment extends BaseEntity {
         user.addDiaryComment(newDiaryComment);
         return newDiaryComment;
     }
+
 
 
 }

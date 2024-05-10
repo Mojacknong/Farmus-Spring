@@ -1,9 +1,6 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.AllDairy;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.CheckTodayDiaryResponse;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieDiaryCount;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectDiaryOneResponse;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
@@ -126,6 +123,21 @@ public class MyVeggieDiaryService {
                         diaryList.get(0).getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                 ));
     }
+
+
+    @Transactional
+    public List<DiaryCommentContent> selectComment(
+            Long userId, Long diaryId, Long farmClubId
+    )  {
+
+        List<DiaryComment> diaryCommentList = diaryRepository.findDiary(diaryId, farmClubId);
+        List<DiaryCommentContent> diaryCommentContent = DiaryCommentContent.processData(diaryCommentList, userId);
+        log.info(String.valueOf(diaryCommentContent));
+
+
+       return diaryCommentContent;
+    }
+
 
 
     public void insertComment(String content, User user, Diary diary){

@@ -6,6 +6,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentWr
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.Like;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieDiaryService;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
@@ -13,6 +14,7 @@ import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -98,6 +100,19 @@ public class MyVeggieDiaryController {
         myVeggieDiaryService.cancelLike(userObject, diaryObject);
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
+
+    @GetMapping(value = "/{diaryId}/{farmClubId}/comment")
+    public BaseResponseDto<?> selectComment(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable("diaryId") Long diaryId,
+            @PathVariable("farmClubId") Long farmClubId
+    )  {
+        List<DiaryCommentContent> diaryCommentList = myVeggieDiaryService.selectComment(user.getUserId(), diaryId, farmClubId);
+
+        return BaseResponseDto.of(SuccessCode.SUCCESS, diaryCommentList);
+    }
+
+
     @PostMapping(value = "/comment")
     public BaseResponseDto<?> writeComment(
             @AuthenticationPrincipal CustomUser user,
