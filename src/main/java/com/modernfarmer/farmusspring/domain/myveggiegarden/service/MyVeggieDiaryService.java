@@ -8,14 +8,12 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryCommentNotFoundException;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryNotFoundException;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.MyVeggieGardenSuccessCode;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.*;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.service.UserService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.MyVeggieGardenErrorCode;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import com.modernfarmer.farmusspring.infra.s3.S3Service;
 import lombok.AllArgsConstructor;
@@ -38,6 +36,7 @@ public class MyVeggieDiaryService {
     private final MyVeggieGardenService myVeggieGardenService;
     private final MyVeggieRepository myVeggieRepository;
     private final UserService userService;
+    private final DiaryRepository diaryRepository;
 
     @Transactional
     public BaseResponseDto<Void> settingMyVeggieDiary(
@@ -92,6 +91,13 @@ public class MyVeggieDiaryService {
     }
 
     @Transactional
+    public void cancelLike(User user, Diary diary) {
+        DiaryLike diaryLike = diaryRepository.findDiaryLikeByIdAndUser(user, diary);
+        checkDiaryLikeData(diaryLike);
+        deleteLike(user, diary);
+    }
+
+    @Transactional
     public void writeComment(Long userId, Long diaryId, String content) {
         User userData = userService.selectUserById(userId);
         Diary diaryData = selectDiaryById(diaryId);
@@ -132,6 +138,10 @@ public class MyVeggieDiaryService {
         diary.addDiaryLike(newDiary);
     }
 
+    public void deleteLike(User user, Diary diary){
+        diaryRepository.deleteDiaryLikeByIdAndUser(user, diary);
+    }
+
     public boolean verifyDiaryState(Diary diary){
 
         if(diary == null){
@@ -157,10 +167,15 @@ public class MyVeggieDiaryService {
 
     public void checkDiaryData(Diary diary){
         if(diary == null) {
-            throw new DiaryNotFoundException("해당 일기는 존재하지 않습니다.");
+            throw new DiaryNotFoundException("해당 일기는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like);
         }
     }
 
+    public void checkDiaryLikeData(DiaryLike diaryLike){
+        if(diaryLike == null) {
+            throw new DiaryLikeNotFoundException("해당 좋아요 데이터는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like);
+        }
+    }
     public void validateDiaryComment(Optional<DiaryComment> diaryComment){
         if(diaryComment.isEmpty()){
             throw new DiaryCommentNotFoundException("해당 유저는 댓글 삭제 권한이 없습니다.");

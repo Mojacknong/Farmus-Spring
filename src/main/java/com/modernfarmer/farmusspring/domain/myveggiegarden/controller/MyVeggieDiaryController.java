@@ -3,12 +3,11 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentDelete;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentWrite;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.LikePress;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.Like;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieDiaryService;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
@@ -85,12 +84,20 @@ public class MyVeggieDiaryController {
     @PostMapping(value = "/like")
     public BaseResponseDto<?> pressLike(
             @AuthenticationPrincipal CustomUser user,
-            @Validated @RequestBody LikePress likePress)  {
-        myVeggieDiaryService.pressLike(user.getUserId(), likePress.getDiaryId());
+            @Validated @RequestBody Like like)  {
+        myVeggieDiaryService.pressLike(user.getUserId(), like.getDiaryId());
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
-
+    @DeleteMapping(value = "/like")
+    public BaseResponseDto<?> cancelLike(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody Like like)  {
+        User userObject = User.builder().id(user.getUserId()).build();
+        Diary diaryObject = Diary.builder().id(like.getDiaryId()).build();
+        myVeggieDiaryService.cancelLike(userObject, diaryObject);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
     @PostMapping(value = "/comment")
     public BaseResponseDto<?> writeComment(
             @AuthenticationPrincipal CustomUser user,
