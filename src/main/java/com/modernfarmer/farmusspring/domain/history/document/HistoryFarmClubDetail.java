@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @Document(collection = "history_club_detail")
-public class HistoryClubDetail extends BaseDocument {
+public class HistoryFarmClubDetail extends BaseDocument {
 
     @Id
     private ObjectId id;
@@ -37,8 +37,8 @@ public class HistoryClubDetail extends BaseDocument {
         private int likeNum;
     }
 
-    public static HistoryClubDetail createHistoryClubDetail(List<HistoryClubPost> missionPostList) {
-        return HistoryClubDetail.builder()
+    public static HistoryFarmClubDetail createHistoryClubDetail(List<HistoryClubPost> missionPostList) {
+        return HistoryFarmClubDetail.builder()
                 .missionPostList(missionPostList)
                 .build();
     }
