@@ -2,6 +2,8 @@ package com.modernfarmer.farmusspring.domain.farmclub.repository;
 
 
 import com.modernfarmer.farmusspring.domain.farmclub.vo.*;
+import com.modernfarmer.farmusspring.domain.history.vo.MissionPostHistoryVo;
+import com.modernfarmer.farmusspring.domain.history.vo.QMissionPostHistoryVo;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -75,6 +77,24 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .join(myVeggie.user, user)
                 .where(farmClub.id.eq(farmClubId))
                 .orderBy(missionPost.createdDate.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<MissionPostHistoryVo> getMissionPostHistory(Long userFarmClubId) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+
+        return queryFactory
+                .select(new QMissionPostHistoryVo(
+                        missionPost.stepNum,
+                        missionPost.image,
+                        missionPost.content,
+                        missionPost.createdDate.stringValue()
+                ))
+                .from(missionPost)
+                .join(missionPost.userFarmClub, userFarmClub)
+                .where(userFarmClub.id.eq(userFarmClubId))
+                .orderBy(missionPost.stepNum.asc())
                 .fetch();
     }
 }
