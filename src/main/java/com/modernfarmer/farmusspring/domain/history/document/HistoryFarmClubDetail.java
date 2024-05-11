@@ -33,8 +33,7 @@ public class HistoryFarmClubDetail extends BaseDocument {
         private String stepName;
         private String postImage;
         private String content;
-        private String dateTime;
-        private int likeNum;
+        private String date;
     }
 
     public static HistoryFarmClubDetail createHistoryClubDetail(List<HistoryClubPost> missionPostList) {
