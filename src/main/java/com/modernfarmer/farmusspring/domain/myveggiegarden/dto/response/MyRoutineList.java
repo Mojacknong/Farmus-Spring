@@ -45,7 +45,7 @@ public class MyRoutineList {
         return myVeggie.getRoutines().stream()
                 .map(routine -> {
 
-                    return new MyVeggieRoutine(true, routine.getContent(), routine.getPeriod() );
+                    return new MyVeggieRoutine(true, routine.getContent(), routine.getPeriod(), routine.getId() );
                         })
                 .toList();
     }

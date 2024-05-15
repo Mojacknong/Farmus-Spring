@@ -5,8 +5,8 @@ import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,14 +21,12 @@ public class DiaryLike extends BaseEntity {
     @Column(name = "diary_like_id")
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 

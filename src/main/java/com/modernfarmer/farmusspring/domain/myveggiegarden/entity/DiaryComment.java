@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.entity;
 
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
+import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,12 +30,10 @@ public class DiaryComment extends BaseEntity {
     private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -44,13 +43,11 @@ public class DiaryComment extends BaseEntity {
                 .user(user)
                 .diary(diary)
                 .build();
-
         diary.addDiaryComment(newDiaryComment);
         user.addDiaryComment(newDiaryComment);
-
         return newDiaryComment;
-
     }
+
 
 
 }

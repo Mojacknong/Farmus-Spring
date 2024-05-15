@@ -41,11 +41,11 @@ public class Diary extends BaseEntity {
     @JoinColumn(name = "my_veggie_id")
     private MyVeggie myVeggie;
 
-    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
     @Builder.Default
     private List<DiaryComment> diaryComments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<DiaryLike> diaryLikes = new ArrayList<>();
 
@@ -63,9 +63,7 @@ public class Diary extends BaseEntity {
                 .build();
 
         myVeggie.addDiary(newDiary);
-
         return newDiary;
-
     }
 
     public void addDiaryComment(DiaryComment diaryComment) {
@@ -75,4 +73,6 @@ public class Diary extends BaseEntity {
     public void addDiaryLike(DiaryLike diaryLike) {
         diaryLikes.add(diaryLike);
     }
+
+
 }

@@ -1,14 +1,23 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentDelete;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentWrite;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.Like;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieDiaryService;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieGardenService;
+import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +32,7 @@ public class MyVeggieDiaryController {
 
     private final MyVeggieDiaryService myVeggieDiaryService;
 
-    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public BaseResponseDto<Void> settingMyVeggieDiary(
             @RequestPart(value = "file", required = false) MultipartFile multipartFile,
             @RequestParam("content") String content,
@@ -72,5 +81,53 @@ public class MyVeggieDiaryController {
         List<AllDairy> result = myVeggieDiaryService.selectDiaryAll(myVeggie);
 
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
+    }
+
+    @PostMapping(value = "/like")
+    public BaseResponseDto<?> pressLike(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody Like like)  {
+        myVeggieDiaryService.pressLike(user.getUserId(), like.getDiaryId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @DeleteMapping(value = "/like")
+    public BaseResponseDto<?> cancelLike(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody Like like)  {
+        User userObject = User.builder().id(user.getUserId()).build();
+        Diary diaryObject = Diary.builder().id(like.getDiaryId()).build();
+        myVeggieDiaryService.cancelLike(userObject, diaryObject);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @GetMapping(value = "/{diaryId}/{farmClubId}/comment")
+    public BaseResponseDto<?> selectComment(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable("diaryId") Long diaryId,
+            @PathVariable("farmClubId") Long farmClubId
+    )  {
+        List<DiaryCommentContent> diaryCommentList = myVeggieDiaryService.selectComment(user.getUserId(), diaryId, farmClubId);
+
+        return BaseResponseDto.of(SuccessCode.SUCCESS, diaryCommentList);
+    }
+
+
+    @PostMapping(value = "/comment")
+    public BaseResponseDto<?> writeComment(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody CommentWrite commentWrite)  {
+        myVeggieDiaryService.writeComment(user.getUserId(), commentWrite.getDiaryId(), commentWrite.getContent());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+
+    @DeleteMapping(value = "/comment")
+    public BaseResponseDto<?> deleteComment(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody CommentDelete commentDelete)  {
+        User userObject = User.builder().id(user.getUserId()).build();
+        myVeggieDiaryService.deleteComment(userObject, commentDelete.getDiaryCommentId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 }
