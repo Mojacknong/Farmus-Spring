@@ -109,6 +109,13 @@ public class MyVeggieDiaryService {
     }
 
     @Transactional
+    public void updateComment(User user, Long diaryCommentId, String content) {
+
+        Optional<DiaryComment> diaryCommentData = myVeggieRepository.findDiaryCommentByIdAndUserId(diaryCommentId, user);
+        validateDiaryComment(diaryCommentData);
+        myVeggieRepository.updateDiaryCommentByIdAndUserId(diaryCommentId, user, content);
+    }
+    @Transactional
     public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(
             MyVeggie myVeggie
     )  {
@@ -132,10 +139,7 @@ public class MyVeggieDiaryService {
 
         List<DiaryComment> diaryCommentList = diaryRepository.findDiary(diaryId, farmClubId);
         List<DiaryCommentContent> diaryCommentContent = DiaryCommentContent.processData(diaryCommentList, userId);
-        log.info(String.valueOf(diaryCommentContent));
-
-
-       return diaryCommentContent;
+        return diaryCommentContent;
     }
 
 
