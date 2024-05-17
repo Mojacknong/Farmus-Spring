@@ -50,6 +50,17 @@ public class MyVeggieDiaryController {
         );
     }
 
+
+    @GetMapping(value = "/{farmClubId}")
+    public BaseResponseDto<FarmClubDiary> findFarmClubDiary(
+            @PathVariable("farmClubId") Long farmClubId){
+
+        List<FarmClubDiary> farmClubDiaryList = myVeggieDiaryService.findDiaryAccordingToFarmClub(farmClubId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubDiaryList);
+    }
+
+
+
     @GetMapping(value = "/{myVeggieId}/check")
     public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(
             @PathVariable("myVeggieId") Long myVeggieId
