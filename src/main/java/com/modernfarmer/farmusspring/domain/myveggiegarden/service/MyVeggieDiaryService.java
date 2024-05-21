@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
+import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
@@ -8,6 +9,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.service.UserService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -34,6 +36,7 @@ public class MyVeggieDiaryService {
     private final MyVeggieRepository myVeggieRepository;
     private final UserService userService;
     private final DiaryRepository diaryRepository;
+    private final DateManager dateManager;
 
     @Transactional
     public BaseResponseDto<Void> settingMyVeggieDiary(
@@ -65,6 +68,29 @@ public class MyVeggieDiaryService {
         boolean state = verifyDiaryState(diary);
         return BaseResponseDto.of(SuccessCode.SUCCESS,CheckTodayDiaryResponse.of(state));
     }
+
+
+
+    @Transactional
+    public List<FarmClubDiary> findDiaryAccordingToFarmClub(Long farmClubId) {
+        List<Diary> diaryList = diaryRepository.findDiaryByFarmClub(farmClubId);
+        List<FarmClubDiary> proccessData = proccessFarmClubData(diaryList);
+        return proccessData;
+    }
+
+    private List<FarmClubDiary> proccessFarmClubData(List<Diary> diaryList){
+        return diaryList.stream().map(diary -> {
+            User user = diary.getMyVeggie().getUser();
+            return FarmClubDiary.of(
+                    diary,
+                    user,
+                    dateManager.dotDateTime(diary.getCreatedDate()),
+                    diary.getDiaryComments().size(),
+                    diary.getDiaryLikes().size()
+                    );}).toList();
+    }
+
+
     @Transactional
     public MyVeggieDiaryCount selectDiaryCount(MyVeggie myVeggie) {
 
@@ -109,6 +135,13 @@ public class MyVeggieDiaryService {
     }
 
     @Transactional
+    public void updateComment(User user, Long diaryCommentId, String content) {
+
+        Optional<DiaryComment> diaryCommentData = myVeggieRepository.findDiaryCommentByIdAndUserId(diaryCommentId, user);
+        validateDiaryComment(diaryCommentData);
+        myVeggieRepository.updateDiaryCommentByIdAndUserId(diaryCommentId, user, content);
+    }
+    @Transactional
     public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(
             MyVeggie myVeggie
     )  {
@@ -132,10 +165,7 @@ public class MyVeggieDiaryService {
 
         List<DiaryComment> diaryCommentList = diaryRepository.findDiary(diaryId, farmClubId);
         List<DiaryCommentContent> diaryCommentContent = DiaryCommentContent.processData(diaryCommentList, userId);
-        log.info(String.valueOf(diaryCommentContent));
-
-
-       return diaryCommentContent;
+        return diaryCommentContent;
     }
 
 

@@ -19,6 +19,8 @@ public interface UserRepository  extends JpaRepository<User, Long> {
     @Query("SELECT a FROM user AS a  WHERE a.id = :userId")
     User findUserData(@Param("userId") Long userId);
 
+    User findUserById(Long userId);
+
     @Modifying
     @Query("update user as u set u.level= :level where u.id = :userId")
     void insertUserLevel(@Param("userId") Long userId, @Param("level") String level);

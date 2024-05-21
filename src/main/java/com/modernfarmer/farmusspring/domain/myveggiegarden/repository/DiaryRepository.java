@@ -37,4 +37,13 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
      List<DiaryComment> findDiary(@Param("diaryId") Long diaryId, @Param("farmClubId") Long farmClubId);
 
 
+    @Query("SELECT d FROM diary AS d " +
+            "JOIN FETCH d.myVeggie AS mv " +
+            "JOIN FETCH mv.user " +
+            "LEFT JOIN diary_comment  AS dc ON dc.id = d.id "+
+            "LEFT JOIN  diary_like  AS dl ON dl.id = d.id " +
+            "WHERE d.farmClub.id = :farmClubId AND d.isOpen = true "
+          )
+    List<Diary> findDiaryByFarmClub(@Param("farmClubId") Long farmClubId);
+
 }

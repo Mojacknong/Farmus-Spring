@@ -30,7 +30,7 @@ public class UserFirebaseToken extends BaseEntity {
     private String token;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -39,11 +39,8 @@ public class UserFirebaseToken extends BaseEntity {
                 .token(token)
                 .user(user)
                 .build();
-
         user.addUserFirebaseToken(newUserFirebaseToken);
-
         return newUserFirebaseToken;
 
     }
-
 }

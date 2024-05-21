@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentDelete;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentUpdate;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentWrite;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.Like;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
@@ -48,6 +49,17 @@ public class MyVeggieDiaryController {
                 myVeggieId
         );
     }
+
+
+    @GetMapping(value = "/{farmClubId}")
+    public BaseResponseDto<FarmClubDiary> findFarmClubDiary(
+            @PathVariable("farmClubId") Long farmClubId){
+
+        List<FarmClubDiary> farmClubDiaryList = myVeggieDiaryService.findDiaryAccordingToFarmClub(farmClubId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubDiaryList);
+    }
+
+
 
     @GetMapping(value = "/{myVeggieId}/check")
     public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(
@@ -128,6 +140,15 @@ public class MyVeggieDiaryController {
             @Validated @RequestBody CommentDelete commentDelete)  {
         User userObject = User.builder().id(user.getUserId()).build();
         myVeggieDiaryService.deleteComment(userObject, commentDelete.getDiaryCommentId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @PutMapping(value = "/comment")
+    public BaseResponseDto<?> updateComment(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody CommentUpdate commentUpdate)  {
+        User userObject = User.builder().id(user.getUserId()).build();
+        myVeggieDiaryService.updateComment(userObject, commentUpdate.getDiaryCommentId(), commentUpdate.getContent());
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 }
