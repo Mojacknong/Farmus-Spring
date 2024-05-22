@@ -41,22 +41,10 @@ public class UserMotivation extends BaseEntity {
                 .build();
 
         user.addUserMotivation(newUserMotivation);
-
         return newUserMotivation;
 
     }
 
-    public static UserMotivation createUserMotivationWithId(Long id, String motivation, User user){
-        UserMotivation newUserMotivation = UserMotivation.builder()
-                .id(id)
-                .motivation(motivation)
-                .user(user)
-                .build();
 
-        user.addUserMotivation(newUserMotivation);
-
-        return newUserMotivation;
-
-    }
 
 }

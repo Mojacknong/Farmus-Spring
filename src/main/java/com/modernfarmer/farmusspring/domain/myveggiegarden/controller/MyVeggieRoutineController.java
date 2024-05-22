@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.MyRoutineCheck;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRoutineReqeuest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyRoutineList;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieRoutine;
@@ -30,9 +31,15 @@ public class MyVeggieRoutineController {
     public BaseResponseDto<Void> settingMyVeggieRoutine(
             @Validated @RequestBody SettingMyVeggieRoutineReqeuest settingMyVeggieRoutineReqeuest
             ) {
-
         return myVeggieRoutineService.settingMyVeggieRoutine(settingMyVeggieRoutineReqeuest);
+    }
 
+    @PostMapping(value = "/check")
+    public BaseResponseDto<?> checkMyVeggieRoutine(
+            @Validated @RequestBody MyRoutineCheck myRoutineCheck
+    ) {
+        myVeggieRoutineService.checkMyVeggieRoutine(myRoutineCheck.getRoutineId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
     @GetMapping(value = "/{myVeggieId}")

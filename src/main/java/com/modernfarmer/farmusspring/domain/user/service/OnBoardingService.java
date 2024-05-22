@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OnBoardingService {
 
-    private final UserMotivationRepository userMotivationRepository;
     private final UserRepository userRepository;
 
     @Transactional

@@ -22,13 +22,15 @@ public class MyVeggieRoutine {
     private Boolean check;
     private String content;
     private int period;
+    private Long routineId;
 
 
     public static MyVeggieRoutine of(Routine routine, Boolean check){
         return new MyVeggieRoutine(
                 check,
                 routine.getContent(),
-                routine.getPeriod()
+                routine.getPeriod(),
+                routine.getId()
         );
     }
 
@@ -38,7 +40,6 @@ public class MyVeggieRoutine {
         return routineList.stream()
                 .map(routine -> {
                     boolean check;
-
                     check = signRoutineCheck(routine.getDate());
                     return MyVeggieRoutine.of(routine, check);
                 })
