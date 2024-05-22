@@ -6,10 +6,13 @@ import com.modernfarmer.farmusspring.domain.farmclub.exception.FarmClubErrorCode
 import com.modernfarmer.farmusspring.domain.farmclub.exception.custom.FarmClubEntityNotFoundException;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.QGetMyFarmClubVo_BaseInfo;
+import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
+import com.modernfarmer.farmusspring.domain.history.vo.QHistoryDetailVo;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QFarmClub.farmClub;
@@ -77,6 +80,22 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
         } else {
             throw new FarmClubEntityNotFoundException("내 팜클럽을 불러오는 도중 에러가 발생했습니다.", FarmClubErrorCode.FARM_CLUB_NOT_FOUND);
         }
+    }
+
+    public HistoryDetailVo getFarmClubDetail(Long userFarmClubId) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+
+        return queryFactory
+                .select(new QHistoryDetailVo(
+                        farmClub.veggieImage,
+                        farmClub.name,
+                        farmClub.veggieName,
+                        farmClub.startedAt.stringValue()
+                ))
+                .from(userFarmClub)
+                .join(userFarmClub.farmClub, farmClub)
+                .where(userFarmClub.id.eq(userFarmClubId))
+                .fetchOne();
     }
 
 }

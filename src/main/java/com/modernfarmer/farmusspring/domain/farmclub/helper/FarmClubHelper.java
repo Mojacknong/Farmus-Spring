@@ -3,6 +3,7 @@ package com.modernfarmer.farmusspring.domain.farmclub.helper;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.SearchFarmClubResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.FarmClubRepository;
+import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,5 +19,9 @@ public class FarmClubHelper {
 
     public FarmClub getFarmClubEntity(Long id) {
         return farmClubRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팜클럽입니다."));
+    }
+
+    public HistoryDetailVo getFarmClubDetail(Long userFarmClubId) {
+        return farmClubRepository.getFarmClubDetail(userFarmClubId);
     }
 }
