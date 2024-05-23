@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.farmclub.vo;
 
 import com.modernfarmer.farmusspring.domain.farmclub.entity.MissionPost;
+import com.modernfarmer.farmusspring.domain.farmclub.entity.MissionPostComment;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.querydsl.core.annotations.QueryProjection;
 
@@ -12,14 +13,14 @@ public record MissionPostCommentVo(
         String content
 ) {
     @QueryProjection
-    public MissionPostCommentVo(MissionPost missionPost, User user)
+    public MissionPostCommentVo(MissionPostComment missionPostComment, User user)
     {
         this(
-                missionPost.getId(),
+                missionPostComment.getId(),
                 user.getNickname(),
                 user.getProfileImage(),
-                missionPost.getCreatedDate().toString(),
-                missionPost.getContent()
+                missionPostComment.getCreatedDate().toString(),
+                missionPostComment.getComment()
         );
     }
 }
