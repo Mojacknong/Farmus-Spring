@@ -6,6 +6,7 @@ import com.modernfarmer.farmusspring.domain.veggieinfo.vo.InfoForRegisterVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -49,13 +50,15 @@ public class VeggieInfoRepositoryImpl implements CustomVeggieInfoRepository{
 
     @Override
     public List<StepVo> getVeggieInfoStepList(String veggieInfoId) {
-        // Query to get all steps from veggieInfo collection
-        // and return as List<StepVo>
-        Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(veggieInfoId))
-                .fields()
-                .include("steps");
+        MatchOperation match = Aggregation.match(Criteria.where("_id").is(veggieInfoId));
+        UnwindOperation unwind = Aggregation.unwind("steps");
+        ProjectionOperation project = Aggregation.project()
+                .and("steps.num").as("num")
+                .and("steps.content").as("content")
+                .and("steps.tips").as("tips");
+        Aggregation aggregation = Aggregation.newAggregation(match, unwind, project);
+        AggregationResults<StepVo> results = mongoTemplate.aggregate(aggregation, "veggie_info", StepVo.class);
 
-        return mongoTemplate.find(query, StepVo.class, "veggie_info");
+        return results.getMappedResults();
     }
 }
