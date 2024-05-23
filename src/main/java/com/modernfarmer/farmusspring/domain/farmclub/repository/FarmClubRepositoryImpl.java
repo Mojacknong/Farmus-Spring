@@ -11,8 +11,10 @@ import com.modernfarmer.farmusspring.domain.history.vo.QHistoryDetailVo;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QFarmClub.farmClub;
@@ -20,6 +22,7 @@ import static com.modernfarmer.farmusspring.domain.farmclub.entity.QUserFarmClub
 import static com.modernfarmer.farmusspring.domain.myveggiegarden.entity.QMyVeggie.myVeggie;
 import static com.modernfarmer.farmusspring.domain.user.entity.QUser.user;
 
+@Slf4j
 public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
 
     @PersistenceContext
@@ -44,11 +47,9 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
 
         return queryFactory
                 .select(new QGetMyFarmClubListResponseDto(farmClub))
-                .from(user)
-                .join(user.myVeggies, myVeggie)
-                .join(myVeggie.userFarmClub, userFarmClub)
+                .from(userFarmClub)
                 .join(userFarmClub.farmClub, farmClub)
-                .where(user.id.eq(userId))
+                .where(userFarmClub.userId.eq(userId))
                 .fetch();
     }
 
@@ -62,24 +63,23 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
                 .where(farmClub.id.eq(farmClubId))
                 .fetchOne();
 
-        if (baseInfo != null) {
-            Long userFarmClubCount = queryFactory
-                    .select(userFarmClub.count())
-                    .from(userFarmClub)
-                    .where(userFarmClub.farmClub.id.eq(farmClubId))
-                    .fetchOne();
+        Long userFarmClubCount = queryFactory
+                .select(userFarmClub.count())
+                .from(userFarmClub)
+                .join(userFarmClub.farmClub, farmClub)
+                .fetchOne();
 
-            Integer daySinceStart = queryFactory
-                    .select(userFarmClub.createdDate.dayOfYear().subtract(farmClub.startedAt.dayOfYear()))
-                    .from(userFarmClub)
-                    .where(userFarmClub.farmClub.id.eq(farmClubId))
-                    .where(userFarmClub.userId.eq(userId))
-                    .fetchOne();
+        LocalDate userFarmClubCreatedDate = queryFactory
+                .select(farmClub.startedAt)
+                .from(userFarmClub)
+                .join(userFarmClub.farmClub, farmClub)
+                .where(userFarmClub.userId.eq(userId))
+                .fetchOne();
 
-            return GetMyFarmClubVo.of(baseInfo, userFarmClubCount, daySinceStart);
-        } else {
-            throw new FarmClubEntityNotFoundException("내 팜클럽을 불러오는 도중 에러가 발생했습니다.", FarmClubErrorCode.FARM_CLUB_NOT_FOUND);
-        }
+        log.info("userFarmClubCount: {}", userFarmClubCount);
+        log.info("userFarmClubCreatedDate: {}", userFarmClubCreatedDate);
+
+        return GetMyFarmClubVo.of(baseInfo, userFarmClubCount, userFarmClubCreatedDate);
     }
 
     public HistoryDetailVo getFarmClubDetail(Long userFarmClubId) {
