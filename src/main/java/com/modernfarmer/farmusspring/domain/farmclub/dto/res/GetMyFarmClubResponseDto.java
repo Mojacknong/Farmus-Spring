@@ -32,12 +32,22 @@ public record GetMyFarmClubResponseDto(
     public static List<Step> createSteps(List<StepVo> stepVoList, List<GetMissionPostListWithStepCountsAndImagesVo> missionList) {
         List<Step> steps = new ArrayList<>();
         for (int i = 0; i < stepVoList.size(); i++) {
-            Step step = new Step(
-                    missionList.get(i).images(),
-                    stepVoList.get(i).num(),
-                    stepVoList.get(i).content(),
-                    missionList.get(i).count()
-            );
+            Step step;
+            if (i >= missionList.size()) {
+                step = new Step(
+                        new ArrayList<>(),
+                        stepVoList.get(i).num(),
+                        stepVoList.get(i).content(),
+                        0L
+                );
+            } else {
+                step = new Step(
+                        missionList.get(i).images(),
+                        stepVoList.get(i).num(),
+                        stepVoList.get(i).content(),
+                        missionList.get(i).count()
+                );
+            }
             steps.add(step);
         }
         return steps;

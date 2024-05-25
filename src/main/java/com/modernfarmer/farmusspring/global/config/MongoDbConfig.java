@@ -15,7 +15,9 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @RequiredArgsConstructor
 @EnableMongoAuditing
-@EnableMongoRepositories(basePackages = "com.modernfarmer.farmusspring.domain.**.repository")
+@EnableMongoRepositories(basePackages = {
+                "com.modernfarmer.farmusspring.domain.veggieinfo.repository",
+                "com.modernfarmer.farmusspring.domain.history.repository"})
 public class MongoDbConfig {
 
     private final MongoMappingContext mongoMappingContext;

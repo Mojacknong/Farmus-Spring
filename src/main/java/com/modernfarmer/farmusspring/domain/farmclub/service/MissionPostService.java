@@ -18,6 +18,7 @@ import com.modernfarmer.farmusspring.infra.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public class MissionPostService {
         return CreateMissionPostResponseDto.of(missionPostId);
     }
 
+    @Transactional
     public CreateMissionPostCommentResponseDto createMissionPostComment(Long userId, CreateMissionPostCommentRequestDto requestDto) {
         MissionPost missionPost = missionPostHelper.getMissionPost(requestDto.missionPostId());
         User user = userHelper.getUserEntity(userId);
@@ -49,6 +51,7 @@ public class MissionPostService {
         return CreateMissionPostCommentResponseDto.of(missionPost.getId());
     }
 
+    @Transactional
     public CreateMissionPostLikeResponseDto createMissionPostLike(Long userId, Long missionPostId) {
         MissionPost missionPost = missionPostHelper.getMissionPost(missionPostId);
         User user = userHelper.getUserEntity(userId);

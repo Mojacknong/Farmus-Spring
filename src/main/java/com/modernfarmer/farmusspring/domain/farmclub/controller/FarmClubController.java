@@ -1,10 +1,7 @@
 package com.modernfarmer.farmusspring.domain.farmclub.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
-import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateFarmClubRequestDto;
-import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateMissionPostCommentRequestDto;
-import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateMissionPostLikeRequestDto;
-import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateMissionPostRequestDto;
+import com.modernfarmer.farmusspring.domain.farmclub.dto.req.*;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.service.FarmClubService;
 import com.modernfarmer.farmusspring.domain.farmclub.service.MissionPostService;
@@ -29,16 +26,19 @@ public class FarmClubController {
     // 응답 : 팜클럽 id
     @PostMapping
     public BaseResponseDto<?> createFarmClub(
+            @AuthenticationPrincipal CustomUser user,
             @RequestBody CreateFarmClubRequestDto requestDto
     ) {
-        return BaseResponseDto.of(SuccessCode.CREATED, farmClubService.createFarmClub(requestDto));
+        return BaseResponseDto.of(SuccessCode.CREATED, farmClubService.createFarmClub(requestDto, user.getUserId()));
     }
 
     @PostMapping("/register")
     public BaseResponseDto<?> registerFarmClub(
-            @RequestBody CreateFarmClubRequestDto requestDto
+            @AuthenticationPrincipal CustomUser user,
+            @RequestBody RegisterFarmClubRequestDto requestDto
     ) {
-        return BaseResponseDto.of(SuccessCode.CREATED, farmClubService.createFarmClub(requestDto));
+        return BaseResponseDto.of(SuccessCode.CREATED,
+                farmClubService.registerFarmClub(requestDto.farmClubId(), requestDto.myVeggieId(), user.getUserId()));
     }
 
     @GetMapping("/search")

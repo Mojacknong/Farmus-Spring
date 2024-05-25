@@ -67,7 +67,7 @@ public class User extends BaseEntity {
     @Builder.Default
     private List<DiaryLike> diaryLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<MissionPostComment> missionPostComments = new ArrayList<>();
 

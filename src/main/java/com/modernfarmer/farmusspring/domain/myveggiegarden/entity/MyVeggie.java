@@ -54,7 +54,7 @@ public class MyVeggie extends BaseEntity {
     @Builder.Default
     private List<Diary> diaries = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_farm_club_id")
     private UserFarmClub userFarmClub;
 

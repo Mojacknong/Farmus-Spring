@@ -5,8 +5,8 @@ import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.joda.time.LocalDate;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,13 +54,14 @@ public class FarmClub extends BaseEntity {
     @Builder.Default
     private List<Diary> diaries = new ArrayList<>();
 
-    public static FarmClub createFarmClub(String veggieInfoId, String name, String description, String difficulty, String veggieImage, int maxUser, LocalDate startedAt){
+    public static FarmClub createFarmClub(String veggieInfoId, String name, String description, String difficulty, String veggieImage, String veggieName, int maxUser, LocalDate startedAt) {
         return FarmClub.builder()
                 .veggieInfoId(veggieInfoId)
                 .name(name)
                 .description(description)
                 .difficulty(difficulty)
                 .veggieImage(veggieImage)
+                .veggieName(veggieName)
                 .maxUser(maxUser)
                 .startedAt(startedAt)
                 .build();

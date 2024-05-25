@@ -29,11 +29,11 @@ public class MissionPost extends BaseEntity {
     @Column(nullable = false)
     private String image;
 
-    @OneToMany(mappedBy = "missionPost", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "missionPost", cascade = CascadeType.ALL)
     @Builder.Default
     private List<MissionPostLike> missionPostLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "missionPost", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "missionPost", cascade = CascadeType.ALL)
     @Builder.Default
     private List<MissionPostComment> missionPostComments = new ArrayList<>();
 
