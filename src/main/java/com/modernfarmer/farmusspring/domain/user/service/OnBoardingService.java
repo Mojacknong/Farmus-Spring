@@ -24,27 +24,23 @@ public class OnBoardingService {
     private final UserRepository userRepository;
 
     @Transactional
-    public BaseResponseDto<Void> settingMotivation(User user, SetMotivationRequest setMotivationRequest) {
+    public BaseResponseDto settingMotivation(Long userId, SetMotivationRequest setMotivationRequest) {
 
+        User user = findUser(userId);
         insertMotivation(user, setMotivationRequest);
-
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
     @Transactional
     public BaseResponseDto<SetLevelResponse> settingLevel(Long userId, SetLevelRequest setLevelRequest){
 
         String level = measureLevel(setLevelRequest.getTime(), setLevelRequest.getSkill());
-
         insertLevel(userId, level);
-
         return BaseResponseDto.of(SuccessCode.SUCCESS, SetLevelResponse.of(level));
 
     }
     @Transactional
     public BaseResponseDto<Void> completeOnBoarding(Long userId)  {
-
         updateCompleteBoarding(userId);
-
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
@@ -78,7 +74,6 @@ public class OnBoardingService {
         boolean isElementary = false;
         boolean isBeginner = false;
 
-
         if ("홈파밍 중급".equals(skill)) {
             isIntermediate = true;
         } else if ("홈파밍 고수".equals(skill)) {
@@ -88,7 +83,6 @@ public class OnBoardingService {
         } else if ("홈파밍 입문".equals(skill)) {
             isBeginner = true;
         }
-
 
         if (time == 2 && (isIntermediate || isMaster)) {
             return "HARD";
@@ -107,7 +101,6 @@ public class OnBoardingService {
         } else if (time == 0 && (isElementary || isBeginner)) {
             return "EASY";
         }
-
         return "알 수 없음";
     }
 
