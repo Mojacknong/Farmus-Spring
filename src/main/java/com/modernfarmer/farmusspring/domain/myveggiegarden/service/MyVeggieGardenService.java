@@ -109,14 +109,14 @@ public class MyVeggieGardenService {
                 .orElseThrow(() -> new IllegalArgumentException("채소가 존재하지 않습니다."));
     }
 
-    private void addMyyVeggie(Long userId, SettingMyVeggieRequest settingMyVeggiRequest){
+    private void addMyyVeggie(Long userId, SettingMyVeggieRequest settingMyVeggieRequest){
 
         MyVeggie newMyVeggie = MyVeggie.createMyVegetable(
-                settingMyVeggiRequest.getNickname(),
-                settingMyVeggiRequest.getBirh(),
-                settingMyVeggiRequest.getVeggiInfoId(),
-                settingMyVeggiRequest.getVeggieName(),
-                settingMyVeggiRequest.getVeggieImage(),
+                settingMyVeggieRequest.getNickname(),
+                settingMyVeggieRequest.getBirth(),
+                settingMyVeggieRequest.getVeggieInfoId(),
+                settingMyVeggieRequest.getVeggieName(),
+                settingMyVeggieRequest.getVeggieImage(),
                 User.builder().id(userId).build()
         );
         myVeggieRepository.save(newMyVeggie);

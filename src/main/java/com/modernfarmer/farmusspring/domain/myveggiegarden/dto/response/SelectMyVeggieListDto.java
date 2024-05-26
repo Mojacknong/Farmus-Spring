@@ -16,7 +16,7 @@ public class SelectMyVeggieListDto {
 
     public static List<SelectMyVeggieListResponse> processData(List<MyVeggie> myVeggieList){
         return myVeggieList.stream()
-                .map(myVeggie -> SelectMyVeggieListResponse.of(myVeggie.getVeggieInfoId(),myVeggie.getNickname()))
+                .map(myVeggie -> SelectMyVeggieListResponse.of(myVeggie.getId(),myVeggie.getNickname()))
                 .toList();
     }
 }
