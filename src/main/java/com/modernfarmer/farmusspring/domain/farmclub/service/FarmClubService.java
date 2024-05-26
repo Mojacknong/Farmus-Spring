@@ -11,6 +11,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListWithSt
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
+import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.CreateFarmClubVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
@@ -49,7 +50,7 @@ public class FarmClubService {
 
     public GetFarmClubResponseDto getFarmClub(Long id) {
         FarmClub farmClub = farmClubHelper.getFarmClubEntity(id);
-        List<String> help = veggieInfoHelper.getVeggieInfoHelp(farmClub.getVeggieInfoId());
+        VeggieInfo.Help help = veggieInfoHelper.getVeggieInfoHelp(farmClub.getVeggieInfoId());
         return GetFarmClubResponseDto.of(farmClub, farmClub.getUserFarmClubs().size(), help);
     }
 
