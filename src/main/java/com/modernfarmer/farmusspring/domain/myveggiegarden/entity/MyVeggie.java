@@ -33,7 +33,7 @@ public class MyVeggie extends BaseEntity {
     private Date birth;
 
     @Column(name = "veggie_info_id")
-    private Long veggieInfoId;
+    private String veggieInfoId;
 
     @Column(name = "veggie_name")
     private String veggieName;
@@ -58,7 +58,7 @@ public class MyVeggie extends BaseEntity {
     @JoinColumn(name = "user_farm_club_id")
     private UserFarmClub userFarmClub;
 
-    public static MyVeggie createMyVegetable(String nickname, Date birth, Long veggieInfoId,
+    public static MyVeggie createMyVegetable(String nickname, Date birth, String veggieInfoId,
                                              String veggieName,
                                              String veggieImage,
                                              User user){

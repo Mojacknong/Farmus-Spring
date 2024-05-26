@@ -17,10 +17,10 @@ public class SettingMyVeggieRequest {
     private String nickname;
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
-    private Date birh;
+    private Date birth;
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
-    private Long veggiInfoId;
+    private String veggieInfoId;
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
     private String veggieName;

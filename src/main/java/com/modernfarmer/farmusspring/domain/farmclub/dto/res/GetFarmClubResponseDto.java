@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.farmclub.dto.res;
 
 import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
+import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import lombok.Builder;
 
 import java.util.List;
@@ -15,9 +16,9 @@ public record GetFarmClubResponseDto (
         String startedAt,
         int maxMemberCount,
         int currentMemberCount,
-        List<String> help
+        VeggieInfo.Help help
 ){
-    public static GetFarmClubResponseDto of(FarmClub farmClub, int currentMemberCount, List<String> help) {
+    public static GetFarmClubResponseDto of(FarmClub farmClub, int currentMemberCount, VeggieInfo.Help help) {
         return GetFarmClubResponseDto.builder()
                 .farmClubId(farmClub.getId())
                 .farmClubName(farmClub.getName())

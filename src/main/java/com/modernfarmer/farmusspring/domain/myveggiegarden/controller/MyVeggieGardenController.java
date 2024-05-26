@@ -31,11 +31,11 @@ public class MyVeggieGardenController {
     @PostMapping(value = "")
     public BaseResponseDto<Void> settingMyVeggie(
             @AuthenticationPrincipal CustomUser user,
-            @Validated @RequestBody SettingMyVeggieRequest settingMyVeggi
+            @Validated @RequestBody SettingMyVeggieRequest settingMyVeggie
             ){
         return  myVeggieGardenService.settingMyVeggie(
                 user.getUserId(),
-                settingMyVeggi
+                settingMyVeggie
         );
     }
 

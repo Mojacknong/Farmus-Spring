@@ -34,7 +34,7 @@ public class VeggieInfo extends BaseDocument {
 
     private String period;
 
-    private List<String> help;
+    private Help help;
 
     @AllArgsConstructor
     @NoArgsConstructor
@@ -46,6 +46,16 @@ public class VeggieInfo extends BaseDocument {
         private int num;
         private String content;
         private List<String> tips;
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Builder
+    public static class Help {
+        private String material;
+        private List<String> selectHow;
+        private List<String> features;
     }
 
     public static VeggieInfo createVeggieInfo(String name, String difficulty, List<Step> steps, String veggieImage) {
