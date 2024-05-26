@@ -34,6 +34,7 @@ public class JwtTokenProvider {
     private final long accessTokenTime = 60L * 1000 * 10000000;
     private final long refreshTokenTime = 180L * 1000 * 1000000000;
 
+
     @PostConstruct
     protected void init() {
         log.info("[init] JwtTokenProvider 내 secretKey 초기화 시작", StandardCharsets.UTF_8);
