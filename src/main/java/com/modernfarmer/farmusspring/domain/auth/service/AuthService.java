@@ -33,35 +33,27 @@ import java.util.Optional;
 public class AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
-
     private final RedisManager redisManager;
-
     private final UserRepository userRepository;
-
     private final GoogleLogin googleLogin;
-
     private final KakaoLogin kakaoLogin;
 
     @Transactional
     public BaseResponseDto<LoginResponseDto> googleLogin(String googleAccessToken) {
 
         return BaseResponseDto.of(SuccessCode.SUCCESS,
-                googleLogin.loginMethod(googleAccessToken)
-
-                );
+                googleLogin.loginMethod(googleAccessToken));
     }
     @Transactional
     public BaseResponseDto<LoginResponseDto> kakaoLogin(String kakaoAccessToken) {
 
         return BaseResponseDto.of(SuccessCode.SUCCESS,
-                kakaoLogin.loginMethod(kakaoAccessToken)
-        );
+                kakaoLogin.loginMethod(kakaoAccessToken));
 
 
     }
     @Transactional
     public BaseResponseDto<Void> logout(Long userId) {
-
         deleteredisToken(userId);
         log.info("로그아웃 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
@@ -75,8 +67,7 @@ public class AuthService {
         return BaseResponseDto.of(SuccessCode.SUCCESS,
                 TokenResponseDto.of(
                         jwtTokenProvider.createAccessToken(Long.valueOf(userId), user.getRole()),
-                        refreshToken
-                ));
+                        refreshToken));
     }
 
     private void deleteredisToken(Long userId){
@@ -91,13 +82,9 @@ public class AuthService {
 
 
     private void validateRefreshToken(Long userId, String refreshToken) {
-
         String redisRefreshToken = getRedisToken(userId);
         if (!refreshToken.equals(redisRefreshToken)) {
-
             throw new AuthRefreshTokenValidateException("일치하지 않는 토큰입니다.");
         }
     }
-
-
 }
