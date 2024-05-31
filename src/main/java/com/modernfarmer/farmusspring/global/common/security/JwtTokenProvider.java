@@ -109,19 +109,13 @@ public class JwtTokenProvider {
     }
 
     public Long getUserId(String token) {
-        log.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
-
         String info = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody()
                 .getSubject();
 
-        Long userId = Long.valueOf(info);
-
-        return userId;
-
+        return Long.valueOf(info);
     }
 
     public boolean validateToken(String token) {                         // 토큰 유효성 확인
-        log.info("[validateToken] 토큰 유효 체크 시작");
         Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         log.info("[validateToken] 토큰 유효 체크 완료");
         return true;

@@ -38,17 +38,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse servletResponse,
                                     FilterChain filterChain) {
         try {
+            log.info("Request method: {}", servletRequest.getMethod());
+            log.info("Request path: {}", servletRequest.getRequestURI());
             String token = jwtTokenProvider.getToken(servletRequest);
 
             if (token != null) {
 
                 jwtTokenProvider.validateToken(token);
-                log.info(String.valueOf(1));
 
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                log.info(String.valueOf(2));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.info(String.valueOf(3));
             }
         }catch (IllegalArgumentException e) {
             // 예외 처리: Invalid access token header
