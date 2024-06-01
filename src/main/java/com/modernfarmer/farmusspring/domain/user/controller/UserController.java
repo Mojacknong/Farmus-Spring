@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.user.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.user.dto.request.SetLevelRequest;
+import com.modernfarmer.farmusspring.domain.user.dto.request.UpdateProfileDto;
 import com.modernfarmer.farmusspring.domain.user.dto.response.SetLevelResponse;
 import com.modernfarmer.farmusspring.domain.user.dto.response.UserProfileResponse;
 import com.modernfarmer.farmusspring.domain.user.service.UserService;
@@ -38,14 +39,13 @@ public class UserController {
         return userService.deleteProfleImage(user.getUserId());
     }
 
-    @PostMapping(value = "/profile", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/profile")
     public BaseResponseDto<Void> settingProfile(
             @AuthenticationPrincipal CustomUser user,
-            @RequestPart(value = "file", required = false) MultipartFile multipartFile,
-            @RequestParam("nickName") String nickName) throws IOException {
-
-        return  userService.settingProfile(user.getUserId(), multipartFile,nickName);
-
+            @RequestPart UpdateProfileDto requestDto,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) throws IOException {
+        return  userService.settingProfile(user.getUserId(), file, requestDto.nickname());
     }
 
 }
