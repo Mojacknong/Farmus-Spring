@@ -38,8 +38,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse servletResponse,
                                     FilterChain filterChain) {
         try {
-            log.info("Request method: {}", servletRequest.getMethod());
-            log.info("Request path: {}", servletRequest.getRequestURI());
+            if(servletRequest.getRequestURI().contains("api")) {
+                log.info("Request method: {}", servletRequest.getMethod());
+                log.info("Request path: {}", servletRequest.getRequestURI());
+            }
             String token = jwtTokenProvider.getToken(servletRequest);
 
             if (token != null) {
