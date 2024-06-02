@@ -8,6 +8,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.QGetMyFarmClubVo_BaseInfo;
 import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
 import com.modernfarmer.farmusspring.domain.history.vo.QHistoryDetailVo;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -34,7 +35,13 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         return queryFactory
-                .select(new QSearchFarmClubResponseDto(farmClub))
+                .select(new QSearchFarmClubResponseDto(
+                        farmClub,
+                        JPAExpressions
+                                .select(userFarmClub.count())
+                                .from(userFarmClub)
+                                .where(userFarmClub.farmClub.eq(farmClub))
+                ))
                 .from(farmClub)
                 .where(farmClub.difficulty.in(difficulties))
                 .where(farmClub.name.contains(keyword))

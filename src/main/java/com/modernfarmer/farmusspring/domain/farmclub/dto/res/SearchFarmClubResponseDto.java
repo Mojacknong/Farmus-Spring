@@ -12,10 +12,11 @@ public record SearchFarmClubResponseDto (
         String veggieImage,
         String difficulty,
         String startedAt,
-        Integer maxUser
+        Integer maxUser,
+        Long curUser
 ) {
     @QueryProjection
-    public SearchFarmClubResponseDto(FarmClub farmClub) {
+    public SearchFarmClubResponseDto(FarmClub farmClub, Long curUser) {
         this(
                 farmClub.getId(),
                 farmClub.getName(),
@@ -23,6 +24,8 @@ public record SearchFarmClubResponseDto (
                 farmClub.getVeggieImage(),
                 farmClub.getDifficulty(),
                 farmClub.getStartedAt().toString(),
-                farmClub.getMaxUser());
+                farmClub.getMaxUser(),
+                curUser
+        );
     }
 }
