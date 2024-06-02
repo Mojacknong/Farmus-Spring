@@ -43,8 +43,8 @@ public class FarmClubController {
 
     @GetMapping("/search")
     public BaseResponseDto<?> searchFarmClub(
-            @RequestParam List<String> difficulties,
-            @RequestParam String keyword
+            @RequestParam(required = false) List<String> difficulties,
+            @RequestParam(required = false) String keyword
     ) {
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.searchFarmClub(difficulties, keyword));
     }
@@ -54,6 +54,11 @@ public class FarmClubController {
             @PathVariable Long id
     ) {
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getFarmClub(id));
+    }
+
+    @GetMapping("/recommend")
+    public BaseResponseDto<?> getRecommendedFarmClubList() {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getRecommendedFarmClubList(""));
     }
 
     @GetMapping("/me")
