@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum Difficulty {
 
     EASY("초급"),
-    MEDIUM("중급"),
+    NORMAL("중급"),
     HARD("고급");
 
     private final String name;
