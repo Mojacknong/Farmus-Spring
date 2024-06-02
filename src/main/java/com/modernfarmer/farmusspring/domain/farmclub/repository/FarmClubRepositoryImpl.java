@@ -8,6 +8,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.QGetMyFarmClubVo_BaseInfo;
 import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
 import com.modernfarmer.farmusspring.domain.history.vo.QHistoryDetailVo;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -34,6 +35,10 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
         QFarmClub farmClub = QFarmClub.farmClub;
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
+        // 난이도 조건 설정
+        BooleanExpression difficultyCondition = difficulties == null ? null : farmClub.difficulty.in(difficulties);
+        BooleanExpression keywordCondition = keyword == null ? null : farmClub.name.contains(keyword);
+
         return queryFactory
                 .select(new QSearchFarmClubResponseDto(
                         farmClub,
@@ -43,8 +48,8 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
                                 .where(userFarmClub.farmClub.eq(farmClub))
                 ))
                 .from(farmClub)
-                .where(farmClub.difficulty.in(difficulties))
-                .where(farmClub.name.contains(keyword))
+                .where(difficultyCondition)
+                .where(keywordCondition)
                 .fetch();
     }
 
