@@ -9,9 +9,9 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.service.UserService;
+import com.modernfarmer.farmusspring.domain.user.util.DateManager;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import com.modernfarmer.farmusspring.infra.s3.S3Service;
@@ -153,7 +153,7 @@ public class MyVeggieDiaryService {
                 SelectDiaryOneResponse.of(
                         diaryList.get(0).getImage(),
                         diaryList.get(0).getContent(),
-                        diaryList.get(0).getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        dateManager.formatDate(diaryList.get(0).getCreatedDate())
                 ));
     }
 
