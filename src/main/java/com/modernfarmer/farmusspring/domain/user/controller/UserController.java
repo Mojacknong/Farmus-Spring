@@ -39,13 +39,13 @@ public class UserController {
         return userService.deleteProfleImage(user.getUserId());
     }
 
-    @PostMapping(value = "/profile")
+    @PostMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public BaseResponseDto<Void> settingProfile(
             @AuthenticationPrincipal CustomUser user,
-            @RequestPart UpdateProfileDto requestDto,
+            @RequestParam("nickname") String nickname,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) throws IOException {
-        return  userService.settingProfile(user.getUserId(), file, requestDto.nickname());
+        return  userService.settingProfile(user.getUserId(), file, nickname);
     }
 
 }
