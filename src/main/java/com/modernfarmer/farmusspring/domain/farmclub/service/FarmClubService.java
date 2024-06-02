@@ -54,6 +54,10 @@ public class FarmClubService {
         return GetFarmClubResponseDto.of(farmClub, farmClub.getUserFarmClubs().size(), help);
     }
 
+    public List<GetFarmClubResponseDto> getRecommendedFarmClubList(String level) {
+        return null;
+    }
+
     public List<SearchFarmClubResponseDto> searchFarmClub(List<String> difficulties, String keyword) {
         return farmClubRepository.findByConditions(difficulties,  keyword);
     }
