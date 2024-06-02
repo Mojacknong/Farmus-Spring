@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-@Component
+@Component("userDateManager")
 public class DateManager {
 
     public String parsingDotDate(Date date){
