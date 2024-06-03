@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.service;
 
+import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.GetRecommendVeggieDto;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.InfoForRegisterVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.repository.VeggieInfoRepository;
@@ -24,5 +25,9 @@ public class VeggieInfoService {
         VeggieInfo veggieInfo = veggieInfoRepository.findById(new ObjectId(veggieInfoId)).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채소 정보입니다."));
 
         return veggieInfo.getSteps().get(0).getContent();
+    }
+
+    public List<GetRecommendVeggieDto> getRecommendVeggieList(String difficulty) {
+        return veggieInfoRepository.getRecommendVeggieList(difficulty);
     }
 }

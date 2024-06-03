@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.repository;
 
 
+import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.GetRecommendVeggieDto;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.CreateFarmClubVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.InfoForRegisterVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
@@ -58,6 +59,20 @@ public class VeggieInfoRepositoryImpl implements CustomVeggieInfoRepository{
                 .and("steps.tips").as("tips");
         Aggregation aggregation = Aggregation.newAggregation(match, unwind, project);
         AggregationResults<StepVo> results = mongoTemplate.aggregate(aggregation, "veggie_info", StepVo.class);
+
+        return results.getMappedResults();
+    }
+
+    @Override
+    public List<GetRecommendVeggieDto> getRecommendVeggieList(String difficulty) {
+        MatchOperation match = Aggregation.match(Criteria.where("difficulty").is(difficulty));
+        ProjectionOperation project = Aggregation.project()
+                .and("veggieImage").as("image")
+                .and("name").as("name")
+                .and("difficulty").as("difficulty")
+                .and("period").as("period");
+        Aggregation aggregation = Aggregation.newAggregation(match, project);
+        AggregationResults<GetRecommendVeggieDto> results = mongoTemplate.aggregate(aggregation, "veggie_info", GetRecommendVeggieDto.class);
 
         return results.getMappedResults();
     }
