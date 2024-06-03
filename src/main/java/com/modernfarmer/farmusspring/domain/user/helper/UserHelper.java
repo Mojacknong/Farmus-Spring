@@ -18,4 +18,9 @@ public class UserHelper {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
     }
+
+    public String getUserLevel(Long userId) {
+        User user = getUserEntity(userId);
+        return user.getLevel();
+    }
 }

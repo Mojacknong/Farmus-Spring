@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.service;
 
+import com.modernfarmer.farmusspring.domain.user.helper.UserHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.GetRecommendVeggieDto;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.InfoForRegisterVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
@@ -15,6 +16,7 @@ import java.util.List;
 public class VeggieInfoService {
 
     private final VeggieInfoRepository veggieInfoRepository;
+    private final UserHelper userHelper;
 
     public List<InfoForRegisterVo> getVeggieInfoListForRegister() {
         // Get all veggie info list for register
@@ -27,7 +29,8 @@ public class VeggieInfoService {
         return veggieInfo.getSteps().get(0).getContent();
     }
 
-    public List<GetRecommendVeggieDto> getRecommendVeggieList(String difficulty) {
+    public List<GetRecommendVeggieDto> getRecommendVeggieList(Long userid) {
+        String difficulty = userHelper.getUserLevel(userid);
         return veggieInfoRepository.getRecommendVeggieList(difficulty);
     }
 }

@@ -1,10 +1,12 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.controller;
 
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.veggieinfo.service.VeggieInfoService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +27,8 @@ public class VeggieInfoController {
 
     @GetMapping("/recommend")
     public BaseResponseDto<?> getRecommendVeggieList(
-            @RequestParam String difficulty) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, veggieInfoService.getRecommendVeggieList(difficulty));
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, veggieInfoService.getRecommendVeggieList(user.getUserId()));
     }
 }
