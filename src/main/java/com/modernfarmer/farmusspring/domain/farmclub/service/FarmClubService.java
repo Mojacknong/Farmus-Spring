@@ -11,6 +11,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListWithSt
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
+import com.modernfarmer.farmusspring.domain.user.helper.UserHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.CreateFarmClubVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
@@ -32,6 +33,7 @@ public class FarmClubService {
     private final FarmClubHelper farmClubHelper;
     private final VeggieInfoHelper veggieInfoHelper;
     private final MyVeggieHelper myVeggieHelper;
+    private final UserHelper userHelper;
 
     private final MissionPostRepository missionPostRepository;
     private final FarmClubRepository farmClubRepository;
@@ -54,8 +56,15 @@ public class FarmClubService {
         return GetFarmClubResponseDto.of(farmClub, farmClub.getUserFarmClubs().size(), help);
     }
 
-    public List<GetFarmClubResponseDto> getRecommendedFarmClubList(String level) {
-        return null;
+    public GetRecommendFarmClubResponseDto getRecommendedFarmClubList(Long userId) {
+        String level = userHelper.getUserLevel(userId);
+        List<FarmClub> result = farmClubRepository.getRecommendedFarmClubList(level);
+        VeggieInfo.Help helpFirst = veggieInfoHelper.getVeggieInfoHelp(result.get(0).getVeggieInfoId());
+        VeggieInfo.Help helpSecond = veggieInfoHelper.getVeggieInfoHelp(result.get(1).getVeggieInfoId());
+        return GetRecommendFarmClubResponseDto.of(
+                GetFarmClubResponseDto.of(result.get(0), result.get(0).getUserFarmClubs().size(), helpFirst),
+                GetFarmClubResponseDto.of(result.get(1), result.get(1).getUserFarmClubs().size(), helpSecond)
+        );
     }
 
     public List<SearchFarmClubResponseDto> searchFarmClub(List<String> difficulties, String keyword) {

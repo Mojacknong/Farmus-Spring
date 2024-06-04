@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.farmclub.repository;
 
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.*;
+import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.QFarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.FarmClubErrorCode;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.custom.FarmClubEntityNotFoundException;
@@ -13,11 +14,15 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QFarmClub.farmClub;
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QUserFarmClub.userFarmClub;
@@ -108,6 +113,26 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
                 .join(userFarmClub.farmClub, farmClub)
                 .where(userFarmClub.id.eq(userFarmClubId))
                 .fetchOne();
+    }
+
+    @Override
+    public List<FarmClub> getRecommendedFarmClubList(String level) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        // 그룹별로 veggieName을 기준으로 각 그룹에서 랜덤 한 개씩 선택
+        List<FarmClub> result = queryFactory
+                .selectFrom(farmClub)
+                .where(farmClub.difficulty.eq(level))
+                .orderBy(farmClub.veggieName.asc(), farmClub.id.asc())
+                .fetch();
+
+        // 각 veggieName 그룹에서 랜덤으로 하나씩 선택
+        Map<String, List<FarmClub>> groupedByVeggieName = result.stream()
+                .collect(Collectors.groupingBy(FarmClub::getVeggieName));
+
+        Random random = new Random();
+        return groupedByVeggieName.values().stream()
+                .map(list -> list.get(random.nextInt(list.size())))
+                .collect(Collectors.toList());
     }
 
 }

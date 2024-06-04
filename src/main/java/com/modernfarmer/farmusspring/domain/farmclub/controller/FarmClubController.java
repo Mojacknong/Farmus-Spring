@@ -57,8 +57,10 @@ public class FarmClubController {
     }
 
     @GetMapping("/recommend")
-    public BaseResponseDto<?> getRecommendedFarmClubList() {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getRecommendedFarmClubList(""));
+    public BaseResponseDto<?> getRecommendedFarmClubList(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getRecommendedFarmClubList(user.getUserId()));
     }
 
     @GetMapping("/me")

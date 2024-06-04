@@ -7,9 +7,13 @@ import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record GetRecommendFarmClubResponseDto(
-        List<GetFarmClubResponseDto> farmClubList
+        GetFarmClubResponseDto recFirst,
+        GetFarmClubResponseDto recSecond
 ) {
-    public static GetRecommendFarmClubResponseDto of(List<GetFarmClubResponseDto> farmClubList) {
-        return new GetRecommendFarmClubResponseDto(farmClubList);
+    public static GetRecommendFarmClubResponseDto of(GetFarmClubResponseDto recFirst, GetFarmClubResponseDto recSecond) {
+        return GetRecommendFarmClubResponseDto.builder()
+                .recFirst(recFirst)
+                .recSecond(recSecond)
+                .build();
     }
 }

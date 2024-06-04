@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.farmclub.helper;
 
+import com.modernfarmer.farmusspring.domain.farmclub.dto.res.GetRecommendFarmClubResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.SearchFarmClubResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.FarmClubErrorCode;
@@ -26,5 +27,9 @@ public class FarmClubHelper {
 
     public HistoryDetailVo getFarmClubDetail(Long userFarmClubId) {
         return farmClubRepository.getFarmClubDetail(userFarmClubId);
+    }
+
+    public List<FarmClub> getRecommendedFarmClubList(String level) {
+        return farmClubRepository.getRecommendedFarmClubList(level);
     }
 }

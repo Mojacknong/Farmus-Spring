@@ -1,6 +1,8 @@
 package com.modernfarmer.farmusspring.domain.farmclub.repository;
 
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.GetMyFarmClubListResponseDto;
+import com.modernfarmer.farmusspring.domain.farmclub.dto.res.GetRecommendFarmClubResponseDto;
+import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.SearchFarmClubResponseDto;
 import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
@@ -12,4 +14,6 @@ public interface FarmClubRepositoryCustom {
     List<GetMyFarmClubListResponseDto> findMyFarmClubList(Long userId);
     GetMyFarmClubVo findMyFarmClub(Long farmClubId, Long userId);
     HistoryDetailVo getFarmClubDetail(Long userFarmClubId);
+
+    List<FarmClub> getRecommendedFarmClubList(String level);
 }
