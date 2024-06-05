@@ -2,7 +2,7 @@ package com.modernfarmer.farmusspring.domain.veggieinfo.repository;
 
 
 import com.modernfarmer.farmusspring.domain.veggieinfo.dto.res.GetRecommendVeggieDto;
-import com.modernfarmer.farmusspring.domain.veggieinfo.vo.CreateFarmClubVo;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.VeggieInfoVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.InfoForRegisterVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class VeggieInfoRepositoryImpl implements CustomVeggieInfoRepository{
     }
 
     @Override
-    public CreateFarmClubVo getVeggieInfoForCreateFarmClub(String veggieInfoId) {
+    public VeggieInfoVo getVeggieInfo(String veggieInfoId) {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(veggieInfoId))
@@ -46,7 +46,7 @@ public class VeggieInfoRepositoryImpl implements CustomVeggieInfoRepository{
                 .include("veggieImage")
                 .include("difficulty");
 
-        return mongoTemplate.findOne(query, CreateFarmClubVo.class, "veggie_info");
+        return mongoTemplate.findOne(query, VeggieInfoVo.class, "veggie_info");
     }
 
     @Override

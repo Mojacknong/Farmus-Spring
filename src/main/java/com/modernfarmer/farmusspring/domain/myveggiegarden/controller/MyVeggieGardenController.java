@@ -29,7 +29,7 @@ public class MyVeggieGardenController {
     private final MyVeggieGardenService myVeggieGardenService;
 
     @PostMapping(value = "")
-    public BaseResponseDto<Void> settingMyVeggie(
+    public BaseResponseDto<?> settingMyVeggie(
             @AuthenticationPrincipal CustomUser user,
             @Validated @RequestBody SettingMyVeggieRequest settingMyVeggie
             ){

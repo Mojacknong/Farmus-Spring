@@ -13,7 +13,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
 import com.modernfarmer.farmusspring.domain.user.helper.UserHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
-import com.modernfarmer.farmusspring.domain.veggieinfo.vo.CreateFarmClubVo;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.VeggieInfoVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class FarmClubService {
     @Transactional
     public CreateFarmClubResponseDto createFarmClub(CreateFarmClubRequestDto request, Long userId) {
         // 몽고에서 이미지, 난이도 가져오기
-        CreateFarmClubVo veggieInfo = veggieInfoHelper.getVeggieInfoForCreateFarmClub(request.veggieInfoId());
+        VeggieInfoVo veggieInfo = veggieInfoHelper.getVeggieInfo(request.veggieInfoId());
         FarmClub farmClub = createFarmClubEntity(request, veggieInfo);
         Long newFarmClubId = farmClubRepository.save(farmClub).getId();
         // 채소 id로 팜클럽에 가입하는 메서드 추가
@@ -114,7 +114,7 @@ public class FarmClubService {
         return tips.get((int) (Math.random() * tips.size()));
     }
 
-    private FarmClub createFarmClubEntity(CreateFarmClubRequestDto request, CreateFarmClubVo veggieInfo) {
+    private FarmClub createFarmClubEntity(CreateFarmClubRequestDto request, VeggieInfoVo veggieInfo) {
         return FarmClub.createFarmClub(
                 request.veggieInfoId(),
                 request.farmClubName(),

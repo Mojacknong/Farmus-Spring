@@ -7,6 +7,8 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
+import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.VeggieInfoVo;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.AllArgsConstructor;
@@ -28,12 +30,15 @@ public class MyVeggieGardenService {
     private final DateManager dateManager;
     private final MyDetailMyVeggieDto myDetailMyVeggieDto;
 
+    private final VeggieInfoHelper veggieInfoHelper;
+
 
 
     @Transactional
-    public BaseResponseDto<Void> settingMyVeggie(Long userId, SettingMyVeggieRequest settingMyVeggieRequest) {
-
-        addMyyVeggie(userId, settingMyVeggieRequest);
+    public BaseResponseDto<?> settingMyVeggie(Long userId, SettingMyVeggieRequest settingMyVeggieRequest) {
+        String veggieInfoId = settingMyVeggieRequest.getVeggieInfoId();
+        VeggieInfoVo veggieInfo = veggieInfoHelper.getVeggieInfo(veggieInfoId);
+        addMyyVeggie(userId, settingMyVeggieRequest, veggieInfo);
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
@@ -109,14 +114,14 @@ public class MyVeggieGardenService {
                 .orElseThrow(() -> new IllegalArgumentException("채소가 존재하지 않습니다."));
     }
 
-    private void addMyyVeggie(Long userId, SettingMyVeggieRequest settingMyVeggieRequest){
+    private void addMyyVeggie(Long userId, SettingMyVeggieRequest settingMyVeggieRequest, VeggieInfoVo veggieInfoVo){
 
         MyVeggie newMyVeggie = MyVeggie.createMyVegetable(
                 settingMyVeggieRequest.getNickname(),
                 settingMyVeggieRequest.getBirth(),
                 settingMyVeggieRequest.getVeggieInfoId(),
-                settingMyVeggieRequest.getVeggieName(),
-                settingMyVeggieRequest.getVeggieImage(),
+                veggieInfoVo.name(),
+                veggieInfoVo.veggieImage(),
                 User.builder().id(userId).build()
         );
         myVeggieRepository.save(newMyVeggie);

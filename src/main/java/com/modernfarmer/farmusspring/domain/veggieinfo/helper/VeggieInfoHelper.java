@@ -1,6 +1,6 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.helper;
 
-import com.modernfarmer.farmusspring.domain.veggieinfo.vo.CreateFarmClubVo;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.VeggieInfoVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.exception.custom.VeggieInfoNotFoundException;
 import com.modernfarmer.farmusspring.domain.veggieinfo.repository.VeggieInfoRepository;
@@ -26,9 +26,9 @@ public class VeggieInfoHelper {
         return veggieInfo.getHelp();
     }
 
-    public CreateFarmClubVo getVeggieInfoForCreateFarmClub(String veggieInfoId) {
+    public VeggieInfoVo getVeggieInfo(String veggieInfoId) {
         // Get veggie info for create farm club
-        return veggieInfoRepository.getVeggieInfoForCreateFarmClub(veggieInfoId);
+        return veggieInfoRepository.getVeggieInfo(veggieInfoId);
     }
 
     public List<StepVo> getStepList(String veggieInfoId) {

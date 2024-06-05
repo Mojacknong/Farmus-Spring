@@ -1,6 +1,6 @@
 package com.modernfarmer.farmusspring.domain.veggieinfo.vo;
 
-public record CreateFarmClubVo(
+public record VeggieInfoVo(
     String _id,
     String name,
     String veggieImage,
