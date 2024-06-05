@@ -5,6 +5,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.vo.MyVeggieVo;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -56,6 +57,8 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     @Query("SELECT dc FROM diary_comment AS dc WHERE dc.id = :diaryCommentId AND dc.user = :user")
     Optional<DiaryComment> findDiaryCommentByIdAndUserId(@Param("diaryCommentId") Long diaryCommentId, @Param("user") User user);
 
+    @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.vo.MyVeggieVo(mv.id, mv.nickname) FROM my_veggie mv WHERE mv.user.id = :userId AND mv.veggieInfoId = :veggieInfoId")
+    Optional<MyVeggieVo> findMyVeggieInfo(Long userId, String veggieInfoId);
 
     @Modifying
     @Query("DELETE FROM diary_comment AS dc WHERE dc.id = :diaryCommentId AND dc.user = :user")

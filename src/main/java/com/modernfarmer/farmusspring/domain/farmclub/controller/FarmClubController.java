@@ -116,6 +116,14 @@ public class FarmClubController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, missionPostService.getMissionPostComment(id));
     }
 
+    @GetMapping("/my-veggie")
+    public BaseResponseDto<?> getMyVeggieForRegister(
+            @AuthenticationPrincipal CustomUser user,
+            @RequestParam String veggieInfoId
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getMyVeggie(user.getUserId(), veggieInfoId));
+    }
+
     @GetMapping("/help")
     public BaseResponseDto<?> getFarmClubHelp() {
         return null;

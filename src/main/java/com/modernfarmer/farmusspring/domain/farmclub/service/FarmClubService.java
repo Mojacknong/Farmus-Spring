@@ -11,6 +11,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListWithSt
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.vo.MyVeggieVo;
 import com.modernfarmer.farmusspring.domain.user.helper.UserHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.VeggieInfoVo;
@@ -101,6 +102,11 @@ public class FarmClubService {
 
     public List<GetMyFarmClubListResponseDto> getMyFarmClubList(Long userId) {
         return farmClubRepository.findMyFarmClubList(userId);
+    }
+
+    public GetMyVeggieResponseDto getMyVeggie(Long userId, String veggieInfoId) {
+        MyVeggieVo myVeggie = myVeggieHelper.getMyVeggieInfo(userId, veggieInfoId);
+        return GetMyVeggieResponseDto.of(myVeggie.myVeggieId(), myVeggie.nickname());
     }
 
     private String getRandomTip(List<StepVo> stepList) {
