@@ -17,13 +17,15 @@ public class AllDairy {
     private String image;
     private String content;
     private Boolean isOpen;
+    private String state;
 
     public static AllDairy of(Diary diary, String date){
         return new AllDairy(
                 date,
                 diary.getImage(),
                 diary.getContent(),
-                diary.getIsOpen()
+                diary.getIsOpen(),
+                diary.getState()
         );
     }
 
