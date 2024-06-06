@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@RestControllerAdvice(basePackages = "com.modernfarmer.farmusspring.domain.test")
+@RestControllerAdvice(basePackages = "com.modernfarmer.farmusspring.domain.myveggiegarden.controller")
 public class MyVeggieGardenExceptionHandler {
 
     @ExceptionHandler(RoutineNotFountException.class)
