@@ -23,8 +23,7 @@ public class MyVeggieHelper {
     }
 
     public MyVeggieVo getMyVeggieInfo(Long userId, String veggieInfoId) {
-        return myVeggieRepository.findMyVeggieInfo(userId, veggieInfoId).orElseThrow(() ->
-                new MyVeggieGardenBaseException("채소 데이터를 찾을 수 없습니다.", MyVeggieGardenErrorCode.NO_VEGGIE_FOR_REGISTER)
-        );
+        return myVeggieRepository.findMyVeggieInfo(userId, veggieInfoId).orElse(MyVeggieVo.of(0L, ""));
+
     }
 }
