@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.exception;
 
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.MyVeggieGardenBaseException;
 import com.modernfarmer.farmusspring.domain.test.exception.TestException;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,5 +46,14 @@ public class MyVeggieGardenExceptionHandler {
                 request.getRequestURI(),
                 e.getMessage());
         return BaseResponseDto.of(MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like, e);
+    }
+
+    @ExceptionHandler(MyVeggieGardenBaseException.class)
+    public BaseResponseDto<?> handleMyVeggieException(MyVeggieGardenBaseException e, HttpServletRequest request) {
+        log.error("DiaryLikeException : {} {} errMessage={}\n",
+                request.getMethod(),
+                request.getRequestURI(),
+                e.getMessage());
+        return BaseResponseDto.of(e.getErrorCode(), e.getMessage());
     }
 }
