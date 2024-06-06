@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class SelectMyVeggieProfileResponse {
 
+    private String nickname;
     private String veggieName;
     private String veggieImage;
     private String createdVeggie;

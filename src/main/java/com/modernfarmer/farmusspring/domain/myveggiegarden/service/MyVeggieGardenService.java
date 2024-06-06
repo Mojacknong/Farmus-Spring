@@ -60,6 +60,7 @@ public class MyVeggieGardenService {
         MyVeggie myVeggie = selectMyVeggieAndFarmClub(myVeggieId);
         return BaseResponseDto.of(SuccessCode.SUCCESS,
                 SelectMyVeggieProfileResponse.of(
+                        myVeggie.getNickname(),
                         myVeggie.getVeggieName(),
                         myVeggie.getVeggieImage(),
                         dateManager.parsingDotDate(myVeggie.getBirth()),
