@@ -16,7 +16,8 @@ public record GetFarmClubResponseDto (
         String startedAt,
         int maxMemberCount,
         int currentMemberCount,
-        VeggieInfo.Help help
+        VeggieInfo.Help help,
+        String veggieInfoId
 ){
     public static GetFarmClubResponseDto of(FarmClub farmClub, int currentMemberCount, VeggieInfo.Help help) {
         return GetFarmClubResponseDto.builder()
@@ -29,6 +30,7 @@ public record GetFarmClubResponseDto (
                 .maxMemberCount(farmClub.getMaxUser())
                 .currentMemberCount(currentMemberCount)
                 .help(help)
+                .veggieInfoId(farmClub.getVeggieInfoId())
                 .build();
     }
 }
