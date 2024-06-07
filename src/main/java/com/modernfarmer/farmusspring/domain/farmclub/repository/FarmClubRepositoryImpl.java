@@ -90,7 +90,7 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
                 .select(farmClub.startedAt)
                 .from(userFarmClub)
                 .join(userFarmClub.farmClub, farmClub)
-                .where(userFarmClub.userId.eq(userId))
+                .where(userFarmClub.userId.eq(userId).and(userFarmClub.farmClub.id.eq(farmClubId)))
                 .fetchOne();
 
         log.info("userFarmClubCount: {}", userFarmClubCount);
