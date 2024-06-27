@@ -78,6 +78,12 @@ public class UserService {
         }
     }
 
+    @Transactional
+    public void initUser(Long userId) {
+        User user = userRepository.findUserById(userId);
+        user.initUser();
+    }
+
     private void updateUserProfileAccordingToProfileImage(MultipartFile multipartFile, String nickName, Long userId) throws IOException {
         if(multipartFile.isEmpty()){
 

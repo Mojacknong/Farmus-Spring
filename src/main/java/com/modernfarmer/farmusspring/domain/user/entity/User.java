@@ -121,5 +121,7 @@ public class User extends BaseEntity {
         missionPostLikes.add(missionPostLike);
     }
 
-
+    public void initUser() {
+        this.early = true;
+    }
 }

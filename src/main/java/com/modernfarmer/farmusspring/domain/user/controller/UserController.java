@@ -48,4 +48,10 @@ public class UserController {
         return  userService.settingProfile(user.getUserId(), file, nickname);
     }
 
+    @PostMapping("/init/{userId}")
+    public void initUser(
+            @PathVariable Long userId
+    ) {
+        userService.initUser(userId);
+    }
 }
