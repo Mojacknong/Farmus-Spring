@@ -109,6 +109,13 @@ public class FarmClubService {
         return GetMyVeggieResponseDto.of(myVeggie.myVeggieId(), myVeggie.nickname());
     }
 
+    public GetHelpAllResponseDto getHelpAll(String veggieInfoId) {
+        VeggieInfo.Help help = veggieInfoHelper.getVeggieInfoHelp(veggieInfoId);
+        List<StepVo> steps = veggieInfoHelper.getStepList(veggieInfoId);
+        return GetHelpAllResponseDto.of(help, steps);
+    }
+
+
     private String getRandomTip(List<StepVo> stepList) {
         List<String> tips = new ArrayList<>();
         stepList.forEach(step -> tips.addAll(step.tips()));
