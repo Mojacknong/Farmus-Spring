@@ -7,6 +7,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.FarmClubRepository;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.MissionPostRepository;
+import com.modernfarmer.farmusspring.domain.farmclub.repository.UserFarmClubRepository;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListWithStepCountsAndImagesVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
@@ -30,6 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class FarmClubService {
+    private final UserFarmClubRepository userFarmClubRepository;
 
     private final FarmClubHelper farmClubHelper;
     private final VeggieInfoHelper veggieInfoHelper;
@@ -78,7 +80,7 @@ public class FarmClubService {
         MyVeggie myVeggie = myVeggieHelper.getMyVeggieEntity(myVeggieId);
         FarmClub farmClub = farmClubHelper.getFarmClubEntity(farmClubId);
         // 채소정보 id로 채소의 첫 스텝명 불러옴
-        String stepName = "";
+        String stepName = veggieInfoHelper.getStepName(farmClub.getVeggieInfoId(), 0);
         UserFarmClub userFarmClub = createUserFarmClubEntity(userId, stepName, farmClub, myVeggie);
         farmClub.addUserFarmClub(userFarmClub);
         myVeggie.setUserFarmClub(userFarmClub);
@@ -107,6 +109,24 @@ public class FarmClubService {
     public GetMyVeggieResponseDto getMyVeggie(Long userId, String veggieInfoId) {
         MyVeggieVo myVeggie = myVeggieHelper.getMyVeggieInfo(userId, veggieInfoId);
         return GetMyVeggieResponseDto.of(myVeggie.myVeggieId(), myVeggie.nickname());
+    }
+
+    public GetHelpAllResponseDto getHelpAll(Long farmClubId) {
+        String veggieInfoId = farmClubHelper.getFarmClubEntity(farmClubId).getVeggieInfoId();
+        VeggieInfo.Help help = veggieInfoHelper.getVeggieInfoHelp(veggieInfoId);
+        List<StepVo> steps = veggieInfoHelper.getStepList(veggieInfoId);
+        return GetHelpAllResponseDto.of(help, steps);
+    }
+
+    // 팜클럽 탈퇴
+    public void withdrawFarmClub(Long farmClubId, Long userId, Boolean deleteVeggie) {
+        UserFarmClub userFarmClub = userFarmClubRepository.findByUserIdAndFarmClubId(userId, farmClubId);
+        userFarmClubRepository.deleteById(userFarmClub.getId());
+        if (deleteVeggie) {
+            Long myVeggieId = userFarmClub.getMyVeggie().getId();
+            myVeggieHelper.getMyVeggieEntity(myVeggieId);
+            myVeggieHelper.deleteMyVeggie(myVeggieId);
+        }
     }
 
     private String getRandomTip(List<StepVo> stepList) {

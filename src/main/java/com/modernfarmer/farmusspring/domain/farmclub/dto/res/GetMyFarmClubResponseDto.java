@@ -15,7 +15,7 @@ public record GetMyFarmClubResponseDto(
         Long wholeMemberCount,
         List<Step> steps,
         String advice,
-        int daysSinceStart
+        Long daysSinceStart
 ) {
 
     public static GetMyFarmClubResponseDto of(GetMyFarmClubVo farmClubInfo, List<Step> steps, String advice) {

@@ -57,9 +57,9 @@ public class UserFarmClub extends BaseEntity {
         return newUserFarmClub;
     }
 
-    public void updateCurrentStep(int currentStep, String currentStepName){
-        this.currentStep = currentStep;
-        this.currentStepName = currentStepName;
+    public void updateStep(String nextStep){
+        this.currentStep = this.getCurrentStep() + 1;
+        this.currentStepName = nextStep;
     }
 
     public void addMissionPost(MissionPost missionPost){

@@ -5,6 +5,7 @@ import com.querydsl.core.annotations.QueryProjection;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public record GetMyFarmClubVo(
 
@@ -12,7 +13,7 @@ public record GetMyFarmClubVo(
         String farmClubImage,
         String veggieInfoId,
         Long wholeMemberCount,
-        Integer daySinceStart
+        Long daySinceStart
 ) {
     public static GetMyFarmClubVo of(BaseInfo baseInfo, Long wholeMemberCount, LocalDate dayRegister) {
         return new GetMyFarmClubVo(
@@ -20,7 +21,7 @@ public record GetMyFarmClubVo(
                 baseInfo.farmClubImage(),
                 baseInfo.veggieInfoId(),
                 wholeMemberCount,
-                LocalDate.now().compareTo(dayRegister)
+                ChronoUnit.DAYS.between(dayRegister, LocalDate.now())
         );
     }
 

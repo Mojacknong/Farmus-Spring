@@ -124,8 +124,20 @@ public class FarmClubController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getMyVeggie(user.getUserId(), veggieInfoId));
     }
 
-    @GetMapping("/help")
-    public BaseResponseDto<?> getFarmClubHelp() {
-        return null;
+    @GetMapping("/{farmClubId}/help")
+    public BaseResponseDto<?> getFarmClubHelp(
+            @PathVariable Long farmClubId
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getHelpAll(farmClubId));
+    }
+
+    @DeleteMapping
+    public BaseResponseDto<?> withdrawFarmClub(
+            @RequestParam Long farmClubId,
+            @RequestParam Boolean deleteVeggie,
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        farmClubService.withdrawFarmClub(farmClubId, user.getUserId(), deleteVeggie);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 }
