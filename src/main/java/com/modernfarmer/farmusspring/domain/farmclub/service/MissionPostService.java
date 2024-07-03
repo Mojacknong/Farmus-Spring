@@ -14,6 +14,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.vo.MissionPostCommentVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.MissionPostVo;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.helper.UserHelper;
+import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
 import com.modernfarmer.farmusspring.infra.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,14 +34,18 @@ public class MissionPostService {
     private final UserFarmClubHelper userFarmClubHelper;
     private final MissionPostHelper missionPostHelper;
     private final UserHelper userHelper;
+    private final VeggieInfoHelper veggieInfoHelper;
 
     private final S3Service s3Service;
 
+    @Transactional
     public CreateMissionPostResponseDto createMissionPost(CreateMissionPostRequestDto request, MultipartFile image) {
         UserFarmClub userFarmClub = userFarmClubHelper.getUserFarmClubEntity(request.userFarmClubId());
         String imageUrl = s3Service.uploadImage(image, "mission-post");
-        Long missionPostId = saveMissionPost(request.toEntity(userFarmClub, imageUrl)).getId();
-        return CreateMissionPostResponseDto.of(missionPostId);
+        MissionPost missionPost = saveMissionPost(request.toEntity(userFarmClub, imageUrl));
+        userFarmClub.addMissionPost(missionPost);
+        userFarmClub.updateStep(veggieInfoHelper.getStepName(userFarmClub.getFarmClub().getVeggieInfoId(), userFarmClub.getCurrentStep()));
+        return CreateMissionPostResponseDto.of(missionPost.getId());
     }
 
     @Transactional
