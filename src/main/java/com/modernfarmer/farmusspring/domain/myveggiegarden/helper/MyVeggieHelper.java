@@ -26,4 +26,8 @@ public class MyVeggieHelper {
         return myVeggieRepository.findMyVeggieInfo(userId, veggieInfoId).orElse(MyVeggieVo.of(0L, ""));
 
     }
+
+    public void deleteMyVeggie(Long id) {
+        myVeggieRepository.deleteById(id);
+    }
 }
