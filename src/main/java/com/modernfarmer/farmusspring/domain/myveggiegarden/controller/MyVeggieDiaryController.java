@@ -1,10 +1,7 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentDelete;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentUpdate;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.CommentWrite;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.Like;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
@@ -35,18 +32,15 @@ public class MyVeggieDiaryController {
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public BaseResponseDto<Void> settingMyVeggieDiary(
-            @RequestPart(value = "file", required = false) MultipartFile multipartFile,
-            @RequestParam("content") String content,
-            @RequestParam("isOpen") boolean isOpen,
-            @RequestParam("state") String state,
-            @RequestParam("myVeggieId") Long myVeggieId
-    ) throws IOException {
+            @RequestPart(value = "image", required = false) MultipartFile multipartFile,
+            @RequestPart MyVeggieDiaryInsert myVeggieDiaryInsert
+            ) throws IOException {
         return  myVeggieDiaryService.settingMyVeggieDiary(
                 multipartFile,
-                content,
-                isOpen,
-                state,
-                myVeggieId
+                myVeggieDiaryInsert.getContent(),
+                myVeggieDiaryInsert.isOpen(),
+                myVeggieDiaryInsert.getState(),
+                myVeggieDiaryInsert.getMyVeggieId()
         );
     }
 

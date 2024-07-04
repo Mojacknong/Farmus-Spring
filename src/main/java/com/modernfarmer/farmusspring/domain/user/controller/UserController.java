@@ -42,8 +42,8 @@ public class UserController {
     @PostMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public BaseResponseDto<Void> settingProfile(
             @AuthenticationPrincipal CustomUser user,
-            @RequestParam("nickname") String nickname,
-            @RequestPart(value = "file", required = false) MultipartFile file
+            @RequestPart String nickname,
+            @RequestPart(value = "image", required = false) MultipartFile file
     ) throws IOException {
         return  userService.settingProfile(user.getUserId(), file, nickname);
     }
