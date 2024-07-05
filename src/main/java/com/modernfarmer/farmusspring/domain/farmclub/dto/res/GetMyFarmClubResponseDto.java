@@ -13,6 +13,7 @@ public record GetMyFarmClubResponseDto(
         String farmClubName,
         String farmClubImage,
         Long wholeMemberCount,
+        Integer currentStep,
         List<Step> steps,
         String advice,
         Long daysSinceStart
@@ -23,6 +24,7 @@ public record GetMyFarmClubResponseDto(
                 .farmClubName(farmClubInfo.farmClubName())
                 .farmClubImage(farmClubInfo.farmClubImage())
                 .wholeMemberCount(farmClubInfo.wholeMemberCount())
+                .currentStep(farmClubInfo.currentStep())
                 .steps(steps)
                 .advice(advice)
                 .daysSinceStart(farmClubInfo.daySinceStart())

@@ -13,14 +13,16 @@ public record GetMyFarmClubVo(
         String farmClubImage,
         String veggieInfoId,
         Long wholeMemberCount,
+        Integer currentStep,
         Long daySinceStart
 ) {
-    public static GetMyFarmClubVo of(BaseInfo baseInfo, Long wholeMemberCount, LocalDate dayRegister) {
+    public static GetMyFarmClubVo of(BaseInfo baseInfo, Long wholeMemberCount, Integer currentStep,LocalDate dayRegister) {
         return new GetMyFarmClubVo(
                 baseInfo.farmClubName(),
                 baseInfo.farmClubImage(),
                 baseInfo.veggieInfoId(),
                 wholeMemberCount,
+                currentStep,
                 ChronoUnit.DAYS.between(dayRegister, LocalDate.now())
         );
     }

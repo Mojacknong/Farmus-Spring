@@ -9,6 +9,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.QGetMyFarmClubVo_BaseInfo;
 import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
 import com.modernfarmer.farmusspring.domain.history.vo.QHistoryDetailVo;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -80,11 +81,14 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
                 .where(farmClub.id.eq(farmClubId))
                 .fetchOne();
 
-        Long userFarmClubCount = queryFactory
-                .select(userFarmClub.count())
+        List<Tuple> results = queryFactory
+                .select(userFarmClub.count(), userFarmClub.currentStep)
                 .from(userFarmClub)
                 .join(userFarmClub.farmClub, farmClub)
-                .fetchOne();
+                .fetch();
+
+        Long userFarmClubCount = results.get(0).get(userFarmClub.count());
+        Integer currentStep = results.get(0).get(userFarmClub.currentStep);
 
         LocalDate userFarmClubCreatedDate = queryFactory
                 .select(farmClub.startedAt)
@@ -96,7 +100,7 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
         log.info("userFarmClubCount: {}", userFarmClubCount);
         log.info("userFarmClubCreatedDate: {}", userFarmClubCreatedDate);
 
-        return GetMyFarmClubVo.of(baseInfo, userFarmClubCount, userFarmClubCreatedDate);
+        return GetMyFarmClubVo.of(baseInfo, userFarmClubCount, currentStep, userFarmClubCreatedDate);
     }
 
     public HistoryDetailVo getFarmClubDetail(Long userFarmClubId) {

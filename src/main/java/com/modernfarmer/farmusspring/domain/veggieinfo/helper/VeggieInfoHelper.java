@@ -37,6 +37,6 @@ public class VeggieInfoHelper {
 
     public String getStepName(String veggieInfoId, int step) {
         List<StepVo> stepList = getStepList(veggieInfoId);
-        return stepList.get(step).content();
+        return stepList.get(step - 1).content();
     }
 }
