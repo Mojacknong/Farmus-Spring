@@ -80,7 +80,7 @@ public class FarmClubService {
         MyVeggie myVeggie = myVeggieHelper.getMyVeggieEntity(myVeggieId);
         FarmClub farmClub = farmClubHelper.getFarmClubEntity(farmClubId);
         // 채소정보 id로 채소의 첫 스텝명 불러옴
-        String stepName = veggieInfoHelper.getStepName(farmClub.getVeggieInfoId(), 0);
+        String stepName = veggieInfoHelper.getStepName(farmClub.getVeggieInfoId(), 1);
         UserFarmClub userFarmClub = createUserFarmClubEntity(userId, stepName, farmClub, myVeggie);
         farmClub.addUserFarmClub(userFarmClub);
         myVeggie.setUserFarmClub(userFarmClub);
