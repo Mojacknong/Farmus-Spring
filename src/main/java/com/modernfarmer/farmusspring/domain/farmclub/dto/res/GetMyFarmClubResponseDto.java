@@ -1,6 +1,6 @@
 package com.modernfarmer.farmusspring.domain.farmclub.dto.res;
 
-import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListWithStepCountsAndImagesVo;
+import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
 import lombok.Builder;
@@ -31,26 +31,24 @@ public record GetMyFarmClubResponseDto(
                 .build();
     }
 
-    public static List<Step> createSteps(List<StepVo> stepVoList, List<GetMissionPostListWithStepCountsAndImagesVo> missionList) {
+    public static List<Step> createSteps(List<StepVo> stepVoList, List<GetMissionPostListVo> missionList) {
         List<Step> steps = new ArrayList<>();
-        for (int i = 0; i < stepVoList.size(); i++) {
-            Step step;
-            if (i >= missionList.size()) {
-                step = new Step(
-                        new ArrayList<>(),
-                        stepVoList.get(i).num(),
-                        stepVoList.get(i).content(),
-                        0L
-                );
-            } else {
-                step = new Step(
-                        missionList.get(i).images(),
-                        stepVoList.get(i).num(),
-                        stepVoList.get(i).content(),
-                        missionList.get(i).count()
-                );
+        for (StepVo step: stepVoList) {
+            long count = 0L;
+            List<String> images = new ArrayList<>();
+            for (GetMissionPostListVo mission: missionList) {
+                if (step.num() + 1 == mission.stepNum()) {
+                    images.add(mission.image());
+                    count++;
+                }
             }
-            steps.add(step);
+
+            steps.add(new Step(
+                    images,
+                    step.num(),
+                    step.content(),
+                    count
+            ));
         }
         return steps;
     }
