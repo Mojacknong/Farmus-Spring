@@ -32,6 +32,8 @@ public class VeggieInfo extends BaseDocument {
 
     private String veggieImage;
 
+    private String backgroundColor;
+
     private String period;
 
     private Help help;
