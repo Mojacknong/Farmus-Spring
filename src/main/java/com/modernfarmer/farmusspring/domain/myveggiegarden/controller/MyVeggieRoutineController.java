@@ -58,7 +58,7 @@ public class MyVeggieRoutineController {
     ) {
 
         List<MyRoutineList> result = myVeggieRoutineService.selectMyVeggieRoutine(user.getUserId());
-
+        log.info("채소별 리스트 조회 종료");
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
     }
 }
