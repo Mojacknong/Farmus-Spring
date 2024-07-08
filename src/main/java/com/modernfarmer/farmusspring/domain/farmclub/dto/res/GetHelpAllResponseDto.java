@@ -9,13 +9,17 @@ import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record GetHelpAllResponseDto(
+        String veggieName,
+        String backgroundColor,
         VeggieInfo.Help help,
-        List<StepVo> steps
+        List<VeggieInfo.Step> steps
 ) {
-    public static GetHelpAllResponseDto of(VeggieInfo.Help help, List<StepVo> steps) {
+    public static GetHelpAllResponseDto of(VeggieInfo veggieInfo) {
         return builder()
-                .help(help)
-                .steps(steps)
+                .veggieName(veggieInfo.getName())
+                .backgroundColor(veggieInfo.getBackgroundColor())
+                .help(veggieInfo.getHelp())
+                .steps(veggieInfo.getSteps())
                 .build();
     }
 }
