@@ -41,6 +41,8 @@ public class MyVeggieRoutine {
         return routineList.stream()
                 .map(routine -> {
                     boolean check;
+                    log.info(String.valueOf(routine.getDate()));
+                    log.info("true/false 체크");
                     check = signRoutineCheck(routine.getDate());
                     return MyVeggieRoutine.of(routine, check);
                 })

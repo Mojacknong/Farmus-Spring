@@ -44,7 +44,7 @@ public class MyVeggieRoutineService {
 
     @Transactional
     public List<MyVeggieRoutine> selectMyVeggieRoutineById(MyVeggie myVeggie) {
-
+        log.info("채소별 리스트 서비스 시작");
         List<Routine> routineList = myVeggieRepository.findMyVeggieRoutineById(myVeggie);
         return  MyVeggieRoutine.processData(routineList);
     }
