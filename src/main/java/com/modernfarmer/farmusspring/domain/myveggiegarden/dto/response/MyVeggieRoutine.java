@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Slf4j
 public class MyVeggieRoutine {
 
     private Boolean check;
@@ -52,6 +53,8 @@ public class MyVeggieRoutine {
         if (date.equals(LocalDate.now())) {
            check = false;
         }
+        log.info(String.valueOf(date));
+        log.info(String.valueOf(LocalDate.now()));
         return check;
     }
 
