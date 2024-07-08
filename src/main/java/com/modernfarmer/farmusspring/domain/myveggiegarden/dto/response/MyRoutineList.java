@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +59,12 @@ public class MyRoutineList {
 
     private static Boolean signRoutineCheck(Date date){
         boolean check = true;
-        if (date.equals(LocalDate.now())) {
+        LocalDate currentDate = LocalDate.now();
+        LocalTime fixedTime = LocalTime.of(0, 0, 0, 0);
+        LocalDateTime dateTime = LocalDateTime.of(currentDate, fixedTime);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        String formattedDateTime = dateTime.format(formatter);
+        if (date.equals(formattedDateTime)) {
             check = false;
         }
         log.info(String.valueOf(date));
