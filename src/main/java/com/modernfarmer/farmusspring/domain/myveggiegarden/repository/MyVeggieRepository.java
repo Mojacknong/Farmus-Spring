@@ -67,7 +67,7 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     @Modifying
     @Query("UPDATE diary_comment  AS dc SET dc.comment = :content WHERE dc.id = :diaryCommentId AND dc.user = :user")
     void updateDiaryCommentByIdAndUserId(@Param("diaryCommentId") Long diaryCommentId, @Param("user") User user, @Param("content") String content);
-    @Modifying
-    @Query("UPDATE routine AS r SET r.date = :date WHERE r.id = :routineId")
-    void updateRoutinePeriod(@Param("routineId") Long routineId, @Param("date") Date date);
+//    @Modifying
+//    @Query("UPDATE routine AS r SET r.date = :date, r.complete = true WHERE r.id = :routineId")
+//    void updateRoutinePeriodAndComplete(@Param("routineId") Long routineId, @Param("date") Date date);
 }
