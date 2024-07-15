@@ -19,6 +19,11 @@ public class VeggieInfoHelper {
 
     private final VeggieInfoRepository veggieInfoRepository;
 
+    public VeggieInfo getVeggieInfoEntity(String veggieInfoId) {
+        return veggieInfoRepository.findById(new ObjectId(veggieInfoId))
+                .orElseThrow(() -> new VeggieInfoNotFoundException("존재하지 않는 채소 정보 아이디입니다."));
+    }
+
     public VeggieInfo.Help getVeggieInfoHelp(String veggieInfoId) {
         VeggieInfo veggieInfo = veggieInfoRepository.findById(new ObjectId(veggieInfoId))
                 .orElseThrow(() -> new VeggieInfoNotFoundException("존재하지 않는 채소 정보 아이디입니다."));

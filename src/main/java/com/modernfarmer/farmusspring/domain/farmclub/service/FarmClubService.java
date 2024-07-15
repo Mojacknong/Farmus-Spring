@@ -115,9 +115,8 @@ public class FarmClubService {
 
     public GetHelpAllResponseDto getHelpAll(Long farmClubId) {
         String veggieInfoId = farmClubHelper.getFarmClubEntity(farmClubId).getVeggieInfoId();
-        VeggieInfo.Help help = veggieInfoHelper.getVeggieInfoHelp(veggieInfoId);
-        List<StepVo> steps = veggieInfoHelper.getStepList(veggieInfoId);
-        return GetHelpAllResponseDto.of(help, steps);
+        VeggieInfo veggieInfoEntity = veggieInfoHelper.getVeggieInfoEntity(veggieInfoId);
+        return GetHelpAllResponseDto.of(veggieInfoEntity);
     }
 
     // 팜클럽 탈퇴
