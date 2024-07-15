@@ -44,7 +44,7 @@ public class DateManager {
     public Date addDate(Date date, int addDate){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.DAY_OF_MONTH, addDate); // 3일을 더함
+        cal.add(Calendar.DAY_OF_MONTH, addDate);
         return cal.getTime();
     }
 
