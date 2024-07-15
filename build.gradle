@@ -58,6 +58,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     testImplementation 'it.ozimov:embedded-redis:0.7.2'
 
+    implementation 'mysql:mysql-connector-java:8.0.33'
+
     // 유효성 검사
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
