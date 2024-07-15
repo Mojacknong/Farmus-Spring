@@ -2,7 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.exception;
 
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.MyVeggieGardenBaseException;
-import com.modernfarmer.farmusspring.domain.test.exception.TestException;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.RoutineNotFoundException;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice(basePackages = "com.modernfarmer.farmusspring.domain.myveggiegarden.controller")
 public class MyVeggieGardenExceptionHandler {
 
-    @ExceptionHandler(RoutineNotFountException.class)
-    public BaseResponseDto<?> handleRoutineNotFoundException(RoutineNotFountException e, HttpServletRequest request) {
+    @ExceptionHandler(RoutineNotFoundException.class)
+    public BaseResponseDto<?> handleRoutineNotFoundException(RoutineNotFoundException e, HttpServletRequest request) {
         log.error("RoutineException : {} {} errMessage={}\n",
                 request.getMethod(),
                 request.getRequestURI(),
