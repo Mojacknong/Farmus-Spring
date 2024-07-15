@@ -44,12 +44,11 @@ public class MyVeggieRoutine {
         return routineList.stream()
                 .map(routine -> {
                     boolean check;
-                    log.info(String.valueOf(routine.getDate()));
-                    log.info("true/false 체크");
-                    check = signRoutineCheck(routine.getDate());
+                //    check = signRoutineCheck(routine.getDate());
+                    check= true;
                     return MyVeggieRoutine.of(routine, check);
-                })
-                .toList();
+                }).toList();
+
     }
 
 
@@ -64,8 +63,6 @@ public class MyVeggieRoutine {
         if (date1.equals(formattedDateTime)) {
            check = false;
         }
-        log.info(String.valueOf(date1));
-        log.info(String.valueOf(formattedDateTime));
         return check;
     }
 
