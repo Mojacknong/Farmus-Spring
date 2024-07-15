@@ -1,19 +1,17 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.repository;
 
-import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
+
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
-import java.util.Optional;
+
 
 
 @Repository
