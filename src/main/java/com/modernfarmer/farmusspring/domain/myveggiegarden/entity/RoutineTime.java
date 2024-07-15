@@ -23,7 +23,8 @@ public class RoutineTime extends BaseEntity{
     @Column(name = "routine_time_id")
     private Long id;
 
-    @Column(name = "date")
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date", columnDefinition = "DATE")
     private Date date;
 
 
