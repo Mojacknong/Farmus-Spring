@@ -27,18 +27,17 @@ public class MyVeggieRoutineController {
 
     private final MyVeggieRoutineService myVeggieRoutineService;
 
-    @PostMapping(value = "")
-    public BaseResponseDto<Void> settingMyVeggieRoutine(
-            @Validated @RequestBody SettingMyVeggieRoutineReqeuest settingMyVeggieRoutineReqeuest
-            ) {
-        return myVeggieRoutineService.settingMyVeggieRoutine(settingMyVeggieRoutineReqeuest);
+    @PostMapping()
+    public BaseResponseDto<?> settingMyVeggieRoutine(@Validated @RequestBody SettingMyVeggieRoutineReqeuest settingMyVeggieRoutineReqeuest) {
+        myVeggieRoutineService.settingMyVeggieRoutine(settingMyVeggieRoutineReqeuest);
+        log.info("루틴 추가 완료");
+        return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
     @PostMapping(value = "/check")
-    public BaseResponseDto<?> checkMyVeggieRoutine(
-            @Validated @RequestBody MyRoutineCheck myRoutineCheck
-    ) {
-        myVeggieRoutineService.checkMyVeggieRoutine(myRoutineCheck.getRoutineId());
+    public BaseResponseDto<?> checkMyVeggieRoutine(@Validated @RequestBody MyRoutineCheck myRoutineCheck) {
+        myVeggieRoutineService.checkMyVeggieRoutine(myRoutineCheck.getRoutineId(), myRoutineCheck.getRoutineTimeId());
+        log.info("루틴 체킹 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 

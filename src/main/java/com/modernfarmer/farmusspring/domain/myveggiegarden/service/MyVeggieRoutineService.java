@@ -5,19 +5,18 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyRoutin
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieRoutine;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.RoutineTime;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.MyVeggieGardenErrorCode;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.RoutineNotFountException;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.RoutineNotFoundException;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.RoutineTimeNotFoundException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.RoutineTimeRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
-import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
-import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,22 +28,20 @@ public class MyVeggieRoutineService {
 
     private final MyVeggieGardenService myVeggieGardenService;
     private final MyVeggieRepository myVeggieRepository;
+    private  final RoutineTimeRepository routineTimeRepository;
     private final DateManager dateManager;
 
 
 
     @Transactional
-    public BaseResponseDto<Void> settingMyVeggieRoutine(
-            SettingMyVeggieRoutineReqeuest settingMyVeggieRoutineReqeuest
-    )  {
-        addMyyVeggieRoutine(settingMyVeggieRoutineReqeuest);
-        return BaseResponseDto.of(SuccessCode.SUCCESS,null);
+    public void settingMyVeggieRoutine(SettingMyVeggieRoutineReqeuest settingMyVeggieRoutineReqeuest) {
+        Routine routine = addMyVeggieRoutine(settingMyVeggieRoutineReqeuest);
+        addRoutineTime(new Date(), false, routine);
     }
 
 
     @Transactional
     public List<MyVeggieRoutine> selectMyVeggieRoutineById(MyVeggie myVeggie) {
-
         List<Routine> routineList = myVeggieRepository.findMyVeggieRoutineById(myVeggie);
         return  MyVeggieRoutine.processData(routineList);
     }
@@ -57,34 +54,43 @@ public class MyVeggieRoutineService {
     }
 
     @Transactional
-    public void checkMyVeggieRoutine(Long routineId) {
+    public void checkMyVeggieRoutine(Long routineId, Long routineTimeId) {
         Optional<Routine> routine = selectRoutineByRoutineId(routineId);
-        Date addedDate = dateManager.addDate(routine.get().getDate(), routine.get().getPeriod());
-        myVeggieRepository.updateRoutinePeriod(routineId, addedDate);
+        Optional<RoutineTime> routineTime = selectRoutineTimeByIdAndRoutineId(routine.get(), routineTimeId);
+        routineTimeRepository.updateRoutineTimeComplete(routine.get(), routineTimeId);
+        Date addedDate = dateManager.addDate(routineTime.get().getDate(), routine.get().getPeriod());
+        addRoutineTime(addedDate, false, routine.get());
     }
 
 
 
 
 
+    private void addRoutineTime(Date date, boolean complete, Routine routine){
+        RoutineTime newRoutineTime = RoutineTime.createRoutineTime(date, complete, routine);
+        routine.addRoutineTime(newRoutineTime);
+    }
 
+    public Optional<RoutineTime> selectRoutineTimeByIdAndRoutineId(Routine routine, Long routineTimeId){
+        return Optional.ofNullable(routineTimeRepository.findRoutineTimeByIdAndRoutineId(routine, routineTimeId)
+                .orElseThrow(() -> new RoutineTimeNotFoundException("존재하지 않는 루틴타임입니다.", MyVeggieGardenErrorCode.NOT_FOUND_ROUTINE_TIME)));
+    }
 
 
     public Optional<Routine> selectRoutineByRoutineId(Long routineId){
         return Optional.ofNullable(myVeggieRepository.findRoutineById(routineId)
-                .orElseThrow(() -> new RoutineNotFountException("해당 루틴이 존재하지 않습니다.")));
+                .orElseThrow(() -> new RoutineNotFoundException("존재하지 않는 루틴입니다.", MyVeggieGardenErrorCode.NOT_FOUND_ROUTINE)));
     }
 
-    private void addMyyVeggieRoutine(SettingMyVeggieRoutineReqeuest settingMyVeggieRoutineReqeuest){
+    private Routine addMyVeggieRoutine(SettingMyVeggieRoutineReqeuest settingMyVeggieRoutineReqeuest){
         MyVeggie myVeggie = myVeggieGardenService.getMyVeggie(settingMyVeggieRoutineReqeuest.getMyVeggieId());
         Routine newRoutine = Routine.createRoutine(
-                new Date(),
                 settingMyVeggieRoutineReqeuest.getContent(),
                 settingMyVeggieRoutineReqeuest.getPeriod(),
-                myVeggie,
-                settingMyVeggieRoutineReqeuest.isNotify()
+                myVeggie
         );
         myVeggie.addRoutine(newRoutine);
+        return newRoutine;
     }
 
 
