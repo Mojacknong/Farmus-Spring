@@ -35,8 +35,8 @@ public class Routine extends BaseEntity {
     @Column(name = "period")
     private int period;
 
-    @Column(name = "notify")
-    private boolean notify;
+    @Column(name = "compete")
+    private boolean complete;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,13 +44,13 @@ public class Routine extends BaseEntity {
     private MyVeggie myVeggie;
 
 
-    public static Routine createRoutine(Date date, String content, int period, MyVeggie myVeggie, boolean notify){
+    public static Routine createRoutine(Date date, String content, int period, MyVeggie myVeggie, boolean complete){
         Routine newRoutine = Routine.builder()
                 .date(date)
                 .content(content)
                 .period(period)
                 .myVeggie(myVeggie)
-                .notify(notify)
+                .complete(complete)
                 .build();
 
         myVeggie.addRoutine(newRoutine);
