@@ -51,7 +51,8 @@ public class MyRoutineList {
         return myVeggie.getRoutines().stream()
                 .map(routine -> {
                     boolean check;
-                    check = signRoutineCheck(routine.getDate());
+                //    check = signRoutineCheck(routine.getDate());
+                    check = true;
                     return new MyVeggieRoutine(check, routine.getContent(), routine.getPeriod(), routine.getId() );
                         })
                 .toList();
