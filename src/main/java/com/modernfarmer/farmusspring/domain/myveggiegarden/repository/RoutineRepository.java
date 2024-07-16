@@ -20,4 +20,8 @@ public interface RoutineRepository extends JpaRepository<Routine, Long> {
     @Modifying
     @Query("UPDATE routine AS r SET r.content = :content, r.period = :period WHERE r.id = :routineId")
     void updateRoutine(@Param("routineId") Long routineId, @Param("content") String content, @Param("period") int period);
+
+    @Modifying
+    @Query("DELETE FROM routine AS r WHERE r.id = :routineId")
+    void deleteRoutine(@Param("routineId") Long routineId);
 }
