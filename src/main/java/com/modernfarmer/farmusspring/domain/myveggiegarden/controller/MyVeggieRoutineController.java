@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.MyRoutineCheck;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineDelete;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineUpdate;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRoutineReqeuest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyRoutineList;
@@ -33,6 +34,13 @@ public class MyVeggieRoutineController {
     public BaseResponseDto<?> modifyRoutine(@Validated @RequestBody RoutineUpdate routineUpdate) {
         myVeggieRoutineService.modifyRoutine(routineUpdate);
         log.info("루틴 수정 완료");
+        return BaseResponseDto.of(SuccessCode.SUCCESS,null);
+    }
+
+    @DeleteMapping
+    public BaseResponseDto<?> eraseRoutine(@Validated @RequestBody RoutineDelete routineDelete) {
+        myVeggieRoutineService.eraseRoutine(routineDelete);
+        log.info("루틴 삭제 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 

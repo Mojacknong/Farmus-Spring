@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineDelete;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineUpdate;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRoutineReqeuest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyRoutineList;
@@ -39,6 +40,12 @@ public class MyVeggieRoutineService {
     public void modifyRoutine(RoutineUpdate routineUpdate) {
         verifyRoutine(routineRepository.findRoutineById(routineUpdate.getRoutineId()));
         routineRepository.updateRoutine(routineUpdate.getRoutineId(), routineUpdate.getContent(), routineUpdate.getPeriod());
+    }
+
+    @Transactional
+    public void eraseRoutine(RoutineDelete routineDelete) {
+        verifyRoutine(routineRepository.findRoutineById(routineDelete.getRoutineId()));
+        routineRepository.deleteRoutine(routineDelete.getRoutineId());
     }
 
     @Transactional
