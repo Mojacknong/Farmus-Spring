@@ -51,8 +51,8 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     List<MyVeggie> findMyVeggieAndRoutine(@Param("userId") Long userId);
 
 
-    @Query("SELECT r FROM routine AS r  WHERE r.id = :routineId ")
-    Optional<Routine> findRoutineById(@Param("routineId") Long routineId);
+//    @Query("SELECT r FROM routine AS r  WHERE r.id = :routineId ")
+//    Optional<Routine> findRoutineById(@Param("routineId") Long routineId);
 
     @Query("SELECT dc FROM diary_comment AS dc WHERE dc.id = :diaryCommentId AND dc.user = :user")
     Optional<DiaryComment> findDiaryCommentByIdAndUserId(@Param("diaryCommentId") Long diaryCommentId, @Param("user") User user);
