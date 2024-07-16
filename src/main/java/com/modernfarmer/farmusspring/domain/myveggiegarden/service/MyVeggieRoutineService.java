@@ -70,8 +70,12 @@ public class MyVeggieRoutineService {
 
     @Transactional
     public void checkMyVeggieRoutine(Long routineId, Long routineTimeId) {
-        Optional<Routine> routine = selectRoutineById(routineId);
-        Optional<RoutineTime> routineTime = selectRoutineTimeByIdAndRoutineId(routine.get(), routineTimeId);
+       // Optional<Routine> routine = selectRoutineById(routineId);
+        Optional<Routine> routine = routineRepository.findRoutineById(routineId);
+        verifyRoutine(routine);
+     //   Optional<RoutineTime> routineTime = selectRoutineTimeByIdAndRoutineId(routine.get(), routineTimeId);
+        Optional<RoutineTime> routineTime = routineTimeRepository.findRoutineTimeByIdAndRoutineId(routine.get(), routineTimeId);
+        verifyRoutineTime(routineTime);
         routineTimeRepository.updateRoutineTimeComplete(routine.get(), routineTimeId);
         Date addedDate = dateManager.addDate(routineTime.get().getDate(), routine.get().getPeriod());
         addRoutineTime(addedDate, false, routine.get());
@@ -86,15 +90,10 @@ public class MyVeggieRoutineService {
         routine.addRoutineTime(newRoutineTime);
     }
 
-    public Optional<RoutineTime> selectRoutineTimeByIdAndRoutineId(Routine routine, Long routineTimeId){
-        return Optional.ofNullable(routineTimeRepository.findRoutineTimeByIdAndRoutineId(routine, routineTimeId)
-                .orElseThrow(() -> new RoutineTimeNotFoundException("존재하지 않는 루틴타임입니다.", MyVeggieGardenErrorCode.NOT_FOUND_ROUTINE_TIME)));
-    }
 
-
-    public Optional<Routine> selectRoutineById(Long routineId){
-        return Optional.ofNullable(routineRepository.findRoutineById(routineId)
-                .orElseThrow(() -> new RoutineNotFoundException("존재하지 않는 루틴입니다.", MyVeggieGardenErrorCode.NOT_FOUND_ROUTINE)));
+    public void verifyRoutineTime(Optional<RoutineTime> routineTime){
+        if(routineTime.isEmpty())
+            throw new RoutineTimeNotFoundException("존재하지 않는 루틴타임입니다.", MyVeggieGardenErrorCode.NOT_FOUND_ROUTINE_TIME);
     }
 
     public void verifyRoutine(Optional<Routine> routine){
