@@ -5,6 +5,8 @@ import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class Routine extends BaseEntity {
 
     @OneToMany(mappedBy = "routine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<RoutineTime> routineTimes = new ArrayList<>();
 
     public static Routine createRoutine(String content, int period, MyVeggie myVeggie){
