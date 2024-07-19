@@ -30,8 +30,8 @@ public class RoutineTime extends BaseEntity{
     private Date date;
 
 
-    @Column(name = "compete")
-    private boolean complete;
+    @Column(name = "complete")
+    private Boolean complete;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
