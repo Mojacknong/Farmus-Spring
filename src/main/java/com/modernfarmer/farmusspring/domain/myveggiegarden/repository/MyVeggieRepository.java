@@ -1,10 +1,7 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.repository;
 
 
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.vo.MyVeggieVo;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -51,6 +48,7 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     List<MyVeggie> findMyVeggieAndRoutine(@Param("userId") Long userId);
 
 
+
 //    @Query("SELECT r FROM routine AS r  WHERE r.id = :routineId ")
 //    Optional<Routine> findRoutineById(@Param("routineId") Long routineId);
 
@@ -70,4 +68,14 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
 //    @Modifying
 //    @Query("UPDATE routine AS r SET r.date = :date, r.complete = true WHERE r.id = :routineId")
 //    void updateRoutinePeriodAndComplete(@Param("routineId") Long routineId, @Param("date") Date date);
+
+
+    @Query("SELECT mv FROM my_veggie AS mv " +
+            "LEFT JOIN  mv.routines AS r " +
+            "JOIN   r.routineTimes AS rt " +
+            "WHERE mv.user= :user AND " +
+            "rt.date = :day")
+    List<MyVeggie> findMyVeggieAndRoutineTimeAndRoutineByUserWithDate(@Param("user") User user, @Param("day") Date day);
+
+
 }
