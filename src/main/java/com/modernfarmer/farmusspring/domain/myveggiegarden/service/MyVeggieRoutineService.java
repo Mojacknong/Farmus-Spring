@@ -5,6 +5,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineUp
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRoutineReqeuest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyRoutineList;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieRoutine;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.RoutineMonthChecking;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.RoutineTime;
@@ -15,14 +16,14 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRe
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.RoutineRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.RoutineTimeRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
+import com.modernfarmer.farmusspring.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Slf4j
 @AllArgsConstructor
@@ -55,6 +56,14 @@ public class MyVeggieRoutineService {
     }
 
 
+
+
+    @Transactional
+    public RoutineMonthChecking selectRoutineCheckingAccordingToMonth(User user, Date month) {
+        List<RoutineTime> routineTimeList = routineTimeRepository.findRoutineTimeAndRoutineAndMyVeggieByMonthWithUser(month, user);
+        return RoutineMonthChecking.of(extractDate(routineTimeList));
+    }
+
     @Transactional
     public List<MyVeggieRoutine> selectMyVeggieRoutineById(MyVeggie myVeggie) {
         List<Routine> routineList = myVeggieRepository.findMyVeggieRoutineById(myVeggie);
@@ -62,11 +71,42 @@ public class MyVeggieRoutineService {
     }
 
     @Transactional
-    public List<MyRoutineList> selectMyVeggieRoutine(Long userId) {
-        log.info("채소별 리스트 서비스 시작");
-        List<MyVeggie> myVeggieList = myVeggieRepository.findMyVeggieAndRoutine(userId);
-        return MyRoutineList.processData(myVeggieList);
+    public List<MyRoutineList>  selectRoutineAccordingToDate(User user, Date day) {
+        List<MyVeggie> myVeggieList = myVeggieRepository.findMyVeggieAndRoutineTimeAndRoutineByUserWithDate(user, day);
+        return mappingMyVeggieListData(myVeggieList, day);
     }
+
+
+    public List<MyRoutineList> mappingMyVeggieListData(List<MyVeggie> myVeggieList, Date day){
+        return myVeggieList.stream()
+                .map(myVeggie -> MyRoutineList.of(myVeggie,mappingRoutineListData(myVeggie, day)))
+                .toList();
+    }
+
+    private List<MyVeggieRoutine> mappingRoutineListData(MyVeggie myVeggie, Date day) {
+        return myVeggie.getRoutines().stream()
+                .filter(routine -> checkingRoutineTime(day, routine) != null)
+                .map(routine -> MyVeggieRoutine.of(routine, checkingRoutineTime(day, routine)))
+                .toList();
+    }
+
+    public Boolean checkingRoutineTime(Date date, Routine routine) {
+        return routine.getRoutineTimes().stream()
+                .filter(routineTime -> dateManager.formatDayDateToString(date).equals(dateManager.formatDayDateToString(routineTime.getDate())))
+                .findFirst()
+                .map(RoutineTime::getComplete)
+                .orElse(null);
+    }
+
+
+
+    public List<Date> extractDate(List<RoutineTime> routineTimeList){
+        return routineTimeList.stream()
+                .map(RoutineTime::getDate)
+                .toList();
+    }
+
+
 
     @Transactional
     public void checkMyVeggieRoutine(Long routineId, Long routineTimeId) {
