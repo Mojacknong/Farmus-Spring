@@ -70,8 +70,12 @@ public class FarmClubService {
         );
     }
 
-    public List<SearchFarmClubResponseDto> searchFarmClub(List<String> difficulties, String keyword) {
-        return farmClubRepository.findByConditions(difficulties,  keyword);
+    public List<SearchFarmClubResponseDto> searchFarmClub(List<String> difficulties, String keyword, Long userId) {
+        List<Long> farmClubIds = farmClubHelper.findFarmClubIdsByUserId(userId);
+        List<SearchFarmClubResponseDto> farmClubs = farmClubRepository.findByConditions(difficulties, keyword);
+        return farmClubs.stream()
+                .filter(farmClub -> !farmClubIds.contains(farmClub.id()))
+                .toList();
     }
 
     @Transactional
@@ -108,9 +112,13 @@ public class FarmClubService {
         return farmClubRepository.findMyFarmClubList(userId);
     }
 
-    public GetMyVeggieResponseDto getMyVeggie(Long userId, String veggieInfoId) {
+    public GetMyVeggieResponseDto getMyVeggieForRegister(Long userId, String veggieInfoId) {
         MyVeggieVo myVeggie = myVeggieHelper.getMyVeggieInfo(userId, veggieInfoId);
         return GetMyVeggieResponseDto.of(myVeggie.myVeggieId(), myVeggie.nickname());
+    }
+
+    public List<MyVeggieVo> getMyVeggieForCreate(Long userId) {
+        return myVeggieHelper.getMyVeggieInfo(userId);
     }
 
     public GetHelpAllResponseDto getHelpAll(Long farmClubId) {
