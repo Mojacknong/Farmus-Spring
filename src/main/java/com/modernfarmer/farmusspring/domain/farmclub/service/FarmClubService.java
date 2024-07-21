@@ -75,6 +75,8 @@ public class FarmClubService {
         List<SearchFarmClubResponseDto> farmClubs = farmClubRepository.findByConditions(difficulties, keyword);
         return farmClubs.stream()
                 .filter(farmClub -> !farmClubIds.contains(farmClub.id()))
+                .filter(farmClub -> farmClub.maxUser() > farmClub.curUser())
+                .filter(farmClub -> farmClub.startedAt().compareTo(LocalDate.now().toString()) >= 0)
                 .toList();
     }
 
