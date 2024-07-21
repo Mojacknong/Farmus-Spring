@@ -57,8 +57,11 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     @Query("SELECT dc FROM diary_comment AS dc WHERE dc.id = :diaryCommentId AND dc.user = :user")
     Optional<DiaryComment> findDiaryCommentByIdAndUserId(@Param("diaryCommentId") Long diaryCommentId, @Param("user") User user);
 
-    @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.vo.MyVeggieVo(mv.id, mv.nickname) FROM my_veggie mv WHERE mv.user.id = :userId AND mv.veggieInfoId = :veggieInfoId")
+    @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.vo.MyVeggieVo(mv.id, mv.veggieInfoId, mv.nickname) FROM my_veggie mv WHERE mv.user.id = :userId AND mv.veggieInfoId = :veggieInfoId")
     Optional<MyVeggieVo> findMyVeggieInfo(Long userId, String veggieInfoId);
+
+    @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.vo.MyVeggieVo(mv.id, mv.veggieInfoId, mv.nickname) FROM my_veggie mv WHERE mv.user.id = :userId AND mv.userFarmClub IS NULL")
+    List<MyVeggieVo> findMyVeggieInfoForCreate(Long userId);
 
     @Modifying
     @Query("DELETE FROM diary_comment AS dc WHERE dc.id = :diaryCommentId AND dc.user = :user")
