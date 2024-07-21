@@ -6,6 +6,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.FarmClubErrorCode;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.custom.FarmClubEntityNotFoundException;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.FarmClubRepository;
+import com.modernfarmer.farmusspring.domain.farmclub.repository.UserFarmClubRepository;
 import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import java.util.List;
 public class FarmClubHelper {
 
     private final FarmClubRepository farmClubRepository;
+    private final UserFarmClubRepository userFarmClubRepository;
 
     public FarmClub getFarmClubEntity(Long id) {
         return farmClubRepository.findById(id).orElseThrow(() ->
@@ -31,5 +33,9 @@ public class FarmClubHelper {
 
     public List<FarmClub> getRecommendedFarmClubList(String level) {
         return farmClubRepository.getRecommendedFarmClubList(level);
+    }
+
+    public List<Long> findFarmClubIdsByUserId(Long userId) {
+        return userFarmClubRepository.findFarmClubIdsByUserId(userId);
     }
 }

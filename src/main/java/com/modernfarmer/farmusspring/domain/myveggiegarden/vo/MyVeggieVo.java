@@ -6,13 +6,14 @@ import lombok.Builder;
 @Builder
 public record MyVeggieVo(
         Long myVeggieId,
+        String veggieInfoId,
         String nickname
 ) {
 
     @QueryProjection
     public MyVeggieVo {}
 
-    public static MyVeggieVo of(Long myVeggieId, String nickname) {
-        return new MyVeggieVo(myVeggieId, nickname);
+    public static MyVeggieVo of(Long myVeggieId, String veggieInfoId, String nickname) {
+        return new MyVeggieVo(myVeggieId, veggieInfoId, nickname);
     }
 }

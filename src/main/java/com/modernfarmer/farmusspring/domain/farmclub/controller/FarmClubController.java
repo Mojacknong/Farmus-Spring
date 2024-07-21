@@ -2,7 +2,6 @@ package com.modernfarmer.farmusspring.domain.farmclub.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.*;
-import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.service.FarmClubService;
 import com.modernfarmer.farmusspring.domain.farmclub.service.MissionPostService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -44,9 +43,10 @@ public class FarmClubController {
     @GetMapping("/search")
     public BaseResponseDto<?> searchFarmClub(
             @RequestParam(required = false) List<String> difficulties,
-            @RequestParam(required = false) String keyword
+            @RequestParam(required = false) String keyword,
+            @AuthenticationPrincipal CustomUser user
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.searchFarmClub(difficulties, keyword));
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.searchFarmClub(difficulties, keyword, user.getUserId()));
     }
 
     @GetMapping("/{id}")
@@ -121,7 +121,14 @@ public class FarmClubController {
             @AuthenticationPrincipal CustomUser user,
             @RequestParam String veggieInfoId
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getMyVeggie(user.getUserId(), veggieInfoId));
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getMyVeggieForRegister(user.getUserId(), veggieInfoId));
+    }
+
+    @GetMapping("/my-veggie/create")
+    public BaseResponseDto<?> getMyVeggieForCreate(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getMyVeggieForCreate(user.getUserId()));
     }
 
     @GetMapping("/{farmClubId}/help")

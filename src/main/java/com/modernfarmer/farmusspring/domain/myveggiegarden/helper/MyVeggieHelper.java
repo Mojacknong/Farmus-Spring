@@ -7,8 +7,9 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRe
 import com.modernfarmer.farmusspring.domain.myveggiegarden.vo.MyVeggieVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Slf4j
@@ -23,8 +24,11 @@ public class MyVeggieHelper {
     }
 
     public MyVeggieVo getMyVeggieInfo(Long userId, String veggieInfoId) {
-        return myVeggieRepository.findMyVeggieInfo(userId, veggieInfoId).orElse(MyVeggieVo.of(0L, ""));
+        return myVeggieRepository.findMyVeggieInfo(userId, veggieInfoId).orElse(MyVeggieVo.of(0L, "", ""));
+    }
 
+    public List<MyVeggieVo> getMyVeggieInfo(Long userId) {
+        return myVeggieRepository.findMyVeggieInfoForCreate(userId);
     }
 
     public void deleteMyVeggie(Long id) {

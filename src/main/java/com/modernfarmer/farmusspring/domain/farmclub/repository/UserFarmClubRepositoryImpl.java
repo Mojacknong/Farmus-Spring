@@ -4,6 +4,8 @@ import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QUserFarmClub.userFarmClub;
 
 @RequiredArgsConstructor
@@ -19,5 +21,14 @@ public class UserFarmClubRepositoryImpl implements UserFarmClubRepositoryCustom 
                 .where(userFarmClub.userId.eq(userId)
                         .and(userFarmClub.farmClub.id.eq(farmClubId)))
                 .fetchOne();
+    }
+
+    @Override
+    public List<Long> findFarmClubIdsByUserId(Long userId) {
+        return queryFactory
+                .select(userFarmClub.farmClub.id)
+                .from(userFarmClub)
+                .where(userFarmClub.userId.eq(userId))
+                .fetch();
     }
 }
