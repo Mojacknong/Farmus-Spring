@@ -1,10 +1,12 @@
 package com.modernfarmer.farmusspring.domain.history.controller;
 
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.history.service.HistoryService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -22,15 +24,29 @@ public class HistoryController {
         return BaseResponseDto.of(SuccessCode.SUCCESS ,historyService.getUserHistory(id));
     }
 
+    @GetMapping("/farmclub")
+    public void getFarmClubHistories(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return ;
+    }
+
     @GetMapping("/farmclub/{id}")
-    public void getFarmClubHistory(
+    public void getFarmClubHistoryDetail(
             @PathVariable Long id
     ) {
         return ;
     }
 
+    @GetMapping("/veggie")
+    public void getVeggieHistories(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return ;
+    }
+
     @GetMapping("/veggie/{id}")
-    public void getVeggieHistory(
+    public void getVeggieHistoryDetail(
             @PathVariable Long id
     ) {
         return ;
