@@ -12,7 +12,7 @@ import java.util.Date;
 @Component
 public class DateManager {
 
-    public String parsingDotDate(Date date){
+    public static String parsingDotDate(Date date){
         SimpleDateFormat format = new SimpleDateFormat("yy.MM.dd");
         return format.format(date);
     }
