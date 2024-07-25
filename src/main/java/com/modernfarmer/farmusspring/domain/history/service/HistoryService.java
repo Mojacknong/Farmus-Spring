@@ -22,7 +22,7 @@ public class HistoryService {
         return null;
     }
 
-    public VeggieHistoryDetailResponseDto getVeggieHistoryDetail(ObjectId detailId) {
+    public VeggieHistoryDetailResponseDto getVeggieHistoryDetail(String detailId) {
         HistoryVeggieDetail historyVeggieDetail = historyHelper.getVeggieHistoryDetail(detailId);
         return VeggieHistoryDetailResponseDto.of(historyVeggieDetail.getDiaryPosts(), historyVeggieDetail.getFarmResult());
     }
@@ -32,7 +32,7 @@ public class HistoryService {
         return VeggieHistoryListResponseDto.of(history.getVeggieHistoryDetails());
     }
 
-    public FarmClubHistoryDetailResponseDto getFarmClubHistoryDetail(ObjectId detailId) {
+    public FarmClubHistoryDetailResponseDto getFarmClubHistoryDetail(String detailId) {
         HistoryFarmClubDetail historyFarmClubDetail = historyHelper.getFarmClubHistoryDetail(detailId);
         return FarmClubHistoryDetailResponseDto.of(historyFarmClubDetail.getMissionPostList());
     }
