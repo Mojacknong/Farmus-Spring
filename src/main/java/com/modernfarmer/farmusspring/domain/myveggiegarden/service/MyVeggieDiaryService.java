@@ -36,7 +36,6 @@ public class MyVeggieDiaryService {
     private final MyVeggieRepository myVeggieRepository;
     private final UserService userService;
     private final DiaryRepository diaryRepository;
-    private final DateManager dateManager;
 
     @Transactional
     public BaseResponseDto<Void> settingMyVeggieDiary(
@@ -84,7 +83,7 @@ public class MyVeggieDiaryService {
             return FarmClubDiary.of(
                     diary,
                     user,
-                    dateManager.dotDateTime(diary.getCreatedDate()),
+                    DateManager.dotDateTime(diary.getCreatedDate()),
                     diary.getDiaryComments().size(),
                     diary.getDiaryLikes().size()
                     );}).toList();
@@ -153,7 +152,7 @@ public class MyVeggieDiaryService {
                 SelectDiaryOneResponse.of(
                         diaryList.get(0).getImage(),
                         diaryList.get(0).getContent(),
-                        dateManager.formatDate(diaryList.get(0).getCreatedDate())
+                        DateManager.formatDate(diaryList.get(0).getCreatedDate())
                 ));
     }
 

@@ -27,9 +27,7 @@ import java.util.List;
 public class MyVeggieGardenService {
 
     private final MyVeggieRepository myVeggieRepository;
-    private final DateManager dateManager;
     private final MyDetailMyVeggieDto myDetailMyVeggieDto;
-
     private final VeggieInfoHelper veggieInfoHelper;
 
 
@@ -63,8 +61,8 @@ public class MyVeggieGardenService {
                         myVeggie.getNickname(),
                         myVeggie.getVeggieName(),
                         myVeggie.getVeggieImage(),
-                        dateManager.parsingDotDate(myVeggie.getBirth()),
-                        dateManager.calculateDay(myVeggie.getBirth(), new Date()),
+                        DateManager.parsingDotDate(myVeggie.getBirth()),
+                        DateManager.calculateDay(myVeggie.getBirth(), new Date()),
                         checkFarmClubAffiliation(myVeggie)
                         ));
     }

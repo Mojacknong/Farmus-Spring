@@ -25,7 +25,7 @@ public class DateManager {
         return date.format(formatter);
     }
 
-    public  String dotDateTime(LocalDateTime date){
+    public static String dotDateTime(LocalDateTime date){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
         return date.format(formatter);
     }
