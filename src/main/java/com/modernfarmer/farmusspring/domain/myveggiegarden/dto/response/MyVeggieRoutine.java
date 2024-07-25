@@ -23,15 +23,15 @@ import java.util.List;
 @Slf4j
 public class MyVeggieRoutine {
 
-    private Boolean check;
+    private Boolean complete;
     private String content;
     private int period;
     private Long routineId;
 
 
-    public static MyVeggieRoutine of(Routine routine, Boolean check){
+    public static MyVeggieRoutine of(Routine routine){
         return new MyVeggieRoutine(
-                check,
+                routine.isComplete(),
                 routine.getContent(),
                 routine.getPeriod(),
                 routine.getId()
@@ -47,7 +47,7 @@ public class MyVeggieRoutine {
                     log.info(String.valueOf(routine.getDate()));
                     log.info("true/false 체크");
                     check = signRoutineCheck(routine.getDate());
-                    return MyVeggieRoutine.of(routine, check);
+                    return MyVeggieRoutine.of(routine);
                 })
                 .toList();
     }

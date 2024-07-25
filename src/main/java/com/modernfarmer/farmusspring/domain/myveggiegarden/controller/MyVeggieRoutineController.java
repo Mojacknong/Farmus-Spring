@@ -5,6 +5,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineCh
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineDelete;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineUpdate;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineSetting;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyRoutineList;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieRoutine;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.RoutineMonthChecking;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
@@ -94,14 +95,14 @@ public class MyVeggieRoutineController {
     }
 
 
-//    @GetMapping("/date/{date}")
-//    public BaseResponseDto<?> selectRoutineAccordingToDate(
-//            @AuthenticationPrincipal CustomUser user,
-//            @PathVariable("date") String date) throws ParseException {
-//        User userObject = User.builder().id(user.getUserId()).build();
-//        Date parsingDate = dateManager.formatDayStringToDate(date);
-//        List<MyRoutineList> myRoutineLists = myVeggieRoutineService.selectRoutineAccordingToDate(userObject, parsingDate);
-//        log.info("날짜별 루틴 조회 완료");
-//        return BaseResponseDto.of(SuccessCode.SUCCESS, myRoutineLists);
-//    }
+    @GetMapping("/date/{date}")
+    public BaseResponseDto<?> selectRoutineAccordingToDate(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable("date") String date) throws ParseException {
+        User userObject = User.builder().id(user.getUserId()).build();
+        Date parsingDate = dateManager.formatDayStringToDate(date);
+        List<MyRoutineList> myRoutineLists = myVeggieRoutineService.selectRoutineAccordingToDate(userObject, parsingDate);
+        log.info("날짜별 루틴 조회 완료");
+        return BaseResponseDto.of(SuccessCode.SUCCESS, myRoutineLists);
+    }
 }

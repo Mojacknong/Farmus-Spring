@@ -19,9 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @AllArgsConstructor
@@ -73,11 +71,28 @@ public class MyVeggieRoutineService {
     }
 
 
-//    @Transactional
-//    public List<MyRoutineList>  selectRoutineAccordingToDate(User user, Date day) {
-//        List<MyVeggie> myVeggieList = myVeggieRepository.findMyVeggieAndRoutineTimeAndRoutineByUserWithDate(user, day);
-//        return mappingMyVeggieListData(myVeggieList, day);
-//    }
+    @Transactional
+    public List<MyRoutineList>  selectRoutineAccordingToDate(User user, Date day) {
+        List<MyVeggie> myVeggieList = myVeggieRepository.findMyVeggieAndRoutineByUserWithDate(user);
+        return mappingMyVeggieListData(myVeggieList, day);
+    }
+
+    public List<MyRoutineList> mappingMyVeggieListData(List<MyVeggie> myVeggieList, Date day){
+        return myVeggieList.stream()
+                .map(myVeggie -> MyRoutineList.of(myVeggie, mappingRoutineListData(myVeggie, day)))
+                .toList();
+    }
+
+
+    private List<MyVeggieRoutine> mappingRoutineListData(MyVeggie myVeggie, Date day) {
+        return myVeggie.getRoutines().stream()
+                .filter(routine -> Objects.equals(dateManager.formatDayDateToString(day), routine.getDate().toString()))
+                .map(MyVeggieRoutine::of)
+                .toList();
+    }
+
+
+
 
     @Transactional
     public void checkVeggieRoutine(Long routineId) {
