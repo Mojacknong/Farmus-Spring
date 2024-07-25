@@ -12,15 +12,21 @@ import com.modernfarmer.farmusspring.domain.history.repository.HistoryRepository
 import com.modernfarmer.farmusspring.domain.history.repository.HistoryVeggieDetailRepository;
 import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
 import com.modernfarmer.farmusspring.domain.history.vo.MissionPostHistoryVo;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
 import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -57,26 +63,36 @@ public class HistoryHelper {
                 historyDetailVo.period() + " - " + LocalDate.now());
         History history = getUserHistory(userId);
         history.getFarmClubHistoryDetails().add(historyDetail);
+        historyRepository.save(history);
     }
 
-    public void createVeggieHistoryDetail(Long myVeggieId) {
-
+    @Transactional
+    public void createVeggieHistoryDetail(Long userId, Long myVeggieId) {
+        MyVeggie myVeggie = myVeggieHelper.getMyVeggieEntity(myVeggieId);
         // 해당 채소의 모든 성장일기를 가져옴
         // 이미지, 내용, 날짜
+        List<Diary> diaries = myVeggieHelper.getDiariesByMyVeggie(myVeggie);
+        List<HistoryVeggieDetail.HistoryPost> diaryHistories = diaries.stream()
+                .map(diary -> HistoryVeggieDetail.HistoryPost.builder()
+                        .postImage(diary.getImage())
+                        .content(diary.getContent())
+                        .dateTime(DateManager.parsingDotDateTime(diary.getCreatedDate()))
+                        .build())
+                .toList();
 
+        HistoryVeggieDetail historyVeggieDetail = HistoryVeggieDetail.createHistoryDetail(diaryHistories, null);
+        String veggieDetailId = historyVeggieDetailRepository.save(historyVeggieDetail).getId().toHexString();
 
-        // 히스토리 베지 디테일 생성 및 아이디 반환
+        History.Detail historyDetail = History.Detail.createDetail(
+                veggieDetailId,
+                myVeggie.getVeggieImage(),
+                myVeggie.getNickname(),
+                myVeggie.getVeggieName(),
+                DateManager.parsingDotDate(myVeggie.getBirth()) + " - " + DateManager.parsingDotDateTime(LocalDateTime.now()));
 
-
-        // 반환한 아이디로 히스토리 디테일 생성
-
-
-        // 내채소 아이디로 채소 이미지, 채소 닉네임, 채소명, 팜클럽 기간 조회
-
-
-        // 유저 히스토리 조회 및 디테일 추가
-
-
+        History history = getUserHistory(userId);
+        history.getVeggieHistoryDetails().add(historyDetail);
+        historyRepository.save(history);
     }
 
     private static List<HistoryFarmClubDetail.HistoryClubPost> getHistoryClubPostList(List<MissionPostHistoryVo> missionPostHistoryList, List<StepVo> stepList) {
