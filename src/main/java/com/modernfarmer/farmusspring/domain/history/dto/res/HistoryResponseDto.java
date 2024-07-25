@@ -8,13 +8,19 @@ import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record HistoryResponseDto(
-        List<History.Detail> veggieHistoryList,
-        List<History.Detail> farmClubHistoryList
+        String historyId,
+        int veggieHistoryCount,
+        int farmClubHistoryCount,
+        List<History.Icon> veggieHistoryIcons,
+        List<History.Icon> farmClubHistoryIcons
 ) {
     public static HistoryResponseDto of(History history) {
-        return HistoryResponseDto.builder()
-                .veggieHistoryList(history.getVeggieHistoryDetails())
-                .farmClubHistoryList(history.getFarmClubHistoryDetails())
+        return builder()
+                .historyId(history.getId().toHexString())
+                .veggieHistoryCount(history.getVeggieHistoryDetails().size())
+                .farmClubHistoryCount(history.getFarmClubHistoryDetails().size())
+                .veggieHistoryIcons(history.getVeggieHistoryIcons())
+                .farmClubHistoryIcons(history.getFarmClubHistoryIcons())
                 .build();
     }
 }

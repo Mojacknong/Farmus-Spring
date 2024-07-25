@@ -24,9 +24,28 @@ public class History extends BaseDocument {
     private ObjectId id;
 
     private Long userId;
+    
+    private List<Icon> veggieHistoryIcons;
+    private List<Icon> farmClubHistoryIcons;
 
     private List<Detail> veggieHistoryDetails;
     private List<Detail> farmClubHistoryDetails;
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Builder
+    public static class Icon {
+        private String url;
+        private String backgroundColor;
+
+        public static Icon createIcon(String url, String backgroundColor) {
+            return Icon.builder()
+                    .url(url)
+                    .backgroundColor(backgroundColor)
+                    .build();
+        }
+    }
 
     @AllArgsConstructor
     @NoArgsConstructor

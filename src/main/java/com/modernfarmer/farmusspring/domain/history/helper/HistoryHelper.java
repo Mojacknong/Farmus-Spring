@@ -103,13 +103,13 @@ public class HistoryHelper {
                 .orElseThrow(() -> new HistoryEntityNotFoundException("해당 유저의 히스토리가 존재하지 않습니다.", HistoryErrorCode.ENTITY_NOT_FOUND));
     }
 
-    public HistoryFarmClubDetail getFarmClubHistoryDetail(ObjectId farmClubDetailId) {
-        return historyFarmClubDetailRepository.findById(farmClubDetailId)
+    public HistoryFarmClubDetail getFarmClubHistoryDetail(String farmClubDetailId) {
+        return historyFarmClubDetailRepository.findById(new ObjectId(farmClubDetailId))
                 .orElseThrow(() -> new HistoryEntityNotFoundException("해당 팜클럽 히스토리가 존재하지 않습니다.", HistoryErrorCode.ENTITY_NOT_FOUND));
     }
 
-    public HistoryVeggieDetail getVeggieHistoryDetail(ObjectId veggieDetailId) {
-        return historyVeggieDetailRepository.findById(veggieDetailId)
+    public HistoryVeggieDetail getVeggieHistoryDetail(String veggieDetailId) {
+        return historyVeggieDetailRepository.findById(new ObjectId(veggieDetailId))
                 .orElseThrow(() -> new HistoryEntityNotFoundException("해당 채소 히스토리가 존재하지 않습니다.", HistoryErrorCode.ENTITY_NOT_FOUND));
     }
 }
