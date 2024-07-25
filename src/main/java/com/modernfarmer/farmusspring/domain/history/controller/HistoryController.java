@@ -25,30 +25,30 @@ public class HistoryController {
     }
 
     @GetMapping("/farmclub")
-    public void getFarmClubHistories(
+    public BaseResponseDto<?> getFarmClubHistories(
             @AuthenticationPrincipal CustomUser user
     ) {
-        return ;
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
-    @GetMapping("/farmclub/{id}")
-    public void getFarmClubHistoryDetail(
-            @PathVariable Long id
+    @GetMapping("/farmclub/{detailId}")
+    public BaseResponseDto<?> getFarmClubHistoryDetail(
+            @PathVariable Long detailId
     ) {
-        return ;
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
     @GetMapping("/veggie")
-    public void getVeggieHistories(
+    public BaseResponseDto<?> getVeggieHistories(
             @AuthenticationPrincipal CustomUser user
     ) {
-        return ;
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
-    @GetMapping("/veggie/{id}")
-    public void getVeggieHistoryDetail(
-            @PathVariable Long id
+    @GetMapping("/veggie/{detailId}")
+    public BaseResponseDto<?> getVeggieHistoryDetail(
+            @PathVariable Long detailId
     ) {
-        return ;
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 }
