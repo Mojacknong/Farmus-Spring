@@ -11,23 +11,16 @@ public record HistoryResponseDto(
         String historyId,
         int veggieHistoryCount,
         int farmClubHistoryCount,
-        List<Icon> veggieHistoryIcons,
-        List<Icon> farmClubHistoryIcons
+        List<History.Icon> veggieHistoryIcons,
+        List<History.Icon> farmClubHistoryIcons
 ) {
-    public record Icon(
-            String url,
-            String backgroundColor
-    ) {
-
-    }
-
-    public static HistoryResponseDto of(History history, List<Icon> veggieHistoryIcons, List<Icon> farmClubHistoryIcons) {
+    public static HistoryResponseDto of(History history) {
         return builder()
                 .historyId(history.getId().toHexString())
                 .veggieHistoryCount(history.getVeggieHistoryDetails().size())
                 .farmClubHistoryCount(history.getFarmClubHistoryDetails().size())
-                .veggieHistoryIcons(veggieHistoryIcons)
-                .farmClubHistoryIcons(farmClubHistoryIcons)
+                .veggieHistoryIcons(history.getVeggieHistoryIcons())
+                .farmClubHistoryIcons(history.getFarmClubHistoryIcons())
                 .build();
     }
 }

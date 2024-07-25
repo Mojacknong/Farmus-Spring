@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -19,7 +21,8 @@ public class HistoryService {
     private final HistoryHelper historyHelper;
 
     public HistoryResponseDto getUserHistory(Long userId) {
-        return null;
+        History history = historyHelper.getUserHistory(userId);
+        return HistoryResponseDto.of(history);
     }
 
     public VeggieHistoryDetailResponseDto getVeggieHistoryDetail(String detailId) {
