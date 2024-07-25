@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class MyRoutineCheck {
+public class RoutineDelete {
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
     private Long routineId;
