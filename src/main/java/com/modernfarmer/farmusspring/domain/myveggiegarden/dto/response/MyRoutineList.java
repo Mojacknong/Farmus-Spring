@@ -30,8 +30,7 @@ public class MyRoutineList {
                 myVeggie.getNickname(),
                 myVeggie.getVeggieName(),
                 myVeggie.getId(),
-                myVeggieRoutineList
-        );
+                myVeggieRoutineList);
     }
 
     public static List<MyRoutineList> processData(List<MyVeggie> myVeggieList){
@@ -43,7 +42,6 @@ public class MyRoutineList {
     }
 
     private static List<MyVeggieRoutine> checkRoutine(MyVeggie myVeggie){
-
         if(myVeggie.getRoutines().isEmpty()){
             return new ArrayList<>();
         }

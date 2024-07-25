@@ -34,39 +34,14 @@ public class MyVeggieRoutine {
                 routine.isComplete(),
                 routine.getContent(),
                 routine.getPeriod(),
-                routine.getId()
-        );
+                routine.getId());
     }
-
-
 
     public static List<MyVeggieRoutine> processData(List<Routine> routineList){
         return routineList.stream()
                 .map(routine -> {
-                    boolean check;
-                    log.info(String.valueOf(routine.getDate()));
-                    log.info("true/false 체크");
-                    check = signRoutineCheck(routine.getDate());
                     return MyVeggieRoutine.of(routine);
                 })
                 .toList();
     }
-
-
-    private static Boolean signRoutineCheck(Date date){
-        boolean check = true;
-        String date1 = String.valueOf(date);
-        LocalDate currentDate = LocalDate.now();
-        LocalTime fixedTime = LocalTime.of(0, 0, 0, 0);
-        LocalDateTime dateTime = LocalDateTime.of(currentDate, fixedTime);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
-        String formattedDateTime = dateTime.format(formatter);
-        if (date1.equals(formattedDateTime)) {
-           check = false;
-        }
-        log.info(String.valueOf(date1));
-        log.info(String.valueOf(formattedDateTime));
-        return check;
-    }
-
 }

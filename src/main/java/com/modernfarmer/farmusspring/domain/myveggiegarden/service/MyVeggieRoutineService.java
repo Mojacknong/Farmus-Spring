@@ -32,12 +32,10 @@ public class MyVeggieRoutineService {
     private final RoutineRepository routineRepository;
 
 
-
     @Transactional
     public void settingVeggieRoutine(Long veggieId, String content, int period)  {
         addVeggieRoutine(veggieId, content, period, new Date());
     }
-
 
     @Transactional
     public void modifyRoutine(RoutineUpdate routineUpdate) {
@@ -70,7 +68,6 @@ public class MyVeggieRoutineService {
         return RoutineMonthChecking.of(extractDate(routineTimeList));
     }
 
-
     @Transactional
     public List<MyRoutineList>  selectRoutineAccordingToDate(User user, Date day) {
         List<MyVeggie> myVeggieList = myVeggieRepository.findMyVeggieAndRoutineByUserWithDate(user);
@@ -86,19 +83,16 @@ public class MyVeggieRoutineService {
 
     private List<MyVeggieRoutine> mappingRoutineListData(MyVeggie myVeggie, Date day) {
         return myVeggie.getRoutines().stream()
-                .filter(routine -> Objects.equals(dateManager.formatDayDateToString(day), routine.getDate().toString()))
+                .filter(routine -> Objects.equals(DateManager.formatDayDateToString(day), routine.getDate().toString()))
                 .map(MyVeggieRoutine::of)
                 .toList();
     }
-
-
-
 
     @Transactional
     public void checkVeggieRoutine(Long routineId) {
         Optional<Routine> routine = routineRepository.findRoutineById(routineId);
         verifyRoutine(routine);
-        Date addedDate = dateManager.addDate(routine.get().getDate(), routine.get().getPeriod());
+        Date addedDate = DateManager.addDate(routine.get().getDate(), routine.get().getPeriod());
         routineRepository.updateRoutineComplete(routine.get(), routineId);
         addVeggieRoutine(routine.get().getMyVeggie().getId(), routine.get().getContent(), routine.get().getPeriod(), addedDate);
     }
@@ -110,16 +104,9 @@ public class MyVeggieRoutineService {
 
     private void addVeggieRoutine(Long veggieId, String content, int period, Date date){
         MyVeggie myVeggie = myVeggieGardenService.getMyVeggie(veggieId);
-        Routine newRoutine = Routine.createRoutine(
-                date,
-                content,
-                period,
-                myVeggie,
-                false
-        );
+        Routine newRoutine = Routine.createRoutine(date,content,period, myVeggie, false);
         myVeggie.addRoutine(newRoutine);
     }
-
 
     public List<Date> extractDate(List<Routine> routineList){
         return routineList.stream()

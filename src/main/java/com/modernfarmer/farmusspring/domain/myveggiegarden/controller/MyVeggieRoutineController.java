@@ -32,7 +32,6 @@ import java.util.List;
 public class MyVeggieRoutineController {
 
     private final MyVeggieRoutineService myVeggieRoutineService;
-    private final DateManager dateManager;
 
     @PostMapping()
     public BaseResponseDto<?> settingVeggieRoutine(@Validated @RequestBody RoutineSetting settingRoutine) {
@@ -40,7 +39,6 @@ public class MyVeggieRoutineController {
         log.info("루틴 추가 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
-
 
     @PatchMapping()
     public BaseResponseDto<?> modifyRoutine(@Validated @RequestBody RoutineUpdate routineUpdate) {
@@ -55,7 +53,6 @@ public class MyVeggieRoutineController {
         log.info("루틴 삭제 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
-
 
     @PostMapping(value = "/check")
     public BaseResponseDto<?> checkVeggieRoutine(@Validated @RequestBody RoutineCheck routineCheck) {
@@ -88,7 +85,7 @@ public class MyVeggieRoutineController {
             @PathVariable("month") String month
     ) throws ParseException {
         User userObject = User.builder().id(user.getUserId()).build();
-        Date parsingDate = dateManager.formatMonthStringToDate(month);
+        Date parsingDate = DateManager.formatMonthStringToDate(month);
         RoutineMonthChecking routineMonthChecking = myVeggieRoutineService.selectRoutineCheckingAccordingToMonth(userObject,parsingDate);
         log.info("월 기준 날짜 체킹 상태 조회 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS, routineMonthChecking);
@@ -100,7 +97,7 @@ public class MyVeggieRoutineController {
             @AuthenticationPrincipal CustomUser user,
             @PathVariable("date") String date) throws ParseException {
         User userObject = User.builder().id(user.getUserId()).build();
-        Date parsingDate = dateManager.formatDayStringToDate(date);
+        Date parsingDate = DateManager.formatDayStringToDate(date);
         List<MyRoutineList> myRoutineLists = myVeggieRoutineService.selectRoutineAccordingToDate(userObject, parsingDate);
         log.info("날짜별 루틴 조회 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS, myRoutineLists);
