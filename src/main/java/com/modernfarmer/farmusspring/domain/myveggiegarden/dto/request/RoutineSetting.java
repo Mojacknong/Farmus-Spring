@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SettingMyVeggieRoutineReqeuest {
+public class RoutineSetting {
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
     private String content;

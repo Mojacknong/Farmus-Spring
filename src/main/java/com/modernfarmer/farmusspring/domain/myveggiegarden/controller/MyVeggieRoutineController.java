@@ -3,7 +3,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.controller;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineCheck;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineDelete;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineUpdate;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRoutineReqeuest;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineSetting;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieRoutine;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.service.MyVeggieRoutineService;
@@ -26,8 +26,8 @@ public class MyVeggieRoutineController {
     private final MyVeggieRoutineService myVeggieRoutineService;
 
     @PostMapping()
-    public BaseResponseDto<Void> settingMyVeggieRoutine(@Validated @RequestBody SettingMyVeggieRoutineReqeuest settingMyVeggieRoutineReqeuest) {
-        myVeggieRoutineService.settingMyVeggieRoutine(settingMyVeggieRoutineReqeuest);
+    public BaseResponseDto<?> settingVeggieRoutine(@Validated @RequestBody RoutineSetting settingRoutine) {
+        myVeggieRoutineService.settingVeggieRoutine(settingRoutine.getMyVeggieId(), settingRoutine.getContent(), settingRoutine.getPeriod());
         log.info("루틴 추가 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }

@@ -26,7 +26,8 @@ public class Routine extends BaseEntity {
     @Column(name = "routine_id")
     private Long id;
 
-    @Column(name = "date")
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date", columnDefinition = "DATE")
     private Date date;
 
     @Column(name = "content")
