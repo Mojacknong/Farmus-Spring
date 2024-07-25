@@ -5,6 +5,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineUp
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.RoutineSetting;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyRoutineList;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyVeggieRoutine;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.RoutineMonthChecking;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.MyVeggieGardenErrorCode;
@@ -12,6 +13,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.Rout
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.RoutineRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
+import com.modernfarmer.farmusspring.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -65,6 +67,19 @@ public class MyVeggieRoutineService {
     }
 
     @Transactional
+    public RoutineMonthChecking selectRoutineCheckingAccordingToMonth(User user, Date month) {
+        List<Routine> routineTimeList = routineRepository.findRoutineAndRoutineAndMyVeggieByMonthWithUser(month, user);
+        return RoutineMonthChecking.of(extractDate(routineTimeList));
+    }
+
+
+//    @Transactional
+//    public List<MyRoutineList>  selectRoutineAccordingToDate(User user, Date day) {
+//        List<MyVeggie> myVeggieList = myVeggieRepository.findMyVeggieAndRoutineTimeAndRoutineByUserWithDate(user, day);
+//        return mappingMyVeggieListData(myVeggieList, day);
+//    }
+
+    @Transactional
     public void checkVeggieRoutine(Long routineId) {
         Optional<Routine> routine = routineRepository.findRoutineById(routineId);
         verifyRoutine(routine);
@@ -88,6 +103,14 @@ public class MyVeggieRoutineService {
                 false
         );
         myVeggie.addRoutine(newRoutine);
+    }
+
+
+    public List<Date> extractDate(List<Routine> routineList){
+        return routineList.stream()
+                .map(Routine::getDate)
+                .distinct()
+                .toList();
     }
 
 

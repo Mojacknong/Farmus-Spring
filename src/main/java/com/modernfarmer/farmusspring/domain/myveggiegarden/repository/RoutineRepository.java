@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.repository;
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
+import com.modernfarmer.farmusspring.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -31,5 +32,11 @@ public interface RoutineRepository extends JpaRepository<Routine, Long> {
     @Modifying
     @Query("UPDATE routine AS r SET r.complete = true WHERE   r.id = :routineId")
     void updateRoutineComplete(@Param("routine") Routine routine, @Param("routineId") Long routineId);
+
+    @Query("SELECT r FROM routine AS r " +
+            "JOIN FETCH r.myVeggie AS mv " +
+            "WHERE mv.user = :user AND " +
+            "FUNCTION('YEAR', r.date) = FUNCTION('YEAR', :month) AND FUNCTION('MONTH', r.date) = FUNCTION('MONTH', :month)")
+    List<Routine> findRoutineAndRoutineAndMyVeggieByMonthWithUser(@Param("month") Date month, @Param("user") User user );
 
 }

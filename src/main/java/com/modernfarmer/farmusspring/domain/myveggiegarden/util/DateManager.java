@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.util;
 
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,6 +47,21 @@ public class DateManager {
         cal.setTime(date);
         cal.add(Calendar.DAY_OF_MONTH, addDate); // 3일을 더함
         return cal.getTime();
+    }
+
+    public Date formatMonthStringToDate(String month) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+        return dateFormat.parse(month);
+    }
+
+    public Date formatDayStringToDate(String day) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.parse(day);
+    }
+
+    public String formatDayDateToString(Date day)  {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(day);
     }
 
 }
