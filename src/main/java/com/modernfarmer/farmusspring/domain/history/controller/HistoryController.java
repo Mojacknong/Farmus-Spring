@@ -21,34 +21,34 @@ public class HistoryController {
     public BaseResponseDto<?> getUserHistory(
             @PathVariable Long id
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS ,historyService.getUserHistory(id));
+        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getUserHistory(id));
     }
 
     @GetMapping("/farmclub")
     public BaseResponseDto<?> getFarmClubHistories(
             @AuthenticationPrincipal CustomUser user
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getFarmClubHistories(user.getUserId()));
     }
 
     @GetMapping("/farmclub/{detailId}")
     public BaseResponseDto<?> getFarmClubHistoryDetail(
-            @PathVariable Long detailId
+            @PathVariable String detailId
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getFarmClubHistoryDetail(detailId));
     }
 
     @GetMapping("/veggie")
     public BaseResponseDto<?> getVeggieHistories(
             @AuthenticationPrincipal CustomUser user
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getVeggieHistories(user.getUserId()));
     }
 
     @GetMapping("/veggie/{detailId}")
     public BaseResponseDto<?> getVeggieHistoryDetail(
-            @PathVariable Long detailId
+            @PathVariable String detailId
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getVeggieHistoryDetail(detailId));
     }
 }
