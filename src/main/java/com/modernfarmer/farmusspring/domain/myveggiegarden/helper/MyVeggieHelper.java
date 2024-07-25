@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.helper;
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.MyVeggieGardenErrorCode;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.MyVeggieGardenBaseException;
@@ -33,5 +34,9 @@ public class MyVeggieHelper {
 
     public void deleteMyVeggie(Long id) {
         myVeggieRepository.deleteById(id);
+    }
+
+    public List<Diary> getDiariesByMyVeggie(MyVeggie myVeggie) {
+        return myVeggieRepository.findDiariesByMyVeggie(myVeggie);
     }
 }
