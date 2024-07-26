@@ -46,6 +46,9 @@ public class User extends BaseEntity {
     @Column(nullable = true)
     private String level;
 
+    @Column(nullable = false)
+    private boolean notificationStatus;
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
@@ -80,6 +83,7 @@ public class User extends BaseEntity {
                 .role(role)
                 .userNumber(userNumber)
                 .early(early)
+                .notificationStatus(true)
                 .build();
 
         return newUser;
