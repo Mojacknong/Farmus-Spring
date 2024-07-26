@@ -3,6 +3,7 @@ package com.modernfarmer.farmusspring.domain.user.service;
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryNotFoundException;
+import com.modernfarmer.farmusspring.domain.user.dto.response.AlarmStatus;
 import com.modernfarmer.farmusspring.domain.user.dto.response.UserProfileResponse;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
@@ -88,9 +89,16 @@ public class UserService {
 
     @Transactional
     public void modifyNotification(Long userId, Boolean status) {
-        log.info(String.valueOf(status));
         userRepository.updateNotification(userId, status);
     }
+
+    @Transactional
+    public AlarmStatus bringNotification(Long userId) {
+        User user = selectUserById(userId);
+        return AlarmStatus.of(user.getNotificationStatus());
+    }
+
+
 
     private void updateUserProfileAccordingToProfileImage(MultipartFile multipartFile, String nickName, Long userId) throws IOException {
         if(multipartFile.isEmpty()){

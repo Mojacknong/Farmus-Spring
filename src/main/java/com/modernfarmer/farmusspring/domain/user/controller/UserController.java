@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.user.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.user.dto.request.AlarmUpdate;
+import com.modernfarmer.farmusspring.domain.user.dto.response.AlarmStatus;
 import com.modernfarmer.farmusspring.domain.user.dto.response.UserProfileResponse;
 import com.modernfarmer.farmusspring.domain.user.service.UserService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -37,9 +38,14 @@ public class UserController {
 
     @PatchMapping("/notification")
     public BaseResponseDto<?> modifyNotification(@AuthenticationPrincipal CustomUser user, @Validated  @RequestBody  AlarmUpdate alarmUpdate)  {
-        log.info(String.valueOf(alarmUpdate.getStatus()));
         userService.modifyNotification(user.getUserId(), alarmUpdate.getStatus());
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @GetMapping("/notification")
+    public BaseResponseDto<?> bringNotification(@AuthenticationPrincipal CustomUser user)  {
+        AlarmStatus result = userService.bringNotification(user.getUserId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, result);
     }
 
 
