@@ -147,4 +147,11 @@ public class FarmClubController {
         farmClubService.withdrawFarmClub(farmClubId, user.getUserId(), deleteVeggie);
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
+
+    @GetMapping("/check")
+    public BaseResponseDto<?> createFarmClubCheck(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.checkCreateFarmClub(user.getUserId()));
+    }
 }

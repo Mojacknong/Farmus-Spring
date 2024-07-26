@@ -41,6 +41,21 @@ public class FarmClubService {
     private final MissionPostRepository missionPostRepository;
     private final FarmClubRepository farmClubRepository;
 
+    public CreateFarmClubCheckResponseDto checkCreateFarmClub(Long userId) {
+        List<MyVeggieVo> myVeggieList = myVeggieHelper.getMyVeggieInfo(userId);
+        log.info("myVeggieList: {}", myVeggieList);
+        if (!myVeggieList.isEmpty()) {
+            return CreateFarmClubCheckResponseDto.of(true, 0L);
+        } else {
+            if (myVeggieHelper.checkMyVeggie(userId)) {
+                return CreateFarmClubCheckResponseDto.of(false, 1L);
+            } else {
+                return CreateFarmClubCheckResponseDto.of(false, 2L);
+
+            }
+        }
+    }
+
     @Transactional
     public CreateFarmClubResponseDto createFarmClub(CreateFarmClubRequestDto request, Long userId) {
         // 몽고에서 이미지, 난이도 가져오기
