@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     private String level;
 
     @Column(nullable = false)
-    private boolean notificationStatus;
+    private Boolean notificationStatus;
 
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
