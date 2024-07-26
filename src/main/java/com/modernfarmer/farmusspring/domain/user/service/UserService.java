@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.user.service;
 
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryNotFoundException;
 import com.modernfarmer.farmusspring.domain.user.dto.response.UserProfileResponse;
@@ -12,6 +13,7 @@ import com.modernfarmer.farmusspring.infra.s3.S3Config;
 import com.modernfarmer.farmusspring.infra.s3.S3Service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,7 +48,6 @@ public class UserService {
 
     @Transactional
     public BaseResponseDto<Void> deleteProfleImage(Long userId) {
-
         updateProfileImage(userId);
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
@@ -82,6 +83,13 @@ public class UserService {
     public void initUser(Long userId) {
         User user = userRepository.findUserById(userId);
         user.initUser();
+    }
+
+
+    @Transactional
+    public void modifyNotification(Long userId, Boolean status) {
+        log.info(String.valueOf(status));
+        userRepository.updateNotification(userId, status);
     }
 
     private void updateUserProfileAccordingToProfileImage(MultipartFile multipartFile, String nickName, Long userId) throws IOException {
