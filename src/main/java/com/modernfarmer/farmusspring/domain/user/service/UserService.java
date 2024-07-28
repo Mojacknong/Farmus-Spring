@@ -1,7 +1,9 @@
 package com.modernfarmer.farmusspring.domain.user.service;
 
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryNotFoundException;
+import com.modernfarmer.farmusspring.domain.user.dto.response.AlarmStatus;
 import com.modernfarmer.farmusspring.domain.user.dto.response.UserProfileResponse;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
@@ -12,6 +14,7 @@ import com.modernfarmer.farmusspring.infra.s3.S3Config;
 import com.modernfarmer.farmusspring.infra.s3.S3Service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,7 +49,6 @@ public class UserService {
 
     @Transactional
     public BaseResponseDto<Void> deleteProfleImage(Long userId) {
-
         updateProfileImage(userId);
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
@@ -83,6 +85,20 @@ public class UserService {
         User user = userRepository.findUserById(userId);
         user.initUser();
     }
+
+
+    @Transactional
+    public void modifyNotification(Long userId, Boolean status) {
+        userRepository.updateNotification(userId, status);
+    }
+
+    @Transactional
+    public AlarmStatus bringNotification(Long userId) {
+        User user = selectUserById(userId);
+        return AlarmStatus.of(user.getNotificationStatus());
+    }
+
+
 
     private void updateUserProfileAccordingToProfileImage(MultipartFile multipartFile, String nickName, Long userId) throws IOException {
         if(multipartFile.isEmpty()){
