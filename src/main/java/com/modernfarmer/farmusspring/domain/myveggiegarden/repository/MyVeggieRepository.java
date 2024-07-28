@@ -21,6 +21,8 @@ import java.util.Optional;
 @Repository
 public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
 
+    boolean existsByUserId(Long userId);
+
     Optional<MyVeggie> findById(Long id);
 
     @Query("SELECT d FROM diary AS d WHERE d.id = :diaryId ")
