@@ -12,7 +12,7 @@ public interface MissionPostRepositoryCustom {
 
     List<GetMissionPostListVo> getMissionPostStepNumAndImage(Long farmClubId);
     List<MissionPostCommentVo> getMissionPostComment(Long missionPostId);
-    List<MissionPostVo> getMissionPostList(Long missionPostId);
+    List<MissionPostVo> getMissionPostList(Long userId, Long missionPostId);
     List<MissionPostHistoryVo> getMissionPostHistory(Long missionPostId);
     void deleteMissionPostLike(Long userId, Long missionPostId);
 }
