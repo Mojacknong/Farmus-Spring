@@ -90,7 +90,7 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
     }
 
     @Override
-    public void deleteMissionPostLIke(Long userId, Long missionPostId) {
+    public void deleteMissionPostLike(Long userId, Long missionPostId) {
         queryFactory
                 .delete(missionPostLike)
                 .where(missionPostLike.user.id.eq(userId)
