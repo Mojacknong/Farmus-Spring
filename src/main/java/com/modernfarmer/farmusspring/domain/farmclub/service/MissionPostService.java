@@ -68,8 +68,8 @@ public class MissionPostService {
         missionPostHelper.deleteMissionPostLike(userId, missionPostId);
     }
 
-    public GetMissionPostListResponseDto getMissionPostList(Long farmClubId) {
-        List<MissionPostVo> missionPosts = missionPostRepository.getMissionPostList(farmClubId);
+    public GetMissionPostListResponseDto getMissionPostList(Long userId, Long farmClubId) {
+        List<MissionPostVo> missionPosts = missionPostHelper.getMissionPostList(userId, farmClubId);
         return GetMissionPostListResponseDto.of(missionPosts);
     }
 

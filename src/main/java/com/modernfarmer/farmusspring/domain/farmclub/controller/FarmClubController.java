@@ -111,11 +111,12 @@ public class FarmClubController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
-    @GetMapping("/{id}/mission")
+    @GetMapping("/{farmClubId}/mission")
     public BaseResponseDto<?> getMissionPostList(
-            @PathVariable Long id
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable Long farmClubId
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, missionPostService.getMissionPostList(id));
+        return BaseResponseDto.of(SuccessCode.SUCCESS, missionPostService.getMissionPostList(user.getUserId(), farmClubId));
     }
 
     @GetMapping("/mission/{id}")
