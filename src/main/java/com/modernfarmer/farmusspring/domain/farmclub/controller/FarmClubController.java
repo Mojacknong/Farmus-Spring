@@ -102,12 +102,12 @@ public class FarmClubController {
         return BaseResponseDto.of(SuccessCode.CREATED, missionPostService.createMissionPostLike(user.getUserId(), requestDto.missionPostId()));
     }
 
-    @DeleteMapping("/mission/like")
+    @DeleteMapping("/mission/like/{missionPostId}")
     public BaseResponseDto<?> deleteMissionPostLike(
             @AuthenticationPrincipal CustomUser user,
-            @RequestBody CreateMissionPostLikeRequestDto requestDto
+            @PathVariable Long missionPostId
     ) {
-        missionPostService.deleteMissionPostLike(user.getUserId(), requestDto.missionPostId());
+        missionPostService.deleteMissionPostLike(user.getUserId(), missionPostId);
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
