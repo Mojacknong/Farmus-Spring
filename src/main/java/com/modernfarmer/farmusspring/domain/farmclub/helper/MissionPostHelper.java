@@ -24,4 +24,8 @@ public class MissionPostHelper {
     public List<MissionPostHistoryVo> getMissionPostHistory(Long userFarmClubId) {
         return missionPostRepository.getMissionPostHistory(userFarmClubId);
     }
+
+    public void deleteMissionPostLike(Long userId, Long missionPostId) {
+        missionPostRepository.deleteMissionPostLIke(userId, missionPostId);
+    }
 }
