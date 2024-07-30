@@ -62,9 +62,7 @@ public class MyVeggieRoutineController {
     }
 
     @GetMapping(value = "/{myVeggieId}")
-    public BaseResponseDto<?> selectMyVeggieRoutineById(
-            @PathVariable("myVeggieId") Long myVeggieId
-    ) {
+    public BaseResponseDto<?> selectRoutineToday(@PathVariable("myVeggieId") Long myVeggieId) {
         MyVeggie myVeggie = MyVeggie.builder().id(myVeggieId).build();
         List<MyVeggieRoutine> result = myVeggieRoutineService.selectMyVeggieRoutineById(myVeggie);
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
