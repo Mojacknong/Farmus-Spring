@@ -64,6 +64,10 @@ public class MissionPostService {
         return CreateMissionPostLikeResponseDto.of(missionPost.getId());
     }
 
+    public void deleteMissionPostLike(Long userId, Long missionPostId) {
+        missionPostHelper.deleteMissionPostLike(userId, missionPostId);
+    }
+
     public GetMissionPostListResponseDto getMissionPostList(Long farmClubId) {
         List<MissionPostVo> missionPosts = missionPostRepository.getMissionPostList(farmClubId);
         return GetMissionPostListResponseDto.of(missionPosts);

@@ -7,6 +7,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.repository.MissionPostRepos
 import com.modernfarmer.farmusspring.domain.history.vo.MissionPostHistoryVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,5 +24,10 @@ public class MissionPostHelper {
 
     public List<MissionPostHistoryVo> getMissionPostHistory(Long userFarmClubId) {
         return missionPostRepository.getMissionPostHistory(userFarmClubId);
+    }
+
+    @Transactional
+    public void deleteMissionPostLike(Long userId, Long missionPostId) {
+        missionPostRepository.deleteMissionPostLike(userId, missionPostId);
     }
 }

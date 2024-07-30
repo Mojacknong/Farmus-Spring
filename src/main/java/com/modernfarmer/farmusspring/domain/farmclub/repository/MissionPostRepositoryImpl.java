@@ -88,4 +88,13 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .orderBy(missionPost.stepNum.asc())
                 .fetch();
     }
+
+    @Override
+    public void deleteMissionPostLike(Long userId, Long missionPostId) {
+        queryFactory
+                .delete(missionPostLike)
+                .where(missionPostLike.user.id.eq(userId)
+                        .and(missionPostLike.missionPost.id.eq(missionPostId)))
+                .execute();
+    }
 }
