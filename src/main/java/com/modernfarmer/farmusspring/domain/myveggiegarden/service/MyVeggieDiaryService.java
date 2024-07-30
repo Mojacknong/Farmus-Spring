@@ -158,11 +158,8 @@ public class MyVeggieDiaryService {
 
 
     @Transactional
-    public List<DiaryCommentContent> selectComment(
-            Long userId, Long diaryId, Long farmClubId
-    )  {
-
-        List<DiaryComment> diaryCommentList = diaryRepository.findDiary(diaryId, farmClubId);
+    public List<DiaryCommentContent> selectComment(Long userId, Long diaryId)  {
+        List<DiaryComment> diaryCommentList = diaryRepository.findDiaryById(diaryId);
         List<DiaryCommentContent> diaryCommentContent = DiaryCommentContent.processData(diaryCommentList, userId);
         return diaryCommentContent;
     }
