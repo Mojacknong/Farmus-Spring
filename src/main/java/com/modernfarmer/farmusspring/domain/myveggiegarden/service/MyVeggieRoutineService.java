@@ -51,7 +51,7 @@ public class MyVeggieRoutineService {
 
     @Transactional
     public List<MyVeggieRoutine> selectMyVeggieRoutineById(MyVeggie myVeggie) {
-        List<Routine> routineList = myVeggieRepository.findMyVeggieRoutineById(myVeggie);
+        List<Routine> routineList = routineRepository.findRoutineByIdAndToday(myVeggie);
         return  MyVeggieRoutine.processData(routineList);
     }
 
