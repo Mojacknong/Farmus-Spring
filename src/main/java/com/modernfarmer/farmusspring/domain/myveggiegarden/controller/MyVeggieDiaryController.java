@@ -70,9 +70,7 @@ public class MyVeggieDiaryController {
     }
 
     @GetMapping(value = "/{myVeggieId}/count")
-    public BaseResponseDto<MyVeggieDiaryCount> selectDiaryCount(
-            @PathVariable("myVeggieId") Long myVeggieId
-    )  {
+    public BaseResponseDto<MyVeggieDiaryCount> selectDiaryCount(@PathVariable("myVeggieId") Long myVeggieId)  {
         MyVeggie myVeggie = MyVeggie.builder().id(myVeggieId).build();
         MyVeggieDiaryCount result = myVeggieDiaryService.selectDiaryCount(myVeggie);
 
@@ -81,10 +79,11 @@ public class MyVeggieDiaryController {
 
     @GetMapping(value = "/{myVeggieId}/all")
     public BaseResponseDto<MyVeggieDiaryCount> selectDiaryAll(
-            @PathVariable("myVeggieId") Long myVeggieId
+            @PathVariable("myVeggieId") Long myVeggieId,
+            @AuthenticationPrincipal CustomUser user
     )  {
         MyVeggie myVeggie = MyVeggie.builder().id(myVeggieId).build();
-        List<AllDairy> result = myVeggieDiaryService.selectDiaryAll(myVeggie);
+        List<AllDairy> result = myVeggieDiaryService.selectDiaryAll(myVeggie, user.getUserId());
 
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
     }

@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
 import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.DiaryAll;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
@@ -89,20 +90,20 @@ public class MyVeggieDiaryService {
                     );}).toList();
     }
 
+    @Transactional
+    public List<AllDairy> selectDiaryAll(MyVeggie myVeggie, Long userId) {
+        List<DiaryAll> diaryList = diaryRepository.findDiariesByMyVeggie(myVeggie, userId);
+        return AllDairy.processData(diaryList);
+    }
+
 
     @Transactional
     public MyVeggieDiaryCount selectDiaryCount(MyVeggie myVeggie) {
-
         List<Diary> diaryList = myVeggieRepository.findDiariesByMyVeggie(myVeggie);
         return MyVeggieDiaryCount.processData(diaryList);
     }
 
-    @Transactional
-    public List<AllDairy> selectDiaryAll(MyVeggie myVeggie) {
 
-        List<Diary> diaryList = selectDiaryByMyVeggie(myVeggie);
-        return AllDairy.processData(diaryList);
-    }
 
 
     @Transactional

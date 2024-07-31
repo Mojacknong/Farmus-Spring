@@ -1,6 +1,8 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.repository;
 
 import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.DiaryAll;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.AllDairy;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
@@ -45,5 +47,15 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "WHERE d.farmClub.id = :farmClubId AND d.isOpen = true "
           )
     List<Diary> findDiaryByFarmClub(@Param("farmClubId") Long farmClubId);
+
+    @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.dto.DiaryAll(d, " +
+            "CASE WHEN dl.user.id = :userId THEN true ELSE false END) " +
+            "FROM diary AS d " +
+            "JOIN FETCH d.myVeggie AS mv " +
+            "JOIN FETCH mv.user " +
+            "LEFT JOIN diary_like AS dl ON dl.diary.id = d.id AND dl.user.id = :userId " +
+            "WHERE d.myVeggie = :myVeggie " +
+            "ORDER BY d.createdDate DESC")
+    List<DiaryAll> findDiariesByMyVeggie(@Param("myVeggie") MyVeggie myVeggie, @Param("userId") Long userId);
 
 }

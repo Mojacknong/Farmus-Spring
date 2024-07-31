@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response;
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.DiaryAll;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,20 +19,29 @@ public class AllDairy {
     private String content;
     private Boolean isOpen;
     private String state;
+    private Long diaryId;
+    private int likeCount;
+    private int commentCount;
+    private boolean myLike;
 
-    public static AllDairy of(Diary diary, String date){
+    public static AllDairy of(DiaryAll diaryAll, String date){
         return new AllDairy(
                 date,
-                diary.getImage(),
-                diary.getContent(),
-                diary.getIsOpen(),
-                diary.getState()
+                diaryAll.getDiary().getImage(),
+                diaryAll.getDiary().getContent(),
+                diaryAll.getDiary().getIsOpen(),
+                diaryAll.getDiary().getState(),
+                diaryAll.getDiary().getId(),
+                diaryAll.getDiary().getDiaryComments().size(),
+                diaryAll.getDiary().getDiaryLikes().size(),
+                diaryAll.isMyLike()
+
         );
     }
 
-    public static List<AllDairy> processData(List<Diary> diaryList){
-        return diaryList.stream()
-                .map(diary -> AllDairy.of(diary, formatDate(diary.getCreatedDate())))
+    public static List<AllDairy> processData(List<DiaryAll> diaryAllList){
+        return diaryAllList.stream()
+                .map(diaryAll -> AllDairy.of(diaryAll, formatDate(diaryAll.getDiary().getCreatedDate())))
                 .toList();
     }
 
