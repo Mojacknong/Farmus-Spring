@@ -34,9 +34,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
              "JOIN FETCH dc.diary AS d " +
              "JOIN FETCH d.myVeggie AS mv " +
              "JOIN FETCH mv.user " +
-             "JOIN FETCH d.farmClub " +
-             "WHERE d.id = :diaryId AND d.farmClub.id = :farmClubId AND d.isOpen = true")
-     List<DiaryComment> findDiary(@Param("diaryId") Long diaryId, @Param("farmClubId") Long farmClubId);
+             "WHERE d.id = :diaryId")
+     List<DiaryComment> findDiaryById(@Param("diaryId") Long diaryId);
 
 
     @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.dto.DiaryAll(d, " +
@@ -59,5 +58,10 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "WHERE d.myVeggie = :myVeggie " +
             "ORDER BY d.createdDate DESC")
     List<DiaryAll> findDiariesByMyVeggie(@Param("myVeggie") MyVeggie myVeggie, @Param("userId") Long userId);
+
+    @Query("SELECT d FROM diary AS d WHERE d.myVeggie = :myVeggie AND FUNCTION('DATE', d.createdDate) = CURRENT_DATE")
+    List<Diary> findDiaryByToday(@Param("myVeggie") MyVeggie myVeggie);
+
+
 
 }
