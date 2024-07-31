@@ -72,21 +72,23 @@ public class MyVeggieDiaryService {
 
 
     @Transactional
-    public List<FarmClubDiary> findDiaryAccordingToFarmClub(Long farmClubId) {
-        List<Diary> diaryList = diaryRepository.findDiaryByFarmClub(farmClubId);
+    public List<FarmClubDiary> findDiaryAccordingToFarmClub(Long farmClubId, Long userId) {
+        List<DiaryAll> diaryList = diaryRepository.findDiaryByFarmClub(farmClubId, userId);
         List<FarmClubDiary> proccessData = proccessFarmClubData(diaryList);
         return proccessData;
     }
 
-    private List<FarmClubDiary> proccessFarmClubData(List<Diary> diaryList){
-        return diaryList.stream().map(diary -> {
-            User user = diary.getMyVeggie().getUser();
+    private List<FarmClubDiary> proccessFarmClubData(List<DiaryAll> diaryAllList){
+        return diaryAllList.stream().map(allDiary -> {
+            User user = allDiary.getDiary().getMyVeggie().getUser();
             return FarmClubDiary.of(
-                    diary,
+                    allDiary.getDiary(),
                     user,
-                    DateManager.dotDateTime(diary.getCreatedDate()),
-                    diary.getDiaryComments().size(),
-                    diary.getDiaryLikes().size()
+                    DateManager.dotDateTime(allDiary.getDiary().getCreatedDate()),
+                    allDiary.getDiary().getDiaryComments().size(),
+                    allDiary.getDiary().getDiaryLikes().size(),
+                    allDiary.isMyLike(),
+                    allDiary.getDiary().getState()
                     );}).toList();
     }
 

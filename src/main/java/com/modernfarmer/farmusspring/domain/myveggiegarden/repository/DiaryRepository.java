@@ -39,14 +39,16 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
      List<DiaryComment> findDiary(@Param("diaryId") Long diaryId, @Param("farmClubId") Long farmClubId);
 
 
-    @Query("SELECT d FROM diary AS d " +
+    @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.dto.DiaryAll(d, " +
+            "CASE WHEN dl.user.id = :userId THEN true ELSE false END) " +
+            "FROM diary AS d " +
             "JOIN FETCH d.myVeggie AS mv " +
             "JOIN FETCH mv.user " +
             "LEFT JOIN diary_comment  AS dc ON dc.id = d.id "+
             "LEFT JOIN  diary_like  AS dl ON dl.id = d.id " +
             "WHERE d.farmClub.id = :farmClubId AND d.isOpen = true "
           )
-    List<Diary> findDiaryByFarmClub(@Param("farmClubId") Long farmClubId);
+    List<DiaryAll> findDiaryByFarmClub(@Param("farmClubId") Long farmClubId, @Param("userId") Long userId);
 
     @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.dto.DiaryAll(d, " +
             "CASE WHEN dl.user.id = :userId THEN true ELSE false END) " +

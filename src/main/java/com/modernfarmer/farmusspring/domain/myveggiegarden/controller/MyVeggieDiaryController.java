@@ -46,10 +46,9 @@ public class MyVeggieDiaryController {
 
 
     @GetMapping(value = "/{farmClubId}")
-    public BaseResponseDto<FarmClubDiary> findFarmClubDiary(
-            @PathVariable("farmClubId") Long farmClubId){
+    public BaseResponseDto<FarmClubDiary> findFarmClubDiary(@PathVariable("farmClubId") Long farmClubId, @AuthenticationPrincipal CustomUser user){
 
-        List<FarmClubDiary> farmClubDiaryList = myVeggieDiaryService.findDiaryAccordingToFarmClub(farmClubId);
+        List<FarmClubDiary> farmClubDiaryList = myVeggieDiaryService.findDiaryAccordingToFarmClub(farmClubId, user.getUserId());
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubDiaryList);
     }
 
