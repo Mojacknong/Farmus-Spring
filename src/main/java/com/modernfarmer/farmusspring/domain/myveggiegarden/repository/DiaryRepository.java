@@ -46,4 +46,9 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
           )
     List<Diary> findDiaryByFarmClub(@Param("farmClubId") Long farmClubId);
 
+    @Query("SELECT d FROM diary AS d WHERE d.myVeggie = :myVeggie AND FUNCTION('DATE', d.createdDate) = CURRENT_DATE")
+    List<Diary> findDiaryByToday(@Param("myVeggie") MyVeggie myVeggie);
+
+
+
 }
