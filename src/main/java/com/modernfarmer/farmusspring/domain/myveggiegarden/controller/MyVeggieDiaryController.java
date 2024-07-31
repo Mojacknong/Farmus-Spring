@@ -63,9 +63,7 @@ public class MyVeggieDiaryController {
     }
 
     @GetMapping(value = "/{myVeggieId}/one")
-    public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(
-            @PathVariable("myVeggieId") Long myVeggieId
-    )  {
+    public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(@PathVariable("myVeggieId") Long myVeggieId) {
         return myVeggieDiaryService.selectDiaryOne(MyVeggie.builder().id(myVeggieId).build());
     }
 
@@ -107,14 +105,9 @@ public class MyVeggieDiaryController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
-    @GetMapping(value = "/{diaryId}/{farmClubId}/comment")
-    public BaseResponseDto<?> selectComment(
-            @AuthenticationPrincipal CustomUser user,
-            @PathVariable("diaryId") Long diaryId,
-            @PathVariable("farmClubId") Long farmClubId
-    )  {
-        List<DiaryCommentContent> diaryCommentList = myVeggieDiaryService.selectComment(user.getUserId(), diaryId, farmClubId);
-
+    @GetMapping(value = "/{diaryId}/comment")
+    public BaseResponseDto<?> selectComment(@AuthenticationPrincipal CustomUser user, @PathVariable("diaryId") Long diaryId)  {
+        List<DiaryCommentContent> diaryCommentList = myVeggieDiaryService.selectComment(user.getUserId(), diaryId);
         return BaseResponseDto.of(SuccessCode.SUCCESS, diaryCommentList);
     }
 

@@ -141,10 +141,8 @@ public class MyVeggieDiaryService {
         myVeggieRepository.updateDiaryCommentByIdAndUserId(diaryCommentId, user, content);
     }
     @Transactional
-    public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(
-            MyVeggie myVeggie
-    )  {
-        List<Diary> diaryList = selectDiaryByMyVeggie(myVeggie);
+    public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(MyVeggie myVeggie)  {
+        List<Diary> diaryList = diaryRepository.findDiaryByToday(myVeggie);
         if(diaryList.isEmpty()) {
             return BaseResponseDto.of(MyVeggieGardenSuccessCode.NOT_FOUND_DIARY, null);
         }
@@ -158,11 +156,8 @@ public class MyVeggieDiaryService {
 
 
     @Transactional
-    public List<DiaryCommentContent> selectComment(
-            Long userId, Long diaryId, Long farmClubId
-    )  {
-
-        List<DiaryComment> diaryCommentList = diaryRepository.findDiary(diaryId, farmClubId);
+    public List<DiaryCommentContent> selectComment(Long userId, Long diaryId)  {
+        List<DiaryComment> diaryCommentList = diaryRepository.findDiaryById(diaryId);
         List<DiaryCommentContent> diaryCommentContent = DiaryCommentContent.processData(diaryCommentList, userId);
         return diaryCommentContent;
     }
