@@ -63,9 +63,7 @@ public class MyVeggieDiaryController {
     }
 
     @GetMapping(value = "/{myVeggieId}/one")
-    public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(
-            @PathVariable("myVeggieId") Long myVeggieId
-    )  {
+    public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(@PathVariable("myVeggieId") Long myVeggieId) {
         return myVeggieDiaryService.selectDiaryOne(MyVeggie.builder().id(myVeggieId).build());
     }
 

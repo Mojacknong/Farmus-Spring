@@ -39,4 +39,7 @@ public interface RoutineRepository extends JpaRepository<Routine, Long> {
             "FUNCTION('YEAR', r.date) = FUNCTION('YEAR', :month) AND FUNCTION('MONTH', r.date) = FUNCTION('MONTH', :month)")
     List<Routine> findRoutineAndRoutineAndMyVeggieByMonthWithUser(@Param("month") Date month, @Param("user") User user );
 
+
+    @Query("SELECT r FROM routine AS r  WHERE r.myVeggie = :myVeggie AND r.date = CURRENT_DATE")
+    List<Routine> findRoutineByIdAndToday(@Param("myVeggie") MyVeggie myVeggie);
 }
