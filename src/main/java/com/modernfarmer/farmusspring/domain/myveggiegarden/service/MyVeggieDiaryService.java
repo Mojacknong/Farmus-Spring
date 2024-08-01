@@ -1,12 +1,16 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DiaryDeleteDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.*;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.DiaryAccessDeniedException;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.MyVeggieNotFoundException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
@@ -55,7 +59,6 @@ public class MyVeggieDiaryService {
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
-
     @Transactional
     public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(MyVeggie myVeggie) {
         Diary diary = selectTodayDiary(myVeggie);
@@ -63,6 +66,33 @@ public class MyVeggieDiaryService {
         return BaseResponseDto.of(SuccessCode.SUCCESS,CheckTodayDiaryResponse.of(state));
     }
 
+    @Transactional
+    public void eraseDiary(DiaryDeleteDto diaryDeleteDto, Long userId){
+        Optional<MyVeggie> myVeggie = myVeggieRepository.findMyVeggieByIdAndUserId((diaryDeleteDto.getMyVeggieId()), userId);
+        verifyMyVeggie(myVeggie);
+        Optional<Diary> diary = diaryRepository.findDiaryByIdAndMyVeggieId(diaryDeleteDto.getDiaryId(), myVeggie.get().getId());
+        verifyDiary(diary);
+        validateDiaryDelete(diary, diaryDeleteDto.getDiaryId());
+        diaryRepository.deleteDiaryById(diaryDeleteDto.getDiaryId());
+    }
+
+    public void verifyDiary(Optional<Diary> diary){
+        if(diary.isEmpty()){
+            throw new DiaryNotFoundException("해당 일기는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY);
+        }
+    }
+
+    public void validateDiaryDelete(Optional<Diary> diary, Long diaryId){
+        if(!diary.get().getId().equals(diaryId)){
+            throw new DiaryAccessDeniedException("해당 일기 접근권한이 없습니다.", MyVeggieGardenErrorCode.NO_ACCESS_DIARY);
+        }
+    }
+
+    public void verifyMyVeggie(Optional<MyVeggie> myVeggie){
+        if(myVeggie.isEmpty()){
+            throw new MyVeggieNotFoundException("존재하지 않는 채소입니다.",MyVeggieGardenErrorCode.NOT_FOUND_VEGGIE);
+        }
+    }
 
 
     @Transactional
@@ -180,9 +210,6 @@ public class MyVeggieDiaryService {
         return myVeggieRepository.findDiariesByMyVeggieAndToday(myVeggie);
     }
 
-    public List<Diary> selectDiaryByMyVeggie(MyVeggie myVeggie){
-        return myVeggieRepository.findDiariesByMyVeggie(myVeggie);
-    }
 
     public Diary selectDiaryById(Long diaryId){
         Diary diaryData =  myVeggieRepository.findDiaryById(diaryId);

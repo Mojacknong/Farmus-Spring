@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -22,6 +23,13 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     @Query("DELETE FROM diary_like AS dl WHERE dl.diary = :diary AND dl.user = :user")
     void deleteDiaryLikeByIdAndUser(@Param("user") User user, @Param("diary") Diary diary);
 
+    @Modifying
+    @Query("DELETE FROM diary AS d WHERE d.id = :diaryId")
+    void deleteDiaryById(@Param("diaryId") Long diaryId);
+
+
+    @Query("SELECT d FROM diary AS d WHERE d.id = :diaryId AND d.myVeggie.id = :myVeggieId")
+    Optional<Diary> findDiaryByIdAndMyVeggieId(@Param("diaryId") Long diaryId, @Param("myVeggieId") Long myVeggieId);
 
     @Query("SELECT dl FROM diary_like AS dl WHERE dl.diary = :diary AND dl.user = :user")
     DiaryLike findDiaryLikeByIdAndUser(@Param("user") User user, @Param("diary") Diary diary);
@@ -58,6 +66,9 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     @Query("SELECT d FROM diary AS d WHERE d.myVeggie = :myVeggie AND FUNCTION('DATE', d.createdDate) = CURRENT_DATE")
     List<Diary> findDiaryByToday(@Param("myVeggie") MyVeggie myVeggie);
+
+
+
 
 
 

@@ -28,6 +28,9 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     @Query("SELECT d FROM diary AS d WHERE d.id = :diaryId ")
     Diary findDiaryById(@Param("diaryId") Long diaryId);
 
+    @Query("SELECT mv FROM my_veggie AS mv WHERE mv.id = :myVeggieId AND  mv.user.id = :userId")
+    Optional<MyVeggie> findMyVeggieByIdAndUserId(@Param("myVeggieId") Long myVeggieId, @Param("userId") Long userId);
+
     @Query("SELECT d FROM diary AS d WHERE d.myVeggie = :myVeggie ORDER BY d.createdDate DESC")
     List<Diary> findDiariesByMyVeggie(MyVeggie myVeggie);
 
@@ -41,8 +44,6 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     @Query("SELECT mv FROM my_veggie AS mv LEFT JOIN  mv.userFarmClub WHERE mv.id= :myVeggieId")
     MyVeggie findMyVeggieAndFarmClub(@Param("myVeggieId") Long myVeggieId);
 
-    @Query("SELECT r FROM routine AS r  WHERE r.myVeggie = :myVeggie ")
-    List<Routine> findMyVeggieRoutineById(@Param("myVeggie") MyVeggie myVeggie);
     @Modifying
     @Query("UPDATE my_veggie  SET nickname = :nickname, birth = :birth WHERE id = :myVeggieId ")
     void updateMyVeggie(@Param("myVeggieId") Long myVeggieId,
@@ -52,9 +53,6 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
     @Query("SELECT mv FROM my_veggie AS mv LEFT JOIN  mv.routines WHERE mv.user.id= :userId")
     List<MyVeggie> findMyVeggieAndRoutine(@Param("userId") Long userId);
 
-
-    @Query("SELECT r FROM routine AS r  WHERE r.id = :routineId ")
-    Optional<Routine> findRoutineById(@Param("routineId") Long routineId);
 
     @Query("SELECT dc FROM diary_comment AS dc WHERE dc.id = :diaryCommentId AND dc.user = :user")
     Optional<DiaryComment> findDiaryCommentByIdAndUserId(@Param("diaryCommentId") Long diaryCommentId, @Param("user") User user);
@@ -81,4 +79,9 @@ public interface MyVeggieRepository extends JpaRepository<MyVeggie, Long> {
             "WHERE mv.user= :user "
             )
     List<MyVeggie> findMyVeggieAndRoutineByUserWithDate(@Param("user") User user);
+
+
+
+
+
 }
