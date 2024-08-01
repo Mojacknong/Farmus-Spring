@@ -1,6 +1,6 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
-import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +44,6 @@ public class MyVeggieDiaryService {
             String state,
             Long myVeggieId
     ) throws IOException {
-
         String imageUrl = getImageUrl(multipartFile);
         addMyyVeggieDiary(
                 content,
@@ -59,10 +57,7 @@ public class MyVeggieDiaryService {
 
 
     @Transactional
-    public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(
-            MyVeggie myVeggie
-    ) {
-
+    public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(MyVeggie myVeggie) {
         Diary diary = selectTodayDiary(myVeggie);
         boolean state = verifyDiaryState(diary);
         return BaseResponseDto.of(SuccessCode.SUCCESS,CheckTodayDiaryResponse.of(state));
@@ -71,39 +66,37 @@ public class MyVeggieDiaryService {
 
 
     @Transactional
-    public List<FarmClubDiary> findDiaryAccordingToFarmClub(Long farmClubId) {
-        List<Diary> diaryList = diaryRepository.findDiaryByFarmClub(farmClubId);
+    public List<FarmClubDiary> findDiaryAccordingToFarmClub(Long farmClubId, Long userId) {
+        List<SortedMyLikeDiary> diaryList = diaryRepository.findDiaryByFarmClub(farmClubId, userId);
         List<FarmClubDiary> proccessData = proccessFarmClubData(diaryList);
         return proccessData;
     }
 
-    private List<FarmClubDiary> proccessFarmClubData(List<Diary> diaryList){
-        return diaryList.stream().map(diary -> {
-            User user = diary.getMyVeggie().getUser();
+    private List<FarmClubDiary> proccessFarmClubData(List<SortedMyLikeDiary> diaryAllList){
+        return diaryAllList.stream().map(allDiary -> {
+            User user = allDiary.getDiary().getMyVeggie().getUser();
             return FarmClubDiary.of(
-                    diary,
+                    allDiary.getDiary(),
                     user,
-                    DateManager.dotDateTime(diary.getCreatedDate()),
-                    diary.getDiaryComments().size(),
-                    diary.getDiaryLikes().size()
+                    DateManager.dotDateTime(allDiary.getDiary().getCreatedDate()),
+                    allDiary.getDiary().getDiaryComments().size(),
+                    allDiary.getDiary().getDiaryLikes().size(),
+                    allDiary.isMyLike(),
+                    allDiary.getDiary().getState()
                     );}).toList();
     }
 
-
     @Transactional
-    public MyVeggieDiaryCount selectDiaryCount(MyVeggie myVeggie) {
-
-        List<Diary> diaryList = myVeggieRepository.findDiariesByMyVeggie(myVeggie);
-        return MyVeggieDiaryCount.processData(diaryList);
-    }
-
-    @Transactional
-    public List<AllDairy> selectDiaryAll(MyVeggie myVeggie) {
-
-        List<Diary> diaryList = selectDiaryByMyVeggie(myVeggie);
+    public List<AllDairy> selectDiaryAll(MyVeggie myVeggie, Long userId) {
+        List<SortedMyLikeDiary> diaryList = diaryRepository.findDiariesByMyVeggie(myVeggie, userId);
         return AllDairy.processData(diaryList);
     }
 
+    @Transactional
+    public MyVeggieDiaryCount selectDiaryCount(MyVeggie myVeggie) {
+        List<Diary> diaryList = myVeggieRepository.findDiariesByMyVeggie(myVeggie);
+        return MyVeggieDiaryCount.processData(diaryList);
+    }
 
     @Transactional
     public void pressLike(Long userId, Long diaryId) {
@@ -179,13 +172,9 @@ public class MyVeggieDiaryService {
     }
 
     public boolean verifyDiaryState(Diary diary){
-
-        if(diary == null){
-            return true;
-        }
+        if(diary == null){return true;}
         return  false;
     }
-
 
     public Diary selectTodayDiary(MyVeggie myVeggie){
         return myVeggieRepository.findDiariesByMyVeggieAndToday(myVeggie);
@@ -217,7 +206,6 @@ public class MyVeggieDiaryService {
             throw new DiaryCommentNotFoundException("해당 유저는 댓글 삭제 권한이 없습니다.");
         }
     }
-
 
     private void addMyyVeggieDiary(
             String content,
