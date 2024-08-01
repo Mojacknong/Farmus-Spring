@@ -58,6 +58,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
         http
+            .formLogin(formLogin -> formLogin.disable())
+            .httpBasic(httpBasic -> httpBasic.disable())
+            .csrf(csrf -> csrf.disable())
+            .cors(withDefaults())
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
             .addFilterAfter(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(request -> request
                             .requestMatchers(
@@ -72,15 +77,11 @@ public class SecurityConfig {
                                     "/api/veggie-info",
                                     "/api/veggie-info/**",
                                     "api/my-veggie",
-                                    "api/my-veggie/diary",
+                                  //  "api/my-veggie/diary",
                                     "/api/my-veggie/simple-list",
                                     "/api/my-veggie/list",
                                     "/api/my-veggie/diary/{myVeggieId}/all",
-                                    "/api/my-veggie/diary/{myVeggieId}/one"
-                                    )
-//                    .authenticated()
-//                    .anyRequest().denyAll()
-                    .permitAll()
+                                    "/api/my-veggie/diary/{myVeggieId}/one").permitAll()
             )
             .authorizeHttpRequests(request -> request.anyRequest().authenticated());
         return http.build();
