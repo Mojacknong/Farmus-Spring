@@ -3,7 +3,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response;
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Routine;
-import io.swagger.models.auth.In;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
