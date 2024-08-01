@@ -30,7 +30,7 @@ public class MyVeggieDiaryController {
 
     private final MyVeggieDiaryService myVeggieDiaryService;
 
-    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public BaseResponseDto<Void> settingMyVeggieDiary(
             @RequestPart(value = "image", required = false) MultipartFile multipartFile,
             @RequestPart MyVeggieDiaryInsert myVeggieDiaryInsert
@@ -47,7 +47,6 @@ public class MyVeggieDiaryController {
 
     @GetMapping(value = "/{farmClubId}")
     public BaseResponseDto<FarmClubDiary> findFarmClubDiary(@PathVariable("farmClubId") Long farmClubId, @AuthenticationPrincipal CustomUser user){
-
         List<FarmClubDiary> farmClubDiaryList = myVeggieDiaryService.findDiaryAccordingToFarmClub(farmClubId, user.getUserId());
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubDiaryList);
     }
@@ -55,9 +54,7 @@ public class MyVeggieDiaryController {
 
 
     @GetMapping(value = "/{myVeggieId}/check")
-    public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(
-            @PathVariable("myVeggieId") Long myVeggieId
-    )  {
+    public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(@PathVariable("myVeggieId") Long myVeggieId)  {
         return myVeggieDiaryService.checkTodayDiary(MyVeggie.builder().id(myVeggieId).build());
     }
 
@@ -70,7 +67,6 @@ public class MyVeggieDiaryController {
     public BaseResponseDto<MyVeggieDiaryCount> selectDiaryCount(@PathVariable("myVeggieId") Long myVeggieId)  {
         MyVeggie myVeggie = MyVeggie.builder().id(myVeggieId).build();
         MyVeggieDiaryCount result = myVeggieDiaryService.selectDiaryCount(myVeggie);
-
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
     }
 
