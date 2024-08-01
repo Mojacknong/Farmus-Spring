@@ -1,7 +1,6 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response;
 
-import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.DiaryAll;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +23,7 @@ public class AllDairy {
     private int commentCount;
     private boolean myLike;
 
-    public static AllDairy of(DiaryAll diaryAll, String date){
+    public static AllDairy of(SortedMyLikeDiary diaryAll, String date){
         return new AllDairy(
                 date,
                 diaryAll.getDiary().getImage(),
@@ -39,7 +38,7 @@ public class AllDairy {
         );
     }
 
-    public static List<AllDairy> processData(List<DiaryAll> diaryAllList){
+    public static List<AllDairy> processData(List<SortedMyLikeDiary> diaryAllList){
         return diaryAllList.stream()
                 .map(diaryAll -> AllDairy.of(diaryAll, formatDate(diaryAll.getDiary().getCreatedDate())))
                 .toList();
