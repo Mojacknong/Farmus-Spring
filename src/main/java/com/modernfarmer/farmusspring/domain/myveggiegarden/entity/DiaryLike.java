@@ -21,7 +21,8 @@ public class DiaryLike extends BaseEntity {
     @Column(name = "diary_like_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "diary_id")
     private Diary diary;
 

@@ -51,6 +51,15 @@ public class MyVeggieDiaryController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubDiaryList);
     }
 
+    @DeleteMapping()
+    public BaseResponseDto<?> eraseDiary(
+            @Validated @RequestBody DiaryDeleteDto diaryDeleteDto,
+            @AuthenticationPrincipal CustomUser user
+    ){
+        myVeggieDiaryService.eraseDiary(diaryDeleteDto, user.getUserId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
 
 
     @GetMapping(value = "/{myVeggieId}/check")
