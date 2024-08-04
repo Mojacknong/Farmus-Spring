@@ -19,4 +19,12 @@ public class UserFarmClubHelper {
         return userFarmClubRepository.findById(id)
                 .orElseThrow(() -> new FarmClubEntityNotFoundException("존재하지 않는 등록 정보입니다.", FarmClubErrorCode.USER_FARM_CLUB_NOT_FOUND));
     }
+
+    public void deleteUserFarmClub(UserFarmClub userFarmClub) {
+        userFarmClubRepository.delete(userFarmClub);
+    }
+
+    public UserFarmClub findByUserIdAndFarmClubId(Long userId, Long farmClubId) {
+        return userFarmClubRepository.findByUserIdAndFarmClubId(userId, farmClubId);
+    }
 }
