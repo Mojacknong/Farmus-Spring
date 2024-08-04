@@ -79,9 +79,11 @@ public class FarmClubService {
         List<FarmClub> result = farmClubRepository.getRecommendedFarmClubList(level);
         VeggieInfo.Help helpFirst = veggieInfoHelper.getVeggieInfoHelp(result.get(0).getVeggieInfoId());
         VeggieInfo.Help helpSecond = veggieInfoHelper.getVeggieInfoHelp(result.get(1).getVeggieInfoId());
+        String userNickname = userHelper.getUserNickname(userId);
         return GetRecommendFarmClubResponseDto.of(
                 GetFarmClubResponseDto.of(result.get(0), result.get(0).getUserFarmClubs().size(), helpFirst),
-                GetFarmClubResponseDto.of(result.get(1), result.get(1).getUserFarmClubs().size(), helpSecond)
+                GetFarmClubResponseDto.of(result.get(1), result.get(1).getUserFarmClubs().size(), helpSecond),
+                userNickname
         );
     }
 
