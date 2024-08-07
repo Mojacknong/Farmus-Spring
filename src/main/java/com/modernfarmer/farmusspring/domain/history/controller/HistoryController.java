@@ -21,6 +21,15 @@ public class HistoryController {
 
     private final HistoryService historyService;
 
+    @PostMapping
+    @ApiResponse(responseCode = "201", description = "히스토리 생성 성공")
+    public BaseResponseDto<?> createHistory(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        historyService.createHistory(user.getUserId());
+        return BaseResponseDto.of(SuccessCode.CREATED, null);
+    }
+
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HistoryResponseDto.class)))
     public BaseResponseDto<?> getUserHistory(

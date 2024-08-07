@@ -57,6 +57,7 @@ public class HistoryHelper {
                 historyDetailVo.period() + " - " + LocalDate.now());
         History history = getUserHistory(userId);
         history.getFarmClubHistoryDetails().add(historyDetail);
+        historyRepository.save(history);
     }
 
     public void createVeggieHistoryDetail(Long myVeggieId) {
