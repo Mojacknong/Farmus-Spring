@@ -20,6 +20,10 @@ public class HistoryService {
 
     private final HistoryHelper historyHelper;
 
+    public void createHistory(Long userId) {
+        historyHelper.createUserHistory(userId);
+    }
+
     public HistoryResponseDto getUserHistory(Long userId) {
         History history = historyHelper.getUserHistory(userId);
         return HistoryResponseDto.of(history);
