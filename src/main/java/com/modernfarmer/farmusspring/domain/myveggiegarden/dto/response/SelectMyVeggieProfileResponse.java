@@ -16,4 +16,5 @@ public class SelectMyVeggieProfileResponse {
     private String createdVeggie;
     private int period;
     private int step;
+    private int stepCount;
 }
