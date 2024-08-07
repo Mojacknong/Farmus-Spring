@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QUserFarmClub.userFarmClub;
 
@@ -14,13 +15,13 @@ public class UserFarmClubRepositoryImpl implements UserFarmClubRepositoryCustom 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public UserFarmClub findByUserIdAndFarmClubId(Long userId, Long farmClubId) {
-        return queryFactory
+    public Optional<UserFarmClub> findByUserIdAndFarmClubId(Long userId, Long farmClubId) {
+        return Optional.ofNullable(queryFactory
                 .select(userFarmClub)
                 .from(userFarmClub)
                 .where(userFarmClub.userId.eq(userId)
                         .and(userFarmClub.farmClub.id.eq(farmClubId)))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override
