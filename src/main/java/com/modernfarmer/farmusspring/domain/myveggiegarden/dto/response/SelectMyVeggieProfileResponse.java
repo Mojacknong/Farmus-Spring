@@ -15,6 +15,6 @@ public class SelectMyVeggieProfileResponse {
     private String veggieImage;
     private String createdVeggie;
     private int period;
-    private int tep;
+    private int step;
     private int stepCount;
 }
