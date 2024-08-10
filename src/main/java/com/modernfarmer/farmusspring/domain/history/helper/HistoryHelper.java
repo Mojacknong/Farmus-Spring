@@ -15,6 +15,7 @@ import com.modernfarmer.farmusspring.domain.history.vo.MissionPostHistoryVo;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
+import com.modernfarmer.farmusspring.domain.veggieinfo.vo.VeggieInfoVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.modernfarmer.farmusspring.domain.history.utils.StringUtil.getHistoryPeriod;
 
 @Component
 @RequiredArgsConstructor
@@ -45,6 +48,7 @@ public class HistoryHelper {
     public void createFarmClubHistoryDetail(Long userId, Long userFarmClubId, String veggieInfoId) {
         List<MissionPostHistoryVo> missionPostHistoryList = missionPostHelper.getMissionPostHistory(userFarmClubId);
         List<StepVo> stepList = veggieInfoHelper.getStepList(veggieInfoId);
+        VeggieInfoVo veggieInfo = veggieInfoHelper.getVeggieInfo(veggieInfoId);
         List<HistoryFarmClubDetail.HistoryClubPost> historyClubPostList = getHistoryClubPostList(missionPostHistoryList, stepList);
         HistoryFarmClubDetail historyFarmClubDetail = HistoryFarmClubDetail.createHistoryClubDetail(historyClubPostList);
         ObjectId farmClubDetailId = historyFarmClubDetailRepository.save(historyFarmClubDetail).getId();
@@ -54,9 +58,11 @@ public class HistoryHelper {
                 historyDetailVo.image(),
                 historyDetailVo.historyName(),
                 historyDetailVo.name(),
-                historyDetailVo.period() + " - " + LocalDate.now());
+                getHistoryPeriod(historyDetailVo.period(), LocalDate.now().toString()));
+        History.Icon icon = History.Icon.createIcon(veggieInfo.backgroundColor(), veggieInfo.backgroundColor());
         History history = getUserHistory(userId);
         history.getFarmClubHistoryDetails().add(historyDetail);
+        history.getFarmClubHistoryIcons().add(icon);
         historyRepository.save(history);
     }
 
