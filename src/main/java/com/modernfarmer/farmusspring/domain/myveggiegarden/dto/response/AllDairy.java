@@ -31,8 +31,8 @@ public class AllDairy {
                 diaryAll.getDiary().getIsOpen(),
                 diaryAll.getDiary().getState(),
                 diaryAll.getDiary().getId(),
-                diaryAll.getDiary().getDiaryComments().size(),
                 diaryAll.getDiary().getDiaryLikes().size(),
+                diaryAll.getDiary().getDiaryComments().size(),
                 diaryAll.isMyLike()
 
         );

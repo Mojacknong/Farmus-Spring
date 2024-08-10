@@ -109,8 +109,8 @@ public class MyVeggieDiaryService {
                     allDiary.getDiary(),
                     user,
                     DateManager.dotDateTime(allDiary.getDiary().getCreatedDate()),
-                    allDiary.getDiary().getDiaryComments().size(),
                     allDiary.getDiary().getDiaryLikes().size(),
+                    allDiary.getDiary().getDiaryComments().size(),
                     allDiary.isMyLike(),
                     allDiary.getDiary().getState()
                     );}).toList();
