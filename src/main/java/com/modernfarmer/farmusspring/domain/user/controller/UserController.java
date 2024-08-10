@@ -46,7 +46,6 @@ public class UserController {
     @PatchMapping("/nickname")
     public BaseResponseDto<?> modifyNickname(@AuthenticationPrincipal CustomUser user, @Validated  @RequestBody UserNicknameDto userNicknameDto)  {
         userService.modifyNickname(user.getUserId(), userNicknameDto.getNickname());
-        log.info("유저 닉네임 유저 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
