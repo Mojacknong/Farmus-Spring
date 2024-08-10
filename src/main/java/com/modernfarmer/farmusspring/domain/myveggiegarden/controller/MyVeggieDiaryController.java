@@ -109,8 +109,8 @@ public class MyVeggieDiaryController {
 
     @GetMapping(value = "/{diaryId}/comment")
     public BaseResponseDto<?> selectComment(@AuthenticationPrincipal CustomUser user, @PathVariable("diaryId") Long diaryId)  {
-        List<DiaryCommentContent> diaryCommentList = myVeggieDiaryService.selectComment(user.getUserId(), diaryId);
-        return BaseResponseDto.of(SuccessCode.SUCCESS, diaryCommentList);
+        DiaryInteractionsDto interactionsDto = myVeggieDiaryService.selectComment(user.getUserId(), diaryId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, interactionsDto);
     }
 
 
