@@ -60,7 +60,7 @@ public class HistoryHelper {
                 historyDetailVo.historyName(),
                 historyDetailVo.name(),
                 getHistoryPeriod(historyDetailVo.period(), LocalDate.now().toString()));
-        History.Icon icon = History.Icon.createIcon(veggieInfo.backgroundColor(), veggieInfo.backgroundColor());
+        History.Icon icon = History.Icon.createIcon(veggieInfo.veggieImage(), veggieInfo.backgroundColor());
         History history = getUserHistory(userId);
         history.getFarmClubHistoryDetails().add(historyDetail);
         history.getFarmClubHistoryIcons().add(icon);
