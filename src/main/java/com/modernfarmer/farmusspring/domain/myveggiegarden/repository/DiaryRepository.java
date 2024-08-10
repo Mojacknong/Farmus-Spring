@@ -28,6 +28,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     void deleteDiaryById(@Param("diaryId") Long diaryId);
 
 
+
+
     @Query("SELECT d FROM diary AS d WHERE d.id = :diaryId AND d.myVeggie.id = :myVeggieId")
     Optional<Diary> findDiaryByIdAndMyVeggieId(@Param("diaryId") Long diaryId, @Param("myVeggieId") Long myVeggieId);
 
