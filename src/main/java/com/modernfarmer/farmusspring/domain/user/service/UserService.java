@@ -59,14 +59,8 @@ public class UserService {
             MultipartFile multipartFile,
             String nickName
     ) throws IOException {
-        if(multipartFile.isEmpty()){
-            log.info("sd");
-
-        }
-
         updateUserProfileAccordingToProfileImage(multipartFile, nickName, userId);
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
-
     }
 
 
