@@ -14,4 +14,10 @@ public class StringUtil {
         return date.substring(2, 10).replace("-", ".");
     }
 
+    // input -> String(2024-08-05 01:14:24.332920)
+    // output -> mm/dd hh:mm
+    public static String getPostFormattedDate(String date) {
+        return date.substring(5, 10) + " " + date.substring(11, 16);
+    }
+
 }

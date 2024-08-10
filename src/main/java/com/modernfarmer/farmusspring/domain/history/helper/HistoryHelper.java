@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.modernfarmer.farmusspring.domain.history.utils.StringUtil.getHistoryPeriod;
+import static com.modernfarmer.farmusspring.domain.history.utils.StringUtil.getPostFormattedDate;
 
 @Component
 @RequiredArgsConstructor
@@ -97,7 +98,7 @@ public class HistoryHelper {
                     return HistoryFarmClubDetail.HistoryClubPost.builder()
                             .postImage(missionPostHistoryVo.image())
                             .content(missionPostHistoryVo.content())
-                            .date(missionPostHistoryVo.date())
+                            .date(getPostFormattedDate(missionPostHistoryVo.date()))
                             .stepNum(step.num())
                             .stepName(step.content())
                             .build();
