@@ -7,20 +7,14 @@ import lombok.Builder;
 import java.util.Set;
 
 @Builder(access = AccessLevel.PRIVATE)
-public record HistoryResponseDto(
-        String historyId,
+public record VeggieHistoryIconResponseDto(
         int veggieHistoryCount,
-        int farmClubHistoryCount,
-        Set<History.Icon> veggieHistoryIcons,
-        Set<History.Icon> farmClubHistoryIcons
+        Set<History.Icon> veggieHistoryIcons
 ) {
-    public static HistoryResponseDto of(History history) {
+    public static VeggieHistoryIconResponseDto of(History history) {
         return builder()
-                .historyId(history.getId().toHexString())
                 .veggieHistoryCount(history.getVeggieHistoryDetails().size())
-                .farmClubHistoryCount(history.getFarmClubHistoryDetails().size())
                 .veggieHistoryIcons(history.getVeggieHistoryIcons())
-                .farmClubHistoryIcons(history.getFarmClubHistoryIcons())
                 .build();
     }
 }

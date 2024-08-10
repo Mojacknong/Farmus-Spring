@@ -21,15 +21,32 @@ public class HistoryController {
 
     private final HistoryService historyService;
 
-    @GetMapping("/{id}")
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HistoryResponseDto.class)))
-    public BaseResponseDto<?> getUserHistory(
-            @PathVariable Long id
+    @PostMapping
+    @ApiResponse(responseCode = "201", description = "히스토리 생성 성공")
+    public BaseResponseDto<?> createHistory(
+            @AuthenticationPrincipal CustomUser user
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getUserHistory(id));
+        historyService.createHistory(user.getUserId());
+        return BaseResponseDto.of(SuccessCode.CREATED, null);
     }
 
-    @GetMapping("/farmclub")
+    @GetMapping("/icon/veggie")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = VeggieHistoryIconResponseDto.class)))
+    public BaseResponseDto<?> getVeggieHistoryIcons(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getVeggieHistoryIcons(user.getUserId()));
+    }
+
+    @GetMapping("/icon/farm-club")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = FarmClubHistoryIconResponseDto.class)))
+    public BaseResponseDto<?> getFarmClubHistoryIcons(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getFarmClubHistoryIcons(user.getUserId()));
+    }
+
+    @GetMapping("/farm-club")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = FarmClubHistoryListResponseDto.class)))
     public BaseResponseDto<?> getFarmClubHistories(
             @AuthenticationPrincipal CustomUser user
@@ -37,7 +54,7 @@ public class HistoryController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getFarmClubHistories(user.getUserId()));
     }
 
-    @GetMapping("/farmclub/{detailId}")
+    @GetMapping("/farm-club/{detailId}")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = FarmClubHistoryDetailResponseDto.class)))
     public BaseResponseDto<?> getFarmClubHistoryDetail(
             @PathVariable String detailId

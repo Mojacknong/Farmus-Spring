@@ -164,4 +164,13 @@ public class FarmClubController {
     ) {
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.checkCreateFarmClub(user.getUserId()));
     }
+
+    @DeleteMapping("/{farmClubId}/success")
+    public BaseResponseDto<?> successFarmClub(
+            @PathVariable Long farmClubId,
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        farmClubService.successFarmClub(farmClubId, user.getUserId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
 }

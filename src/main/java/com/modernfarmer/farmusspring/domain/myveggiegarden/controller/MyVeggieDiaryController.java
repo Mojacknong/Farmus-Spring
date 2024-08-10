@@ -86,7 +86,6 @@ public class MyVeggieDiaryController {
     )  {
         MyVeggie myVeggie = MyVeggie.builder().id(myVeggieId).build();
         List<AllDairy> result = myVeggieDiaryService.selectDiaryAll(myVeggie, user.getUserId());
-
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
     }
 
