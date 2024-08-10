@@ -23,4 +23,9 @@ public class UserHelper {
         User user = getUserEntity(userId);
         return user.getLevel();
     }
+
+    public String getUserNickname(Long userId) {
+        User user = getUserEntity(userId);
+        return user.getNickname();
+    }
 }
