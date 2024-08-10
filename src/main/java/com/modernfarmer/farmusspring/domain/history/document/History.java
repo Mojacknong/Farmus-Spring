@@ -74,6 +74,8 @@ public class History extends BaseDocument {
     public static History createHistory(Long userId) {
         return History.builder()
                 .userId(userId)
+                .veggieHistoryIcons(Set.of())
+                .farmClubHistoryIcons(Set.of())
                 .veggieHistoryDetails(new ArrayList<>())
                 .farmClubHistoryDetails(new ArrayList<>())
                 .build();
