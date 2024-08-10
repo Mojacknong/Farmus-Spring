@@ -11,6 +11,8 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.DiaryAccessDeniedException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.MyVeggieNotFoundException;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryCommentRepository;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryLikeRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
@@ -39,6 +41,8 @@ public class MyVeggieDiaryService {
     private final MyVeggieRepository myVeggieRepository;
     private final UserService userService;
     private final DiaryRepository diaryRepository;
+    private final DiaryCommentRepository diaryCommentRepository;
+    private final DiaryLikeRepository diaryLikeRepository;
 
     @Transactional
     public BaseResponseDto<Void> settingMyVeggieDiary(
@@ -158,7 +162,6 @@ public class MyVeggieDiaryService {
 
     @Transactional
     public void updateComment(User user, Long diaryCommentId, String content) {
-
         Optional<DiaryComment> diaryCommentData = myVeggieRepository.findDiaryCommentByIdAndUserId(diaryCommentId, user);
         validateDiaryComment(diaryCommentData);
         myVeggieRepository.updateDiaryCommentByIdAndUserId(diaryCommentId, user, content);
@@ -179,10 +182,12 @@ public class MyVeggieDiaryService {
 
 
     @Transactional
-    public List<DiaryCommentContent> selectComment(Long userId, Long diaryId)  {
+    public DiaryInteractionsDto selectComment(Long userId, Long diaryId)  {
         List<DiaryComment> diaryCommentList = diaryRepository.findDiaryById(diaryId);
         List<DiaryCommentContent> diaryCommentContent = DiaryCommentContent.processData(diaryCommentList, userId);
-        return diaryCommentContent;
+        int likeCount = diaryLikeRepository.findDiaryLikeCountById(diaryId);
+        int commentCount = diaryCommentRepository.findDiaryCommentCountById(diaryId);
+        return DiaryInteractionsDto.of(diaryCommentContent,likeCount,commentCount);
     }
 
 
