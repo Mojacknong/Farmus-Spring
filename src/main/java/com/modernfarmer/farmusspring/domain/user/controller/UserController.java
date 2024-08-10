@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.user.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.user.dto.request.AlarmUpdate;
+import com.modernfarmer.farmusspring.domain.user.dto.request.UserNicknameDto;
 import com.modernfarmer.farmusspring.domain.user.dto.response.AlarmStatus;
 import com.modernfarmer.farmusspring.domain.user.dto.response.UserProfileResponse;
 import com.modernfarmer.farmusspring.domain.user.service.UserService;
@@ -39,6 +40,13 @@ public class UserController {
     @PatchMapping("/notification")
     public BaseResponseDto<?> modifyNotification(@AuthenticationPrincipal CustomUser user, @Validated  @RequestBody  AlarmUpdate alarmUpdate)  {
         userService.modifyNotification(user.getUserId(), alarmUpdate.getStatus());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @PatchMapping("/nickname")
+    public BaseResponseDto<?> modifyNickname(@AuthenticationPrincipal CustomUser user, @Validated  @RequestBody UserNicknameDto userNicknameDto)  {
+        userService.modifyNickname(user.getUserId(), userNicknameDto.getNickname());
+        log.info("유저 닉네임 유저 완료");
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
