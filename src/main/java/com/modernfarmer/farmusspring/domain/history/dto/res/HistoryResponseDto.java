@@ -4,15 +4,15 @@ import com.modernfarmer.farmusspring.domain.history.document.History;
 import lombok.AccessLevel;
 import lombok.Builder;
 
-import java.util.List;
+import java.util.Set;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record HistoryResponseDto(
         String historyId,
         int veggieHistoryCount,
         int farmClubHistoryCount,
-        List<History.Icon> veggieHistoryIcons,
-        List<History.Icon> farmClubHistoryIcons
+        Set<History.Icon> veggieHistoryIcons,
+        Set<History.Icon> farmClubHistoryIcons
 ) {
     public static HistoryResponseDto of(History history) {
         return builder()
