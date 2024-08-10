@@ -30,15 +30,23 @@ public class HistoryController {
         return BaseResponseDto.of(SuccessCode.CREATED, null);
     }
 
-    @GetMapping("/{id}")
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = HistoryResponseDto.class)))
-    public BaseResponseDto<?> getUserHistory(
-            @PathVariable Long id
+    @GetMapping("/icon/veggie")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = VeggieHistoryIconResponseDto.class)))
+    public BaseResponseDto<?> getVeggieHistoryIcons(
+            @AuthenticationPrincipal CustomUser user
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getUserHistory(id));
+        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getVeggieHistoryIcons(user.getUserId()));
     }
 
-    @GetMapping("/farmclub")
+    @GetMapping("/icon/farm-club")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = FarmClubHistoryIconResponseDto.class)))
+    public BaseResponseDto<?> getFarmClubHistoryIcons(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getFarmClubHistoryIcons(user.getUserId()));
+    }
+
+    @GetMapping("/farm-club")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = FarmClubHistoryListResponseDto.class)))
     public BaseResponseDto<?> getFarmClubHistories(
             @AuthenticationPrincipal CustomUser user
@@ -46,7 +54,7 @@ public class HistoryController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getFarmClubHistories(user.getUserId()));
     }
 
-    @GetMapping("/farmclub/{detailId}")
+    @GetMapping("/farm-club/{detailId}")
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = FarmClubHistoryDetailResponseDto.class)))
     public BaseResponseDto<?> getFarmClubHistoryDetail(
             @PathVariable String detailId

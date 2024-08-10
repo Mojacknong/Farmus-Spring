@@ -43,6 +43,7 @@ public class VeggieInfoRepositoryImpl implements CustomVeggieInfoRepository{
                 .fields()
                 .include("_id")
                 .include("name")
+                .include("backgroundColor")
                 .include("veggieImage")
                 .include("difficulty");
 

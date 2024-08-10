@@ -24,9 +24,14 @@ public class HistoryService {
         historyHelper.createUserHistory(userId);
     }
 
-    public HistoryResponseDto getUserHistory(Long userId) {
+    public FarmClubHistoryIconResponseDto getFarmClubHistoryIcons(Long userId) {
         History history = historyHelper.getUserHistory(userId);
-        return HistoryResponseDto.of(history);
+        return FarmClubHistoryIconResponseDto.of(history);
+    }
+
+    public VeggieHistoryIconResponseDto getVeggieHistoryIcons(Long userId) {
+        History history = historyHelper.getUserHistory(userId);
+        return VeggieHistoryIconResponseDto.of(history);
     }
 
     public VeggieHistoryDetailResponseDto getVeggieHistoryDetail(String detailId) {
