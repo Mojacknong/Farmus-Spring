@@ -11,10 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface DiaryCommentRepository extends JpaRepository<DiaryComment, Long> {
-
     @Query("SELECT count(dc) FROM diary_comment AS dc WHERE dc.diary.id = :diaryId ")
     int findDiaryCommentCountById(@Param("diaryId") Long diaryId);
-
-
-
 }

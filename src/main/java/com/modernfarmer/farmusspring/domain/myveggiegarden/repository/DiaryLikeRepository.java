@@ -13,8 +13,6 @@ import java.util.Optional;
 
 @Repository
 public interface DiaryLikeRepository extends JpaRepository<DiaryLike, Long> {
-
     @Query("SELECT count(dl) FROM diary_like as dl WHERE dl.diary.id = :diaryId ")
     int findDiaryLikeCountById(@Param("diaryId") Long diaryId);
-
 }
