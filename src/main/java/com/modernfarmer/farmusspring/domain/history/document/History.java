@@ -56,14 +56,16 @@ public class History extends BaseDocument {
 
         private String detailId;
         private String image;
+        private String backgroundColor;
         private String historyName;
         private String name;
         private String period;
 
-        public static Detail createDetail(String detailId, String image, String historyName, String name, String period) {
+        public static Detail createDetail(String detailId, String image, String backgroundColor, String historyName, String name, String period) {
             return Detail.builder()
                     .detailId(detailId)
                     .image(image)
+                    .backgroundColor(backgroundColor)
                     .historyName(historyName)
                     .name(name)
                     .period(period)

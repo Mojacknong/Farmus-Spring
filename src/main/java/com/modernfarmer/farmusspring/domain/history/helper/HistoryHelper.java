@@ -57,6 +57,7 @@ public class HistoryHelper {
         History.Detail historyDetail = History.Detail.createDetail(
                 farmClubDetailId.toHexString(),
                 historyDetailVo.image(),
+                veggieInfo.backgroundColor(),
                 historyDetailVo.historyName(),
                 historyDetailVo.name(),
                 getHistoryPeriod(historyDetailVo.period(), LocalDate.now().toString()));
