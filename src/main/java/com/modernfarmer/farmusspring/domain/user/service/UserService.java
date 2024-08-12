@@ -59,10 +59,8 @@ public class UserService {
             MultipartFile multipartFile,
             String nickName
     ) throws IOException {
-
         updateUserProfileAccordingToProfileImage(multipartFile, nickName, userId);
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
-
     }
 
 
@@ -93,6 +91,11 @@ public class UserService {
     }
 
     @Transactional
+    public void modifyNickname(Long userId, String nickname) {
+       userRepository.updateNickname(userId, nickname);
+    }
+
+    @Transactional
     public AlarmStatus bringNotification(Long userId) {
         User user = selectUserById(userId);
         return AlarmStatus.of(user.getNotificationStatus());
@@ -116,7 +119,7 @@ public class UserService {
     }
 
     private void updateNickname(String nickname, Long userId){
-        userRepository.updateUserNickname(nickname,userId);
+        userRepository.updateNickname(userId, nickname);
     }
 
     private void updateProfileAndNickname(Long userId, String imageUrl, String nickname){

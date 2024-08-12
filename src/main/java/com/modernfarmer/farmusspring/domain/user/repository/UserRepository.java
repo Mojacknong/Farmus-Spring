@@ -25,6 +25,7 @@ public interface UserRepository  extends JpaRepository<User, Long> {
     @Query("update user as u set u.level= :level where u.id = :userId")
     void insertUserLevel(@Param("userId") Long userId, @Param("level") String level);
 
+
     @Modifying
     @Query("update user as u set u.early = false where u.id = :userId")
     void updateEarly( @Param("userId") Long userId);
@@ -43,5 +44,5 @@ public interface UserRepository  extends JpaRepository<User, Long> {
 
     @Modifying
     @Query("update user as u set u.nickname = :nickName where u.id = :userId")
-    void updateUserNickname(@Param("nickName") String nickName, @Param("userId") Long userId);
+    void updateNickname(@Param("userId") Long userId, @Param("nickName") String nickName);
 }

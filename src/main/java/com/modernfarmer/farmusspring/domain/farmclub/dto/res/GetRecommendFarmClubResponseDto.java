@@ -8,12 +8,14 @@ import java.util.List;
 @Builder(access = AccessLevel.PRIVATE)
 public record GetRecommendFarmClubResponseDto(
         GetFarmClubResponseDto recFirst,
-        GetFarmClubResponseDto recSecond
+        GetFarmClubResponseDto recSecond,
+        String nickname
 ) {
-    public static GetRecommendFarmClubResponseDto of(GetFarmClubResponseDto recFirst, GetFarmClubResponseDto recSecond) {
+    public static GetRecommendFarmClubResponseDto of(GetFarmClubResponseDto recFirst, GetFarmClubResponseDto recSecond, String nickname) {
         return GetRecommendFarmClubResponseDto.builder()
                 .recFirst(recFirst)
                 .recSecond(recSecond)
+                .nickname(nickname)
                 .build();
     }
 }
