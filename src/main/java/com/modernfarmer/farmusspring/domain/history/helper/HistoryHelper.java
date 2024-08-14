@@ -72,7 +72,6 @@ public class HistoryHelper {
         history.getFarmClubHistoryDetails().add(historyDetail);
         history.getFarmClubHistoryIcons().add(icon);
         historyRepository.save(history);
-        historyRepository.save(history);
     }
 
     @Transactional
