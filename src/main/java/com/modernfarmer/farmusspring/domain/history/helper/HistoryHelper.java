@@ -99,9 +99,10 @@ public class HistoryHelper {
                 myVeggie.getNickname(),
                 myVeggie.getVeggieName(),
                 getHistoryPeriod(myVeggie.getBirth().toString(), LocalDate.now().toString()));
-
+        History.Icon icon = History.Icon.createIcon(veggieInfo.veggieImage(), veggieInfo.backgroundColor());
         History history = getUserHistory(userId);
         history.getVeggieHistoryDetails().add(historyDetail);
+        history.getVeggieHistoryIcons().add(icon);
         historyRepository.save(history);
     }
 
