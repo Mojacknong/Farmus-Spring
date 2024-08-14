@@ -125,6 +125,13 @@ public class HistoryHelper {
                 .toList();
     }
 
+    @Transactional
+    public void createVeggieHistoryResult(HistoryVeggieDetail.HistoryPost farmResult, String veggieDetailId) {
+        HistoryVeggieDetail historyVeggieDetail = getVeggieHistoryDetail(veggieDetailId);
+        historyVeggieDetail.updateHistoryDetailResult(farmResult);
+        historyVeggieDetailRepository.save(historyVeggieDetail);
+    }
+
     public History getUserHistory(Long userId) {
         return historyRepository.findByUserId(userId)
                 .orElseThrow(() -> new HistoryEntityNotFoundException("해당 유저의 히스토리가 존재하지 않습니다.", HistoryErrorCode.ENTITY_NOT_FOUND));
