@@ -78,6 +78,7 @@ public class HistoryHelper {
     @Transactional
     public void createVeggieHistoryDetail(Long userId, Long myVeggieId) {
         MyVeggie myVeggie = myVeggieHelper.getMyVeggieEntity(myVeggieId);
+        VeggieInfoVo veggieInfo = veggieInfoHelper.getVeggieInfo(myVeggie.getVeggieInfoId());
         // 해당 채소의 모든 성장일기를 가져옴
         // 이미지, 내용, 날짜
         List<Diary> diaries = myVeggieHelper.getDiariesByMyVeggie(myVeggie);
@@ -95,9 +96,10 @@ public class HistoryHelper {
         History.Detail historyDetail = History.Detail.createDetail(
                 veggieDetailId,
                 myVeggie.getVeggieImage(),
+                veggieInfo.backgroundColor(),
                 myVeggie.getNickname(),
                 myVeggie.getVeggieName(),
-                DateManager.parsingDotDate(myVeggie.getBirth()) + " - " + DateManager.parsingDotDateTime(LocalDateTime.now()));
+                getHistoryPeriod(myVeggie.getBirth().toString(), LocalDate.now().toString()));
 
         History history = getUserHistory(userId);
         history.getVeggieHistoryDetails().add(historyDetail);
