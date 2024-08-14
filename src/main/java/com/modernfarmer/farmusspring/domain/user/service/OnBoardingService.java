@@ -3,18 +3,25 @@ package com.modernfarmer.farmusspring.domain.user.service;
 
 import com.modernfarmer.farmusspring.domain.user.dto.request.SetLevelRequest;
 import com.modernfarmer.farmusspring.domain.user.dto.request.SetMotivationRequest;
+import com.modernfarmer.farmusspring.domain.user.dto.response.EncouragementMessageDto;
 import com.modernfarmer.farmusspring.domain.user.dto.response.SetLevelResponse;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.entity.UserMotivation;
 import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
 import com.modernfarmer.farmusspring.domain.user.repository.UserMotivationRepository;
 import com.modernfarmer.farmusspring.domain.user.repository.UserRepository;
+import com.modernfarmer.farmusspring.domain.user.util.EncouragementMessages;
+import com.modernfarmer.farmusspring.domain.user.util.RamdomFunction;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
@@ -22,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OnBoardingService {
 
     private final UserRepository userRepository;
+    private final UserMotivationRepository userMotivationRepository;
 
     @Transactional
     public BaseResponseDto settingMotivation(Long userId, SetMotivationRequest setMotivationRequest) {
@@ -32,42 +40,37 @@ public class OnBoardingService {
     }
     @Transactional
     public BaseResponseDto<SetLevelResponse> settingLevel(Long userId, SetLevelRequest setLevelRequest){
-
         String level = measureLevel(setLevelRequest.getTime(), setLevelRequest.getSkill());
         insertLevel(userId, level);
         return BaseResponseDto.of(SuccessCode.SUCCESS, SetLevelResponse.of(level));
-
     }
     @Transactional
     public BaseResponseDto<Void> completeOnBoarding(Long userId)  {
         updateCompleteBoarding(userId);
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
-
-
+    @Transactional
+    public EncouragementMessageDto bringEncouragementMessage(Long userId) {
+        List<UserMotivation> userMotivationList = userMotivationRepository.findUserMotivationByUserId(userId);
+        int ramdomNumber = RamdomFunction.getRandomIntInRange(0, userMotivationList.size()-1);
+        String encouragementMessage = EncouragementMessages.getRandomMessageByKey(EncouragementMessages.valueOf(userMotivationList.get(ramdomNumber).getMotivation()));
+        return EncouragementMessageDto.of(encouragementMessage);
+    }
     private void updateCompleteBoarding(Long userId){
         userRepository.updateEarly(userId);
     }
-
-
-
     public void insertMotivation(User user, SetMotivationRequest setMotivationRequest) {
         for (String motivation : setMotivationRequest.getMotivation()) {
             insertOneMotivation(user, motivation);
         }
     }
-
     public void insertOneMotivation(User user, String motivation) {
         UserMotivation newMotivation = UserMotivation.createUserMotivation(motivation, user);
         user.addUserMotivation(newMotivation);
-
     }
-
     private void insertLevel(Long userId, String level){
         userRepository.insertUserLevel(userId, level);
     }
-
-
     private String  measureLevel(int time,String skill) {
         boolean isIntermediate = false;
         boolean isMaster = false;
@@ -103,7 +106,6 @@ public class OnBoardingService {
         }
         return "알 수 없음";
     }
-
     public User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 없습니다."));
     }

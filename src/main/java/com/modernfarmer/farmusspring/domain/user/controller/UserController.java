@@ -55,8 +55,6 @@ public class UserController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
     }
 
-
-
     @PostMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public BaseResponseDto<Void> settingProfile(
             @AuthenticationPrincipal CustomUser user,
@@ -67,13 +65,8 @@ public class UserController {
     }
 
     @PostMapping("/init/{userId}")
-    public void initUser(
-            @PathVariable Long userId
-    ) {
+    public void initUser(@PathVariable Long userId) {
         userService.initUser(userId);
     }
-
-
-
 
 }

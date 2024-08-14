@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 @AllArgsConstructor
@@ -63,14 +64,11 @@ public class UserService {
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
 
-
-
     public User selectUserById(Long userId){
         User user = userRepository.findUserData(userId);
         checkUserData(user);
         return user;
     }
-
 
     public void checkUserData(User user){
         if(user == null) {
