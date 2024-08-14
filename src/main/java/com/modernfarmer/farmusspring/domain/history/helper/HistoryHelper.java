@@ -75,7 +75,7 @@ public class HistoryHelper {
     }
 
     @Transactional
-    public void createVeggieHistoryDetail(Long userId, Long myVeggieId) {
+    public void createVeggieHistoryDetail(Long userId, Long myVeggieId, HistoryVeggieDetail.HistoryPost farmResult) {
         MyVeggie myVeggie = myVeggieHelper.getMyVeggieEntity(myVeggieId);
         VeggieInfoVo veggieInfo = veggieInfoHelper.getVeggieInfo(myVeggie.getVeggieInfoId());
         // 해당 채소의 모든 성장일기를 가져옴
@@ -89,7 +89,7 @@ public class HistoryHelper {
                         .build())
                 .toList();
 
-        HistoryVeggieDetail historyVeggieDetail = HistoryVeggieDetail.createHistoryDetail(diaryHistories, null);
+        HistoryVeggieDetail historyVeggieDetail = HistoryVeggieDetail.createHistoryDetail(diaryHistories, farmResult);
         String veggieDetailId = historyVeggieDetailRepository.save(historyVeggieDetail).getId().toHexString();
 
         History.Detail historyDetail = History.Detail.createDetail(
