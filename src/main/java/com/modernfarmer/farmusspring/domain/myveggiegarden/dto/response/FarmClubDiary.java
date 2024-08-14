@@ -20,8 +20,10 @@ public class FarmClubDiary {
     private int commentCount;
     private String nickname;
     private String profileImage;
+    private boolean myLike;
+    private String state;
 
-    public static FarmClubDiary of(Diary diary, User user, String writeDateTime, int likeCount, int commentCount){
+    public static FarmClubDiary of(Diary diary, User user, String writeDateTime, int likeCount, int commentCount, boolean myLike, String status){
         return new FarmClubDiary(
                 diary.getId(),
                 diary.getImage(),
@@ -30,7 +32,9 @@ public class FarmClubDiary {
                 likeCount,
                 commentCount,
                 user.getNickname(),
-                user.getProfileImage()
+                user.getProfileImage(),
+                myLike,
+                status
         );
     }
 

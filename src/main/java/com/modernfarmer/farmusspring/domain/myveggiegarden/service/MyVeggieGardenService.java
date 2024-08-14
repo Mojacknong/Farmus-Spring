@@ -7,6 +7,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
+import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
 import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.VeggieInfoVo;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -27,9 +28,7 @@ import java.util.List;
 public class MyVeggieGardenService {
 
     private final MyVeggieRepository myVeggieRepository;
-    private final DateManager dateManager;
     private final MyDetailMyVeggieDto myDetailMyVeggieDto;
-
     private final VeggieInfoHelper veggieInfoHelper;
 
 
@@ -58,14 +57,16 @@ public class MyVeggieGardenService {
     @Transactional
     public BaseResponseDto<SelectMyVeggieProfileResponse> selectMyVeggieProfile(Long myVeggieId) {
         MyVeggie myVeggie = selectMyVeggieAndFarmClub(myVeggieId);
+        VeggieInfo veggieInfo = veggieInfoHelper.getVeggieInfoEntity(myVeggie.getVeggieInfoId());
         return BaseResponseDto.of(SuccessCode.SUCCESS,
                 SelectMyVeggieProfileResponse.of(
                         myVeggie.getNickname(),
                         myVeggie.getVeggieName(),
                         myVeggie.getVeggieImage(),
-                        dateManager.parsingDotDate(myVeggie.getBirth()),
-                        dateManager.calculateDay(myVeggie.getBirth(), new Date()),
-                        checkFarmClubAffiliation(myVeggie)
+                        DateManager.parsingDotDate(myVeggie.getBirth()),
+                        DateManager.calculateDay(myVeggie.getBirth(), new Date()),
+                        checkFarmClubAffiliation(myVeggie),
+                        veggieInfo.getSteps().size()
                         ));
     }
 

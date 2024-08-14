@@ -12,10 +12,11 @@ public record MissionPostVo(
         String image,
         String content,
         Long likeCount,
-        Long commentCount
+        Long commentCount,
+        Boolean isLiked
 ) {
     @QueryProjection
-    public MissionPostVo(MissionPost missionPost, User user, Long likeCount, Long commentCount)
+    public MissionPostVo(MissionPost missionPost, User user, Long likeCount, Long commentCount, Boolean isLiked)
     {
         this(
                 missionPost.getId(),
@@ -25,7 +26,8 @@ public record MissionPostVo(
                 missionPost.getImage(),
                 missionPost.getContent(),
                 likeCount,
-                commentCount
+                commentCount,
+                isLiked
         );
     }
 }

@@ -9,16 +9,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SettingMyVeggieRoutineReqeuest {
+public class DiaryDeleteDto {
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
-    private String content;
-
-    private boolean notify;
-
-    private int period;
+    private Long diaryId;
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
     private Long myVeggieId;
-
 }

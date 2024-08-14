@@ -51,7 +51,7 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
     }
 
     @Override
-    public List<MissionPostVo> getMissionPostList(Long farmClubId) {
+    public List<MissionPostVo> getMissionPostList(Long userId, Long farmClubId) {
 
         return queryFactory
                 .select(new QMissionPostVo(
@@ -62,7 +62,13 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                                 .where(missionPostLike.missionPost.eq(missionPost)),
                         JPAExpressions.select(missionPostComment.count())
                                 .from(missionPostComment)
-                                .where(missionPostComment.missionPost.eq(missionPost))))
+                                .where(missionPostComment.missionPost.eq(missionPost)),
+                        JPAExpressions.selectOne()
+                                .from(missionPostLike)
+                                .where(missionPostLike.missionPost.eq(missionPost)
+                                        .and(missionPostLike.user.id.eq(userId)))
+                                .exists()
+                        ))
                 .from(missionPost)
                 .join(missionPost.userFarmClub, userFarmClub)
                 .join(userFarmClub.myVeggie, myVeggie)
@@ -87,5 +93,14 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .where(userFarmClub.id.eq(userFarmClubId))
                 .orderBy(missionPost.stepNum.asc())
                 .fetch();
+    }
+
+    @Override
+    public void deleteMissionPostLike(Long userId, Long missionPostId) {
+        queryFactory
+                .delete(missionPostLike)
+                .where(missionPostLike.user.id.eq(userId)
+                        .and(missionPostLike.missionPost.id.eq(missionPostId)))
+                .execute();
     }
 }

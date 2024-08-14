@@ -1,7 +1,9 @@
 package com.modernfarmer.farmusspring.domain.user.service;
 
+import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryNotFoundException;
+import com.modernfarmer.farmusspring.domain.user.dto.response.AlarmStatus;
 import com.modernfarmer.farmusspring.domain.user.dto.response.UserProfileResponse;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
@@ -12,6 +14,7 @@ import com.modernfarmer.farmusspring.infra.s3.S3Config;
 import com.modernfarmer.farmusspring.infra.s3.S3Service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +23,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 @AllArgsConstructor
@@ -46,7 +50,6 @@ public class UserService {
 
     @Transactional
     public BaseResponseDto<Void> deleteProfleImage(Long userId) {
-
         updateProfileImage(userId);
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
@@ -57,20 +60,15 @@ public class UserService {
             MultipartFile multipartFile,
             String nickName
     ) throws IOException {
-
         updateUserProfileAccordingToProfileImage(multipartFile, nickName, userId);
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
-
     }
-
-
 
     public User selectUserById(Long userId){
         User user = userRepository.findUserData(userId);
         checkUserData(user);
         return user;
     }
-
 
     public void checkUserData(User user){
         if(user == null) {
@@ -83,6 +81,25 @@ public class UserService {
         User user = userRepository.findUserById(userId);
         user.initUser();
     }
+
+
+    @Transactional
+    public void modifyNotification(Long userId, Boolean status) {
+        userRepository.updateNotification(userId, status);
+    }
+
+    @Transactional
+    public void modifyNickname(Long userId, String nickname) {
+       userRepository.updateNickname(userId, nickname);
+    }
+
+    @Transactional
+    public AlarmStatus bringNotification(Long userId) {
+        User user = selectUserById(userId);
+        return AlarmStatus.of(user.getNotificationStatus());
+    }
+
+
 
     private void updateUserProfileAccordingToProfileImage(MultipartFile multipartFile, String nickName, Long userId) throws IOException {
         if(multipartFile.isEmpty()){
@@ -100,7 +117,7 @@ public class UserService {
     }
 
     private void updateNickname(String nickname, Long userId){
-        userRepository.updateUserNickname(nickname,userId);
+        userRepository.updateNickname(userId, nickname);
     }
 
     private void updateProfileAndNickname(Long userId, String imageUrl, String nickname){

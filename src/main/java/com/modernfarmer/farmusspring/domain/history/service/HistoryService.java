@@ -20,9 +20,18 @@ public class HistoryService {
 
     private final HistoryHelper historyHelper;
 
-    public HistoryResponseDto getUserHistory(Long userId) {
+    public void createHistory(Long userId) {
+        historyHelper.createUserHistory(userId);
+    }
+
+    public FarmClubHistoryIconResponseDto getFarmClubHistoryIcons(Long userId) {
         History history = historyHelper.getUserHistory(userId);
-        return HistoryResponseDto.of(history);
+        return FarmClubHistoryIconResponseDto.of(history);
+    }
+
+    public VeggieHistoryIconResponseDto getVeggieHistoryIcons(Long userId) {
+        History history = historyHelper.getUserHistory(userId);
+        return VeggieHistoryIconResponseDto.of(history);
     }
 
     public VeggieHistoryDetailResponseDto getVeggieHistoryDetail(String detailId) {

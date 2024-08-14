@@ -94,19 +94,29 @@ public class FarmClubController {
         return BaseResponseDto.of(SuccessCode.CREATED, missionPostService.createMissionPostComment(user.getUserId(), requestDto));
     }
 
-    @PostMapping("/mission/like")
+    @PostMapping("/mission/like/{missionPostId}")
     public BaseResponseDto<?> createMissionPostLike(
             @AuthenticationPrincipal CustomUser user,
-            @RequestBody CreateMissionPostLikeRequestDto requestDto
-            ) {
-        return BaseResponseDto.of(SuccessCode.CREATED, missionPostService.createMissionPostLike(user.getUserId(), requestDto.missionPostId()));
+            @PathVariable Long missionPostId
+    ) {
+        return BaseResponseDto.of(SuccessCode.CREATED, missionPostService.createMissionPostLike(user.getUserId(), missionPostId));
     }
 
-    @GetMapping("/{id}/mission")
-    public BaseResponseDto<?> getMissionPostList(
-            @PathVariable Long id
+    @DeleteMapping("/mission/like/{missionPostId}")
+    public BaseResponseDto<?> deleteMissionPostLike(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable Long missionPostId
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, missionPostService.getMissionPostList(id));
+        missionPostService.deleteMissionPostLike(user.getUserId(), missionPostId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @GetMapping("/{farmClubId}/mission")
+    public BaseResponseDto<?> getMissionPostList(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable Long farmClubId
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, missionPostService.getMissionPostList(user.getUserId(), farmClubId));
     }
 
     @GetMapping("/mission/{id}")
@@ -145,6 +155,22 @@ public class FarmClubController {
             @AuthenticationPrincipal CustomUser user
     ) {
         farmClubService.withdrawFarmClub(farmClubId, user.getUserId(), deleteVeggie);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @GetMapping("/check")
+    public BaseResponseDto<?> createFarmClubCheck(
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.checkCreateFarmClub(user.getUserId()));
+    }
+
+    @DeleteMapping("/{farmClubId}/success")
+    public BaseResponseDto<?> successFarmClub(
+            @PathVariable Long farmClubId,
+            @AuthenticationPrincipal CustomUser user
+    ) {
+        farmClubService.successFarmClub(farmClubId, user.getUserId());
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 }

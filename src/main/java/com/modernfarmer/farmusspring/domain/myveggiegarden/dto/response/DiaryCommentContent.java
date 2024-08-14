@@ -24,6 +24,7 @@ public class DiaryCommentContent {
     private String date;
     private String nickname;
     private String profileImage;
+    private Long commentId;
 
     public static DiaryCommentContent of(Boolean check, DiaryComment diaryComment, User user){
         return new DiaryCommentContent(
@@ -31,7 +32,9 @@ public class DiaryCommentContent {
                 diaryComment.getComment(),
                 DateManager.parsingDotDateTime(diaryComment.getCreatedDate()),
                 user.getNickname(),
-                user.getProfileImage());
+                user.getProfileImage(),
+                diaryComment.getId()
+        );
     }
 
 

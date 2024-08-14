@@ -4,9 +4,11 @@ import com.modernfarmer.farmusspring.domain.farmclub.entity.MissionPost;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.FarmClubErrorCode;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.custom.FarmClubEntityNotFoundException;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.MissionPostRepository;
+import com.modernfarmer.farmusspring.domain.farmclub.vo.MissionPostVo;
 import com.modernfarmer.farmusspring.domain.history.vo.MissionPostHistoryVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,5 +25,14 @@ public class MissionPostHelper {
 
     public List<MissionPostHistoryVo> getMissionPostHistory(Long userFarmClubId) {
         return missionPostRepository.getMissionPostHistory(userFarmClubId);
+    }
+
+    public List<MissionPostVo> getMissionPostList(Long userId, Long missionPostId) {
+        return missionPostRepository.getMissionPostList(userId, missionPostId);
+    }
+
+    @Transactional
+    public void deleteMissionPostLike(Long userId, Long missionPostId) {
+        missionPostRepository.deleteMissionPostLike(userId, missionPostId);
     }
 }

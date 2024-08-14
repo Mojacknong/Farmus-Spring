@@ -30,7 +30,7 @@ public class MyVeggieDiaryController {
 
     private final MyVeggieDiaryService myVeggieDiaryService;
 
-    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public BaseResponseDto<Void> settingMyVeggieDiary(
             @RequestPart(value = "image", required = false) MultipartFile multipartFile,
             @RequestPart MyVeggieDiaryInsert myVeggieDiaryInsert
@@ -46,46 +46,46 @@ public class MyVeggieDiaryController {
 
 
     @GetMapping(value = "/{farmClubId}")
-    public BaseResponseDto<FarmClubDiary> findFarmClubDiary(
-            @PathVariable("farmClubId") Long farmClubId){
-
-        List<FarmClubDiary> farmClubDiaryList = myVeggieDiaryService.findDiaryAccordingToFarmClub(farmClubId);
+    public BaseResponseDto<FarmClubDiary> findFarmClubDiary(@PathVariable("farmClubId") Long farmClubId, @AuthenticationPrincipal CustomUser user){
+        List<FarmClubDiary> farmClubDiaryList = myVeggieDiaryService.findDiaryAccordingToFarmClub(farmClubId, user.getUserId());
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubDiaryList);
+    }
+
+    @DeleteMapping()
+    public BaseResponseDto<?> eraseDiary(
+            @Validated @RequestBody DiaryDeleteDto diaryDeleteDto,
+            @AuthenticationPrincipal CustomUser user
+    ){
+        myVeggieDiaryService.eraseDiary(diaryDeleteDto, user.getUserId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
 
 
     @GetMapping(value = "/{myVeggieId}/check")
-    public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(
-            @PathVariable("myVeggieId") Long myVeggieId
-    )  {
+    public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(@PathVariable("myVeggieId") Long myVeggieId)  {
         return myVeggieDiaryService.checkTodayDiary(MyVeggie.builder().id(myVeggieId).build());
     }
 
     @GetMapping(value = "/{myVeggieId}/one")
-    public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(
-            @PathVariable("myVeggieId") Long myVeggieId
-    )  {
+    public BaseResponseDto<SelectDiaryOneResponse> selectDiaryOne(@PathVariable("myVeggieId") Long myVeggieId) {
         return myVeggieDiaryService.selectDiaryOne(MyVeggie.builder().id(myVeggieId).build());
     }
 
     @GetMapping(value = "/{myVeggieId}/count")
-    public BaseResponseDto<MyVeggieDiaryCount> selectDiaryCount(
-            @PathVariable("myVeggieId") Long myVeggieId
-    )  {
+    public BaseResponseDto<MyVeggieDiaryCount> selectDiaryCount(@PathVariable("myVeggieId") Long myVeggieId)  {
         MyVeggie myVeggie = MyVeggie.builder().id(myVeggieId).build();
         MyVeggieDiaryCount result = myVeggieDiaryService.selectDiaryCount(myVeggie);
-
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
     }
 
     @GetMapping(value = "/{myVeggieId}/all")
     public BaseResponseDto<MyVeggieDiaryCount> selectDiaryAll(
-            @PathVariable("myVeggieId") Long myVeggieId
+            @PathVariable("myVeggieId") Long myVeggieId,
+            @AuthenticationPrincipal CustomUser user
     )  {
         MyVeggie myVeggie = MyVeggie.builder().id(myVeggieId).build();
-        List<AllDairy> result = myVeggieDiaryService.selectDiaryAll(myVeggie);
-
+        List<AllDairy> result = myVeggieDiaryService.selectDiaryAll(myVeggie, user.getUserId());
         return BaseResponseDto.of(SuccessCode.SUCCESS, result);
     }
 
@@ -107,15 +107,10 @@ public class MyVeggieDiaryController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
-    @GetMapping(value = "/{diaryId}/{farmClubId}/comment")
-    public BaseResponseDto<?> selectComment(
-            @AuthenticationPrincipal CustomUser user,
-            @PathVariable("diaryId") Long diaryId,
-            @PathVariable("farmClubId") Long farmClubId
-    )  {
-        List<DiaryCommentContent> diaryCommentList = myVeggieDiaryService.selectComment(user.getUserId(), diaryId, farmClubId);
-
-        return BaseResponseDto.of(SuccessCode.SUCCESS, diaryCommentList);
+    @GetMapping(value = "/{diaryId}/comment")
+    public BaseResponseDto<?> selectComment(@AuthenticationPrincipal CustomUser user, @PathVariable("diaryId") Long diaryId)  {
+        DiaryInteractionsDto interactionsDto = myVeggieDiaryService.selectComment(user.getUserId(), diaryId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, interactionsDto);
     }
 
 

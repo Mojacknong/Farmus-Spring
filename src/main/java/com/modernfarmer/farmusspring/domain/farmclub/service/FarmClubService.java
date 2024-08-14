@@ -5,11 +5,13 @@ import com.modernfarmer.farmusspring.domain.farmclub.dto.res.*;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
+import com.modernfarmer.farmusspring.domain.farmclub.helper.UserFarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.FarmClubRepository;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.MissionPostRepository;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.UserFarmClubRepository;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
+import com.modernfarmer.farmusspring.domain.history.helper.HistoryHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.vo.MyVeggieVo;
@@ -31,15 +33,30 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class FarmClubService {
-    private final UserFarmClubRepository userFarmClubRepository;
-
     private final FarmClubHelper farmClubHelper;
     private final VeggieInfoHelper veggieInfoHelper;
     private final MyVeggieHelper myVeggieHelper;
     private final UserHelper userHelper;
+    private final HistoryHelper historyHelper;
 
     private final MissionPostRepository missionPostRepository;
     private final FarmClubRepository farmClubRepository;
+    private final UserFarmClubHelper userFarmClubHelper;
+
+    public CreateFarmClubCheckResponseDto checkCreateFarmClub(Long userId) {
+        List<MyVeggieVo> myVeggieList = myVeggieHelper.getMyVeggieInfo(userId);
+        log.info("myVeggieList: {}", myVeggieList);
+        if (!myVeggieList.isEmpty()) {
+            return CreateFarmClubCheckResponseDto.of(true, 0L);
+        } else {
+            if (myVeggieHelper.checkMyVeggie(userId)) {
+                return CreateFarmClubCheckResponseDto.of(false, 1L);
+            } else {
+                return CreateFarmClubCheckResponseDto.of(false, 2L);
+
+            }
+        }
+    }
 
     @Transactional
     public CreateFarmClubResponseDto createFarmClub(CreateFarmClubRequestDto request, Long userId) {
@@ -64,9 +81,11 @@ public class FarmClubService {
         List<FarmClub> result = farmClubRepository.getRecommendedFarmClubList(level);
         VeggieInfo.Help helpFirst = veggieInfoHelper.getVeggieInfoHelp(result.get(0).getVeggieInfoId());
         VeggieInfo.Help helpSecond = veggieInfoHelper.getVeggieInfoHelp(result.get(1).getVeggieInfoId());
+        String userNickname = userHelper.getUserNickname(userId);
         return GetRecommendFarmClubResponseDto.of(
                 GetFarmClubResponseDto.of(result.get(0), result.get(0).getUserFarmClubs().size(), helpFirst),
-                GetFarmClubResponseDto.of(result.get(1), result.get(1).getUserFarmClubs().size(), helpSecond)
+                GetFarmClubResponseDto.of(result.get(1), result.get(1).getUserFarmClubs().size(), helpSecond),
+                userNickname
         );
     }
 
@@ -91,6 +110,14 @@ public class FarmClubService {
         farmClub.addUserFarmClub(userFarmClub);
         myVeggie.setUserFarmClub(userFarmClub);
         return RegisterFarmClubResponseDto.of(userFarmClub.getId());
+    }
+
+    @Transactional
+    public void successFarmClub(Long farmClubId, Long userId) {
+        UserFarmClub userFarmClub = userFarmClubHelper.findByUserIdAndFarmClubId(userId, farmClubId);
+        historyHelper.createFarmClubHistoryDetail(userId, userFarmClub.getId(), userFarmClub.getFarmClub().getVeggieInfoId());
+        userFarmClub.getMyVeggie().setUserFarmClub(null);
+        userFarmClubHelper.deleteUserFarmClub(userFarmClub);
     }
 
     // 팜클럽으로부터 채소 정보 id, 이름, 이미지, 시작일, 전체 멤버 수 가져옴
@@ -131,8 +158,8 @@ public class FarmClubService {
 
     // 팜클럽 탈퇴
     public void withdrawFarmClub(Long farmClubId, Long userId, Boolean deleteVeggie) {
-        UserFarmClub userFarmClub = userFarmClubRepository.findByUserIdAndFarmClubId(userId, farmClubId);
-        userFarmClubRepository.deleteById(userFarmClub.getId());
+        UserFarmClub userFarmClub = userFarmClubHelper.findByUserIdAndFarmClubId(userId, farmClubId);
+        userFarmClubHelper.deleteUserFarmClub(userFarmClub);
         if (deleteVeggie) {
             Long myVeggieId = userFarmClub.getMyVeggie().getId();
             myVeggieHelper.getMyVeggieEntity(myVeggieId);

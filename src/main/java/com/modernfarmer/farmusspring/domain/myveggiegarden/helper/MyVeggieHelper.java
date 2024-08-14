@@ -32,6 +32,10 @@ public class MyVeggieHelper {
         return myVeggieRepository.findMyVeggieInfoForCreate(userId);
     }
 
+    public boolean checkMyVeggie(Long userId) {
+        return myVeggieRepository.existsByUserId(userId);
+    }
+
     public void deleteMyVeggie(Long id) {
         myVeggieRepository.deleteById(id);
     }

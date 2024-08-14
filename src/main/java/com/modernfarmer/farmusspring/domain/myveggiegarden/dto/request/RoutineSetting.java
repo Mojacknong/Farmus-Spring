@@ -9,9 +9,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class MyRoutineCheck {
+public class RoutineSetting {
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
-    private Long routineId;
+    private String content;
+
+    private boolean notify;
+
+    private int period;
+
+    @NotNull(message = "null 값을 가지면 안됩니다.")
+    private Long myVeggieId;
+
 }

@@ -15,31 +15,27 @@ import java.util.Optional;
 public interface UserRepository  extends JpaRepository<User, Long> {
 
     Optional<User> findByUserNumber(String usernumber);
-
     @Query("SELECT a FROM user AS a  WHERE a.id = :userId")
     User findUserData(@Param("userId") Long userId);
-
     User findUserById(Long userId);
-
     @Modifying
     @Query("update user as u set u.level= :level where u.id = :userId")
     void insertUserLevel(@Param("userId") Long userId, @Param("level") String level);
-
     @Modifying
     @Query("update user as u set u.early = false where u.id = :userId")
     void updateEarly( @Param("userId") Long userId);
-
     @Modifying
     @Query("update user as u set u.profileImage = null where u.id = :userId")
-    void updateProfileImage( @Param("userId") Long userId);
-
-
+    void updateProfileImage(@Param("userId") Long userId);
+    @Modifying
+    @Query("update user as u set u.notificationStatus = :status where u.id = :userId")
+    void updateNotification(@Param("userId") Long userId, @Param("status") Boolean status);
     @Modifying
     @Query("update user as u set u.profileImage = :profileImage, u.nickname = :nickName where u.id = :userId")
     void selectProfileAndNickname(@Param("userId") Long userId, @Param("profileImage") String profileImage, @Param("nickName") String nickName);
-
-
     @Modifying
     @Query("update user as u set u.nickname = :nickName where u.id = :userId")
-    void updateUserNickname(@Param("nickName") String nickName, @Param("userId") Long userId);
+    void updateNickname(@Param("userId") Long userId, @Param("nickName") String nickName);
+
+
 }

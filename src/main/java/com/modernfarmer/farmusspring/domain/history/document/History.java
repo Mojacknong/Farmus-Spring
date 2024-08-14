@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @AllArgsConstructor
@@ -25,8 +26,8 @@ public class History extends BaseDocument {
 
     private Long userId;
     
-    private List<Icon> veggieHistoryIcons;
-    private List<Icon> farmClubHistoryIcons;
+    private Set<Icon> veggieHistoryIcons;
+    private Set<Icon> farmClubHistoryIcons;
 
     private List<Detail> veggieHistoryDetails;
     private List<Detail> farmClubHistoryDetails;
@@ -55,14 +56,16 @@ public class History extends BaseDocument {
 
         private String detailId;
         private String image;
+        private String backgroundColor;
         private String historyName;
         private String name;
         private String period;
 
-        public static Detail createDetail(String detailId, String image, String historyName, String name, String period) {
+        public static Detail createDetail(String detailId, String image, String backgroundColor, String historyName, String name, String period) {
             return Detail.builder()
                     .detailId(detailId)
                     .image(image)
+                    .backgroundColor(backgroundColor)
                     .historyName(historyName)
                     .name(name)
                     .period(period)
@@ -73,6 +76,8 @@ public class History extends BaseDocument {
     public static History createHistory(Long userId) {
         return History.builder()
                 .userId(userId)
+                .veggieHistoryIcons(Set.of())
+                .farmClubHistoryIcons(Set.of())
                 .veggieHistoryDetails(new ArrayList<>())
                 .farmClubHistoryDetails(new ArrayList<>())
                 .veggieHistoryIcons(new ArrayList<>())
