@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface UserMotivationRepository extends JpaRepository<UserMotivation, Long> {
 
-    @Modifying
-    @Query(value = "INSERT INTO user_motivation(motivation, user_id) VALUES (:motivation, :userId)", nativeQuery = true)
-    void insertMotivation(@Param("motivation") String motivation, @Param("userId") Long userId);
+    @Query("select um from user_motivation as um where um.user.id = :userId")
+    List<UserMotivation> findUserMotivationByUserId(@Param("userId") Long userId);
+
+
 
 }
