@@ -80,8 +80,6 @@ public class History extends BaseDocument {
                 .farmClubHistoryIcons(Set.of())
                 .veggieHistoryDetails(new ArrayList<>())
                 .farmClubHistoryDetails(new ArrayList<>())
-                .veggieHistoryIcons(new ArrayList<>())
-                .farmClubHistoryIcons(new ArrayList<>())
                 .build();
     }
 
