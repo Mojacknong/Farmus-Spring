@@ -98,8 +98,6 @@ public class MyVeggieDiaryService {
             throw new MyVeggieNotFoundException("존재하지 않는 채소입니다.",MyVeggieGardenErrorCode.NOT_FOUND_VEGGIE);
         }
     }
-
-
     @Transactional
     public List<FarmClubDiary> findDiaryAccordingToFarmClub(Long farmClubId, Long userId) {
         List<SortedMyLikeDiary> diaryList = diaryRepository.findDiaryByFarmClub(farmClubId, userId);
@@ -198,45 +196,34 @@ public class MyVeggieDiaryService {
         int commentCount = diaryCommentRepository.findDiaryCommentCountById(diaryId);
         return DiaryInteractionsDto.of(diaryCommentContent,likeCount,commentCount);
     }
-
-
-
     public void insertComment(String content, User user, Diary diary){
         DiaryComment diaryComment = DiaryComment.createDiaryComment(content, diary, user);
         diary.addDiaryComment(diaryComment);
     }
-
     public void insertLike(User user, Diary diary){
         DiaryLike newDiary = DiaryLike.createDiaryLike(diary, user);
         diary.addDiaryLike(newDiary);
     }
-
     public void deleteLike(User user, Diary diary){
         diaryRepository.deleteDiaryLikeByIdAndUser(user, diary);
     }
-
     public boolean verifyDiaryState(Diary diary){
         if(diary == null){return true;}
         return  false;
     }
-
     public Diary selectTodayDiary(MyVeggie myVeggie){
         return myVeggieRepository.findDiariesByMyVeggieAndToday(myVeggie);
     }
-
-
     public Diary selectDiaryById(Long diaryId){
         Diary diaryData =  myVeggieRepository.findDiaryById(diaryId);
         checkDiaryData(diaryData);
         return diaryData;
     }
-
     public void checkDiaryData(Diary diary){
         if(diary == null) {
             throw new DiaryNotFoundException("해당 일기는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like);
         }
     }
-
     public void checkLikeDeleteData(DiaryLike diaryLike){
         if(diaryLike == null) {
             throw new LikeNotFoundException("해당 좋아요 데이터는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like);
@@ -247,7 +234,6 @@ public class MyVeggieDiaryService {
             throw new DiaryCommentNotFoundException("해당 유저는 댓글 삭제 권한이 없습니다.");
         }
     }
-
     private void addMyyVeggieDiary(
             String content,
             boolean isOpen,
@@ -265,7 +251,6 @@ public class MyVeggieDiaryService {
         );
         myVeggie.addDiary(newDiary);
     }
-
     private String getImageUrl(MultipartFile multipartFile) throws IOException {
         return s3Service.uploadImage(multipartFile, "dairyimage");
     }

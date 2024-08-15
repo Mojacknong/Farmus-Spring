@@ -80,7 +80,7 @@ public class MyVeggieDiaryController {
     }
 
     @GetMapping(value = "/{myVeggieId}/all")
-    public BaseResponseDto<MyVeggieDiaryCount> selectDiaryAll(
+    public BaseResponseDto<?> selectDiaryAll(
             @PathVariable("myVeggieId") Long myVeggieId,
             @AuthenticationPrincipal CustomUser user
     )  {
