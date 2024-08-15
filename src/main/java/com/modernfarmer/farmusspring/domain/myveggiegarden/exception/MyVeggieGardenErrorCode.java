@@ -14,7 +14,8 @@ public enum MyVeggieGardenErrorCode implements ResponseCode {
     NOT_FOUND_DIARY_Like(3003, "해당 유저 권한의 좋아요를 찾을 수 없습니다."),
     NOT_FOUND_VEGGIE(3004, "해당 채소를 찾을 수 없습니다."),
     NO_VEGGIE_FOR_REGISTER(3005, "해당 팜클럽에 가입할 수 있는 채소가 없습니다."),
-    NO_ACCESS_DIARY(3006,"일기에 접근 권한이 없습니다.");
+    NO_ACCESS_DIARY(3006,"일기에 접근 권한이 없습니다."),
+    EXIST_ALREADY_LIKE(3007,"이미 좋아요가 존재합니다.");
 
     private final int code;
     private final String message;

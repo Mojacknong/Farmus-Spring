@@ -15,4 +15,9 @@ import java.util.Optional;
 public interface DiaryLikeRepository extends JpaRepository<DiaryLike, Long> {
     @Query("SELECT count(dl) FROM diary_like as dl WHERE dl.diary.id = :diaryId ")
     int findDiaryLikeCountById(@Param("diaryId") Long diaryId);
+
+    @Query("SELECT dl FROM diary_like as dl WHERE dl.diary.id = :diaryId AND dl.user.id = :userId")
+    Optional<DiaryLike> findDiaryLikeByDiaryIdAndUserId(@Param("diaryId") Long diaryId, @Param("userId") Long userId);
+
+
 }

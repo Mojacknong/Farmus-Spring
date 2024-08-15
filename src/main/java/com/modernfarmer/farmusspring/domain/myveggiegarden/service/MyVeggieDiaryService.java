@@ -1,6 +1,5 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
-import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DiaryDeleteDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
@@ -10,6 +9,8 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.DiaryAccessDeniedException;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.LikeNotFoundException;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.LikeAlreadyExistExcpetion;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.MyVeggieNotFoundException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryCommentRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryLikeRepository;
@@ -97,8 +98,6 @@ public class MyVeggieDiaryService {
             throw new MyVeggieNotFoundException("존재하지 않는 채소입니다.",MyVeggieGardenErrorCode.NOT_FOUND_VEGGIE);
         }
     }
-
-
     @Transactional
     public List<FarmClubDiary> findDiaryAccordingToFarmClub(Long farmClubId, Long userId) {
         List<SortedMyLikeDiary> diaryList = diaryRepository.findDiaryByFarmClub(farmClubId, userId);
@@ -134,15 +133,23 @@ public class MyVeggieDiaryService {
 
     @Transactional
     public void pressLike(Long userId, Long diaryId) {
+        Optional<DiaryLike> diaryLike = diaryLikeRepository.findDiaryLikeByDiaryIdAndUserId(diaryId, userId);
+        checkLikeData(diaryLike);
         User userData = userService.selectUserById(userId);
         Diary diaryData = selectDiaryById(diaryId);
         insertLike(userData, diaryData);
     }
 
+    public void checkLikeData(Optional<DiaryLike> diaryLike){
+        if(diaryLike.isPresent()) {
+            throw new LikeAlreadyExistExcpetion("좋아요 권한 에러", MyVeggieGardenErrorCode.EXIST_ALREADY_LIKE);
+        }
+    }
+
     @Transactional
     public void cancelLike(User user, Diary diary) {
         DiaryLike diaryLike = diaryRepository.findDiaryLikeByIdAndUser(user, diary);
-        checkDiaryLikeData(diaryLike);
+        checkLikeDeleteData(diaryLike);
         deleteLike(user, diary);
     }
 
@@ -189,48 +196,37 @@ public class MyVeggieDiaryService {
         int commentCount = diaryCommentRepository.findDiaryCommentCountById(diaryId);
         return DiaryInteractionsDto.of(diaryCommentContent,likeCount,commentCount);
     }
-
-
-
     public void insertComment(String content, User user, Diary diary){
         DiaryComment diaryComment = DiaryComment.createDiaryComment(content, diary, user);
         diary.addDiaryComment(diaryComment);
     }
-
     public void insertLike(User user, Diary diary){
         DiaryLike newDiary = DiaryLike.createDiaryLike(diary, user);
         diary.addDiaryLike(newDiary);
     }
-
     public void deleteLike(User user, Diary diary){
         diaryRepository.deleteDiaryLikeByIdAndUser(user, diary);
     }
-
     public boolean verifyDiaryState(Diary diary){
         if(diary == null){return true;}
         return  false;
     }
-
     public Diary selectTodayDiary(MyVeggie myVeggie){
         return myVeggieRepository.findDiariesByMyVeggieAndToday(myVeggie);
     }
-
-
     public Diary selectDiaryById(Long diaryId){
         Diary diaryData =  myVeggieRepository.findDiaryById(diaryId);
         checkDiaryData(diaryData);
         return diaryData;
     }
-
     public void checkDiaryData(Diary diary){
         if(diary == null) {
             throw new DiaryNotFoundException("해당 일기는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like);
         }
     }
-
-    public void checkDiaryLikeData(DiaryLike diaryLike){
+    public void checkLikeDeleteData(DiaryLike diaryLike){
         if(diaryLike == null) {
-            throw new DiaryLikeNotFoundException("해당 좋아요 데이터는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like);
+            throw new LikeNotFoundException("해당 좋아요 데이터는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like);
         }
     }
     public void validateDiaryComment(Optional<DiaryComment> diaryComment){
@@ -238,7 +234,6 @@ public class MyVeggieDiaryService {
             throw new DiaryCommentNotFoundException("해당 유저는 댓글 삭제 권한이 없습니다.");
         }
     }
-
     private void addMyyVeggieDiary(
             String content,
             boolean isOpen,
@@ -256,7 +251,6 @@ public class MyVeggieDiaryService {
         );
         myVeggie.addDiary(newDiary);
     }
-
     private String getImageUrl(MultipartFile multipartFile) throws IOException {
         return s3Service.uploadImage(multipartFile, "dairyimage");
     }

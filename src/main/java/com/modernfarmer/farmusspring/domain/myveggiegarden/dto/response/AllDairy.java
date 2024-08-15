@@ -34,15 +34,11 @@ public class AllDairy {
                 diaryAll.getDiary().getDiaryLikes().size(),
                 diaryAll.getDiary().getDiaryComments().size(),
                 diaryAll.isMyLike()
-
         );
     }
-
     public static List<AllDairy> processData(List<SortedMyLikeDiary> diaryAllList){
         return diaryAllList.stream()
                 .map(diaryAll -> AllDairy.of(diaryAll, formatDate(diaryAll.getDiary().getCreatedDate())))
                 .toList();
     }
-
-
 }

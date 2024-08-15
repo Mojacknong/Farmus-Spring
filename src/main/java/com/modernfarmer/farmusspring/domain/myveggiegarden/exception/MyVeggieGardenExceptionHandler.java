@@ -1,9 +1,9 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.exception;
 
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.LikeNotFoundException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.MyVeggieGardenBaseException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.RoutineNotFoundException;
-import com.modernfarmer.farmusspring.domain.test.exception.TestException;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -39,14 +39,6 @@ public class MyVeggieGardenExceptionHandler {
                 request.getRequestURI(),
                 e.getMessage());
         return BaseResponseDto.of(MyVeggieGardenErrorCode.NOT_FOUND_DIARY_COMMENT, e);
-    }
-    @ExceptionHandler(DiaryLikeNotFoundException.class)
-    public BaseResponseDto<?> handleDiaryLikeNotFoundException(DiaryLikeNotFoundException e, HttpServletRequest request) {
-        log.error("DiaryLikeException : {} {} errMessage={}\n",
-                request.getMethod(),
-                request.getRequestURI(),
-                e.getMessage());
-        return BaseResponseDto.of(MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like, e);
     }
 
     @ExceptionHandler(MyVeggieGardenBaseException.class)
