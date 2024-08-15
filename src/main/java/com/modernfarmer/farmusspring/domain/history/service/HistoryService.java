@@ -62,11 +62,11 @@ public class HistoryService {
 
     public void createVeggieHistoryResult(VeggieHistoryResultPostRequestDto requestDto, MultipartFile image) {
         String imageUrl = s3Service.uploadImage(image, "farm-result");
-        HistoryVeggieDetail.HistoryPost farmResult = HistoryVeggieDetail.HistoryPost.builder()
-                .postImage(imageUrl)
-                .content(requestDto.content())
-                .dateTime(DateManager.parsingDotDateTime(LocalDateTime.now()))
-                .build();
+        HistoryVeggieDetail.HistoryPost farmResult = HistoryVeggieDetail.createHistoryPost(
+                imageUrl,
+                requestDto.content(),
+                DateManager.parsingDotDateTime(LocalDateTime.now())
+        );
         historyHelper.createVeggieHistoryResult(farmResult, requestDto.historyDetailId());
     }
 }

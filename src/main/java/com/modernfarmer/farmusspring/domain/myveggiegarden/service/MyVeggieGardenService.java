@@ -97,11 +97,11 @@ public class MyVeggieGardenService {
     @Transactional
     public void successFarming(SuccessFarmingRequestDto requestDto, MultipartFile image, Long userId) {
         String imageUrl = s3Service.uploadImage(image, "farm-result");
-        HistoryVeggieDetail.HistoryPost farmResult = HistoryVeggieDetail.HistoryPost.builder()
-                .postImage(imageUrl)
-                .content(requestDto.content())
-                .dateTime(DateManager.parsingDotDateTime(LocalDateTime.now()))
-                .build();
+        HistoryVeggieDetail.HistoryPost farmResult = HistoryVeggieDetail.createHistoryPost(
+                imageUrl,
+                requestDto.content(),
+                DateManager.parsingDotDateTime(LocalDateTime.now())
+        );
         historyHelper.createVeggieHistoryDetail(userId, requestDto.myVeggieId(), farmResult);
         myVeggieHelper.deleteMyVeggie(requestDto.myVeggieId());
     }
