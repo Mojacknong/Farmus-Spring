@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.history.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
+import com.modernfarmer.farmusspring.domain.history.dto.req.VeggieHistoryResultPostRequestDto;
 import com.modernfarmer.farmusspring.domain.history.dto.res.*;
 import com.modernfarmer.farmusspring.domain.history.service.HistoryService;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -76,5 +78,14 @@ public class HistoryController {
             @PathVariable String detailId
     ) {
         return BaseResponseDto.of(SuccessCode.SUCCESS, historyService.getVeggieHistoryDetail(detailId));
+    }
+
+    @PostMapping("/veggie/result")
+    public BaseResponseDto<?> postFarmResult(
+            @RequestPart("image") final MultipartFile image,
+            @RequestPart("requestDto") final VeggieHistoryResultPostRequestDto requestDto
+    ) {
+        historyService.createVeggieHistoryResult(requestDto, image);
+        return BaseResponseDto.of(SuccessCode.CREATED, null);
     }
 }

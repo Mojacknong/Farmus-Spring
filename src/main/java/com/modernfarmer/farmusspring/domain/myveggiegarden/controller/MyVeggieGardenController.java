@@ -5,6 +5,7 @@ import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.MyVeggieUpdate;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SuccessFarmingRequestDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.MyDetailMyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieListResponse;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.SelectMyVeggieProfileResponse;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -77,6 +79,14 @@ public class MyVeggieGardenController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
-
+    @PostMapping("/success")
+    public BaseResponseDto<?> successFarming(
+            @RequestPart("requestDto") SuccessFarmingRequestDto requestDto,
+            @RequestPart("image") final MultipartFile image,
+            @AuthenticationPrincipal CustomUser user
+    ){
+        myVeggieGardenService.successFarming(requestDto, image, user.getUserId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
 
 }

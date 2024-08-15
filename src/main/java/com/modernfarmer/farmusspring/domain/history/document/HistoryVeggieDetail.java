@@ -43,6 +43,14 @@ public class HistoryVeggieDetail extends BaseDocument {
                 .build();
     }
 
+    public static HistoryPost createHistoryPost(String postImage, String content, String dateTime) {
+        return HistoryPost.builder()
+                .postImage(postImage)
+                .content(content)
+                .dateTime(dateTime)
+                .build();
+    }
+
     public void updateHistoryDetailResult(HistoryPost farmResult) {
         this.farmResult = farmResult;
     }

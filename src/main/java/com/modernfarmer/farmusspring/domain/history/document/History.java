@@ -90,4 +90,12 @@ public class History extends BaseDocument {
     public void addFarmClubHistoryDetail(Detail detail) {
         farmClubHistoryDetails.add(detail);
     }
+
+    public void addVeggieHistoryIcon(Icon icon) {
+        veggieHistoryIcons.add(icon);
+    }
+
+    public void addFarmClubHistoryIcon(Icon icon) {
+        farmClubHistoryIcons.add(icon);
+    }
 }

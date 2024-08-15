@@ -12,9 +12,13 @@ import com.modernfarmer.farmusspring.domain.history.repository.HistoryRepository
 import com.modernfarmer.farmusspring.domain.history.repository.HistoryVeggieDetailRepository;
 import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
 import com.modernfarmer.farmusspring.domain.history.vo.MissionPostHistoryVo;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
 import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.StepVo;
+import jakarta.transaction.Transactional;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.VeggieInfoVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +26,8 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import static com.modernfarmer.farmusspring.domain.history.utils.StringUtil.getHistoryPeriod;
@@ -68,24 +74,36 @@ public class HistoryHelper {
         historyRepository.save(history);
     }
 
-    public void createVeggieHistoryDetail(Long myVeggieId) {
-
+    @Transactional
+    public void createVeggieHistoryDetail(Long userId, Long myVeggieId, HistoryVeggieDetail.HistoryPost farmResult) {
+        MyVeggie myVeggie = myVeggieHelper.getMyVeggieEntity(myVeggieId);
+        VeggieInfoVo veggieInfo = veggieInfoHelper.getVeggieInfo(myVeggie.getVeggieInfoId());
         // 해당 채소의 모든 성장일기를 가져옴
         // 이미지, 내용, 날짜
+        List<Diary> diaries = myVeggieHelper.getDiariesByMyVeggie(myVeggie);
+        List<HistoryVeggieDetail.HistoryPost> diaryHistories = diaries.stream()
+                .map(diary -> HistoryVeggieDetail.HistoryPost.builder()
+                        .postImage(diary.getImage())
+                        .content(diary.getContent())
+                        .dateTime(DateManager.parsingDotDateTime(diary.getCreatedDate()))
+                        .build())
+                .toList();
 
+        HistoryVeggieDetail historyVeggieDetail = HistoryVeggieDetail.createHistoryDetail(diaryHistories, farmResult);
+        String veggieDetailId = historyVeggieDetailRepository.save(historyVeggieDetail).getId().toHexString();
 
-        // 히스토리 베지 디테일 생성 및 아이디 반환
-
-
-        // 반환한 아이디로 히스토리 디테일 생성
-
-
-        // 내채소 아이디로 채소 이미지, 채소 닉네임, 채소명, 팜클럽 기간 조회
-
-
-        // 유저 히스토리 조회 및 디테일 추가
-
-
+        History.Detail historyDetail = History.Detail.createDetail(
+                veggieDetailId,
+                myVeggie.getVeggieImage(),
+                veggieInfo.backgroundColor(),
+                myVeggie.getNickname(),
+                myVeggie.getVeggieName(),
+                getHistoryPeriod(myVeggie.getBirth().toString(), LocalDate.now().toString()));
+        History.Icon icon = History.Icon.createIcon(veggieInfo.veggieImage(), veggieInfo.backgroundColor());
+        History history = getUserHistory(userId);
+        history.getVeggieHistoryDetails().add(historyDetail);
+        history.getVeggieHistoryIcons().add(icon);
+        historyRepository.save(history);
     }
 
     private static List<HistoryFarmClubDetail.HistoryClubPost> getHistoryClubPostList(List<MissionPostHistoryVo> missionPostHistoryList, List<StepVo> stepList) {
@@ -105,6 +123,13 @@ public class HistoryHelper {
                             .build();
                 })
                 .toList();
+    }
+
+    @Transactional
+    public void createVeggieHistoryResult(HistoryVeggieDetail.HistoryPost farmResult, String veggieDetailId) {
+        HistoryVeggieDetail historyVeggieDetail = getVeggieHistoryDetail(veggieDetailId);
+        historyVeggieDetail.updateHistoryDetailResult(farmResult);
+        historyVeggieDetailRepository.save(historyVeggieDetail);
     }
 
     public History getUserHistory(Long userId) {

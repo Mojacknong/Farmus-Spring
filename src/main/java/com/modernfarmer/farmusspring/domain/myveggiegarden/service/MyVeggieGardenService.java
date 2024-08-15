@@ -1,10 +1,14 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
+import com.modernfarmer.farmusspring.domain.history.document.HistoryVeggieDetail;
+import com.modernfarmer.farmusspring.domain.history.helper.HistoryHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DeleteMyVeggieRequest;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.MyVeggieUpdate;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SettingMyVeggieRequest;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.SuccessFarmingRequestDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.util.DateManager;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.veggieinfo.entity.VeggieInfo;
@@ -12,13 +16,16 @@ import com.modernfarmer.farmusspring.domain.veggieinfo.helper.VeggieInfoHelper;
 import com.modernfarmer.farmusspring.domain.veggieinfo.vo.VeggieInfoVo;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
+import com.modernfarmer.farmusspring.infra.s3.S3Service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +37,9 @@ public class MyVeggieGardenService {
     private final MyVeggieRepository myVeggieRepository;
     private final MyDetailMyVeggieDto myDetailMyVeggieDto;
     private final VeggieInfoHelper veggieInfoHelper;
+    private final MyVeggieHelper myVeggieHelper;
+    private final HistoryHelper historyHelper;
+    private final S3Service s3Service;
 
 
 
@@ -84,7 +94,17 @@ public class MyVeggieGardenService {
         myVeggieRepository.updateMyVeggie(myVeggieUpdate.getMyVeggieId(), myVeggieUpdate.getNickname(), myVeggieUpdate.getBirth());
     }
 
-
+    @Transactional
+    public void successFarming(SuccessFarmingRequestDto requestDto, MultipartFile image, Long userId) {
+        String imageUrl = s3Service.uploadImage(image, "farm-result");
+        HistoryVeggieDetail.HistoryPost farmResult = HistoryVeggieDetail.createHistoryPost(
+                imageUrl,
+                requestDto.content(),
+                DateManager.parsingDotDateTime(LocalDateTime.now())
+        );
+        historyHelper.createVeggieHistoryDetail(userId, requestDto.myVeggieId(), farmResult);
+        myVeggieHelper.deleteMyVeggie(requestDto.myVeggieId());
+    }
 
     public int checkFarmClubAffiliation(MyVeggie myVeggie){
         if(myVeggie.getUserFarmClub() == null)
