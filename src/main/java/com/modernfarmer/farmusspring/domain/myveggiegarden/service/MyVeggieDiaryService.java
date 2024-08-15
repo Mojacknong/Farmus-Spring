@@ -1,6 +1,5 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
-import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DiaryDeleteDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
@@ -10,6 +9,8 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.DiaryAccessDeniedException;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.LikeNotFoundException;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.LikeAlreadyExistExcpetion;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.MyVeggieNotFoundException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryCommentRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryLikeRepository;
@@ -134,15 +135,23 @@ public class MyVeggieDiaryService {
 
     @Transactional
     public void pressLike(Long userId, Long diaryId) {
+        Optional<DiaryLike> diaryLike = diaryLikeRepository.findDiaryLikeByDiaryIdAndUserId(diaryId, userId);
+        checkLikeData(diaryLike);
         User userData = userService.selectUserById(userId);
         Diary diaryData = selectDiaryById(diaryId);
         insertLike(userData, diaryData);
     }
 
+    public void checkLikeData(Optional<DiaryLike> diaryLike){
+        if(diaryLike.isPresent()) {
+            throw new LikeAlreadyExistExcpetion("좋아요 권한 에러", MyVeggieGardenErrorCode.EXIST_ALREADY_LIKE);
+        }
+    }
+
     @Transactional
     public void cancelLike(User user, Diary diary) {
         DiaryLike diaryLike = diaryRepository.findDiaryLikeByIdAndUser(user, diary);
-        checkDiaryLikeData(diaryLike);
+        checkLikeDeleteData(diaryLike);
         deleteLike(user, diary);
     }
 
@@ -228,9 +237,9 @@ public class MyVeggieDiaryService {
         }
     }
 
-    public void checkDiaryLikeData(DiaryLike diaryLike){
+    public void checkLikeDeleteData(DiaryLike diaryLike){
         if(diaryLike == null) {
-            throw new DiaryLikeNotFoundException("해당 좋아요 데이터는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like);
+            throw new LikeNotFoundException("해당 좋아요 데이터는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY_Like);
         }
     }
     public void validateDiaryComment(Optional<DiaryComment> diaryComment){
