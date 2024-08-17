@@ -70,5 +70,5 @@ jobs:
             script: |
                 sudo docker pull modernfarmer/farmus-spring
                 cd docker-compose
-                ./deploy.sh
+                bash deploy.sh
                 docker image prune -f
