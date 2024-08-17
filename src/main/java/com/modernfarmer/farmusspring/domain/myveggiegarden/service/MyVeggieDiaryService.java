@@ -63,14 +63,12 @@ public class MyVeggieDiaryService {
         );
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
-
     @Transactional
     public BaseResponseDto<CheckTodayDiaryResponse> checkTodayDiary(MyVeggie myVeggie) {
         Diary diary = selectTodayDiary(myVeggie);
         boolean state = verifyDiaryState(diary);
         return BaseResponseDto.of(SuccessCode.SUCCESS,CheckTodayDiaryResponse.of(state));
     }
-
     @Transactional
     public void eraseDiary(DiaryDeleteDto diaryDeleteDto, Long userId){
         Optional<MyVeggie> myVeggie = myVeggieRepository.findMyVeggieByIdAndUserId((diaryDeleteDto.getMyVeggieId()), userId);
@@ -80,19 +78,16 @@ public class MyVeggieDiaryService {
         validateDiaryDelete(diary, diaryDeleteDto.getDiaryId());
         diaryRepository.deleteDiaryById(diaryDeleteDto.getDiaryId());
     }
-
     public void verifyDiary(Optional<Diary> diary){
         if(diary.isEmpty()){
             throw new DiaryNotFoundException("해당 일기는 존재하지 않습니다.", MyVeggieGardenErrorCode.NOT_FOUND_DIARY);
         }
     }
-
     public void validateDiaryDelete(Optional<Diary> diary, Long diaryId){
         if(!diary.get().getId().equals(diaryId)){
             throw new DiaryAccessDeniedException("해당 일기 접근권한이 없습니다.", MyVeggieGardenErrorCode.NO_ACCESS_DIARY);
         }
     }
-
     public void verifyMyVeggie(Optional<MyVeggie> myVeggie){
         if(myVeggie.isEmpty()){
             throw new MyVeggieNotFoundException("존재하지 않는 채소입니다.",MyVeggieGardenErrorCode.NOT_FOUND_VEGGIE);
@@ -104,7 +99,6 @@ public class MyVeggieDiaryService {
         List<FarmClubDiary> proccessData = proccessFarmClubData(diaryList);
         return proccessData;
     }
-
     private List<FarmClubDiary> proccessFarmClubData(List<SortedMyLikeDiary> diaryAllList){
         return diaryAllList.stream().map(allDiary -> {
             User user = allDiary.getDiary().getMyVeggie().getUser();
@@ -118,19 +112,16 @@ public class MyVeggieDiaryService {
                     allDiary.getDiary().getState()
                     );}).toList();
     }
-
     @Transactional
     public List<AllDairy> selectDiaryAll(MyVeggie myVeggie, Long userId) {
         List<SortedMyLikeDiary> diaryList = diaryRepository.findDiariesByMyVeggie(myVeggie, userId);
         return AllDairy.processData(diaryList);
     }
-
     @Transactional
     public MyVeggieDiaryCount selectDiaryCount(MyVeggie myVeggie) {
         List<Diary> diaryList = myVeggieRepository.findDiariesByMyVeggie(myVeggie);
         return MyVeggieDiaryCount.processData(diaryList);
     }
-
     @Transactional
     public void pressLike(Long userId, Long diaryId) {
         Optional<DiaryLike> diaryLike = diaryLikeRepository.findDiaryLikeByDiaryIdAndUserId(diaryId, userId);
@@ -139,34 +130,29 @@ public class MyVeggieDiaryService {
         Diary diaryData = selectDiaryById(diaryId);
         insertLike(userData, diaryData);
     }
-
     public void checkLikeData(Optional<DiaryLike> diaryLike){
         if(diaryLike.isPresent()) {
             throw new LikeAlreadyExistExcpetion("좋아요 권한 에러", MyVeggieGardenErrorCode.EXIST_ALREADY_LIKE);
         }
     }
-
     @Transactional
     public void cancelLike(User user, Diary diary) {
         DiaryLike diaryLike = diaryRepository.findDiaryLikeByIdAndUser(user, diary);
         checkLikeDeleteData(diaryLike);
         deleteLike(user, diary);
     }
-
     @Transactional
     public void writeComment(Long userId, Long diaryId, String content) {
         User userData = userService.selectUserById(userId);
         Diary diaryData = selectDiaryById(diaryId);
         insertComment(content, userData, diaryData);
     }
-
     @Transactional
     public void deleteComment(User user, Long diaryCommentId) {
         Optional<DiaryComment> diaryCommentData = myVeggieRepository.findDiaryCommentByIdAndUserId(diaryCommentId, user);
         validateDiaryComment(diaryCommentData);
         myVeggieRepository.deleteDiaryCommentByIdAndUserId(diaryCommentId, user);
     }
-
     @Transactional
     public void updateComment(User user, Long diaryCommentId, String content) {
         Optional<DiaryComment> diaryCommentData = myVeggieRepository.findDiaryCommentByIdAndUserId(diaryCommentId, user);
@@ -186,15 +172,14 @@ public class MyVeggieDiaryService {
                         DateManager.formatDate(diaryList.get(0).getCreatedDate())
                 ));
     }
-
-
     @Transactional
     public DiaryInteractionsDto selectComment(Long userId, Long diaryId)  {
         List<DiaryComment> diaryCommentList = diaryRepository.findDiaryById(diaryId);
         List<DiaryCommentContent> diaryCommentContent = DiaryCommentContent.processData(diaryCommentList, userId);
         int likeCount = diaryLikeRepository.findDiaryLikeCountById(diaryId);
         int commentCount = diaryCommentRepository.findDiaryCommentCountById(diaryId);
-        return DiaryInteractionsDto.of(diaryCommentContent,likeCount,commentCount);
+        Optional<DiaryLike> diaryLike = diaryLikeRepository.findDiaryLikeByDiaryIdAndUserId(diaryId, userId);
+        return DiaryInteractionsDto.of(diaryCommentContent,likeCount,commentCount, diaryLike.isPresent());
     }
     public void insertComment(String content, User user, Diary diary){
         DiaryComment diaryComment = DiaryComment.createDiaryComment(content, diary, user);
