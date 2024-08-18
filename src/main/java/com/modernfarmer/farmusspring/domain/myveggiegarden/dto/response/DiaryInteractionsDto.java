@@ -18,12 +18,14 @@ public class DiaryInteractionsDto {
     private List<DiaryCommentContent> diaryCommentContent;
     private int likeCount;
     private int commentCount;
+    private boolean myLike;
 
-    public static DiaryInteractionsDto of(List<DiaryCommentContent> diaryCommentContentList, int likeCount, int commentCount){
+    public static DiaryInteractionsDto of(List<DiaryCommentContent> diaryCommentContentList, int likeCount, int commentCount, boolean myLike){
         return new DiaryInteractionsDto(
                 diaryCommentContentList,
                 likeCount,
-                commentCount
+                commentCount,
+                myLike
         );
     }
 }
