@@ -30,9 +30,11 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
+    @Value("${jwt.expireAccessToken}")
+    private long accessTokenTime;
 
-    private final long accessTokenTime = 60L * 1000 * 10000000;
-    private final long refreshTokenTime = 180L * 1000 * 1000000000;
+    @Value("${jwt.expireRefreshToken}")
+    private long refreshTokenTime;
 
 
     @PostConstruct
@@ -47,11 +49,10 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
         claims.put("roles", roles);
 
-        Date now = new Date();
         String token = Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + accessTokenTime))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + accessTokenTime))
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret 값 세팅
                 .compact();
 
@@ -62,11 +63,10 @@ public class JwtTokenProvider {
     public String createRefreshToken(Long userId) {            // 토큰 생성
         Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
 
-        Date now = new Date();
         String token = Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + refreshTokenTime))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenTime))
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret 값 세팅
                 .compact();
 

@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class S3Config {
 
-    @Value("${credentials.access-key}")
+    @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
-    @Value("${credentials.secret-key}")
+    @Value("${cloud.aws.credentials.secret-key}")
     private String secretKey;
     @Value("${cloud.aws.region.static}")
     private String region;
