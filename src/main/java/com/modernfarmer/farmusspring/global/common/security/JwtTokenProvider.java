@@ -30,9 +30,11 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
+    @Value("${jwt.expireAccessToken}")
+    private long accessTokenTime;
 
-    private final long accessTokenTime = 60L * 1000 * 10000000;
-    private final long refreshTokenTime = 180L * 1000 * 1000000000;
+    @Value("${jwt.expireRefreshToken}")
+    private long refreshTokenTime;
 
 
     @PostConstruct
