@@ -5,7 +5,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
 
 public record CreateMissionPostRequestDto(
         // 사진, 내용, 스텝번호
-        Long userFarmClubId,
+        Long farmClubId,
         String content
 ) {
 

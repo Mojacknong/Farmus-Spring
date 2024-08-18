@@ -7,7 +7,7 @@ import lombok.Builder;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record MissionPostHistoryVo(
-        Long stepNum,
+        int stepNum,
         String image,
         String content,
         String date
@@ -17,7 +17,7 @@ public record MissionPostHistoryVo(
     public MissionPostHistoryVo {
     }
 
-    public static MissionPostHistoryVo of(Long stepNum, String image, String content, String date) {
+    public static MissionPostHistoryVo of(int stepNum, String image, String content, String date) {
         return MissionPostHistoryVo.builder()
                 .stepNum(stepNum)
                 .image(image)

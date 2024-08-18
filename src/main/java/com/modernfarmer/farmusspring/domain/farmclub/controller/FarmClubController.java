@@ -80,10 +80,11 @@ public class FarmClubController {
 
     @PostMapping("/mission")
     public BaseResponseDto<?> createMissionPost(
+            @AuthenticationPrincipal CustomUser user,
             @RequestPart CreateMissionPostRequestDto requestDto,
             @RequestPart(value = "image") MultipartFile image
     ) {
-        return BaseResponseDto.of(SuccessCode.CREATED, missionPostService.createMissionPost(requestDto, image));
+        return BaseResponseDto.of(SuccessCode.CREATED, missionPostService.createMissionPost(user.getUserId(), requestDto, image));
     }
 
     @PostMapping("/mission/comment")

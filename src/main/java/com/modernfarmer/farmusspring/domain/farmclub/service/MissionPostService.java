@@ -36,8 +36,8 @@ public class MissionPostService {
     private final S3Service s3Service;
 
     @Transactional
-    public CreateMissionPostResponseDto createMissionPost(CreateMissionPostRequestDto request, MultipartFile image) {
-        UserFarmClub userFarmClub = userFarmClubHelper.getUserFarmClubEntity(request.userFarmClubId());
+    public CreateMissionPostResponseDto createMissionPost(Long userId, CreateMissionPostRequestDto request, MultipartFile image) {
+        UserFarmClub userFarmClub = userFarmClubHelper.findByUserIdAndFarmClubId(userId, request.farmClubId());
         String imageUrl = s3Service.uploadImage(image, "mission-post");
         MissionPost missionPost = saveMissionPost(request.toEntity(userFarmClub, imageUrl, userFarmClub.getCurrentStep()));
         userFarmClub.addMissionPost(missionPost);
