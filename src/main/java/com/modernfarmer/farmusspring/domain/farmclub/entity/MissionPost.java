@@ -24,7 +24,7 @@ public class MissionPost extends BaseEntity {
     private String content;
 
     @Column(nullable = false)
-    private Long stepNum;
+    private int stepNum;
 
     @Column(nullable = false)
     private String image;
@@ -41,7 +41,7 @@ public class MissionPost extends BaseEntity {
     @JoinColumn(name = "user_farm_club_id")
     private UserFarmClub userFarmClub;
 
-    public static MissionPost createMissionPost(String content, Long stepNum, String image, UserFarmClub userFarmClub){
+    public static MissionPost createMissionPost(String content, int stepNum, String image, UserFarmClub userFarmClub){
         MissionPost newMissionPost = MissionPost.builder()
                 .content(content)
                 .stepNum(stepNum)
