@@ -128,7 +128,7 @@ public class FarmClubService {
         GetMyFarmClubVo farmClubInfo = farmClubRepository.findMyFarmClub(farmClubId, userId);
         String veggieInfoId = farmClubInfo.veggieInfoId();
         List<StepVo> stepList = veggieInfoHelper.getStepList(veggieInfoId);
-        String randomTip = getRandomTip(stepList);
+        String randomTip = getRandomTip(stepList, farmClubInfo.currentStep());
         List<GetMissionPostListVo> missionList =
                 missionPostRepository.getMissionPostStepNumAndImage(farmClubId);
 
@@ -167,14 +167,14 @@ public class FarmClubService {
         }
     }
 
-    private String getRandomTip(List<StepVo> stepList) {
+    private String getRandomTip(List<StepVo> stepList, int currentStep) {
         List<String> tips = new ArrayList<>();
-        stepList.forEach(step -> tips.addAll(step.tips()));
-
-        if (tips.isEmpty()) {
-            return "아직 도움말이 없습니다.";
+        for (StepVo step : stepList) {
+            if (step.num() == currentStep) {
+                tips = step.tips();
+                break;
+            }
         }
-
         return tips.get((int) (Math.random() * tips.size()));
     }
 
