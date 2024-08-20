@@ -5,6 +5,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.vo.*;
 import com.modernfarmer.farmusspring.domain.history.vo.MissionPostHistoryVo;
 import com.modernfarmer.farmusspring.domain.history.vo.QMissionPostHistoryVo;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -40,10 +41,10 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
     }
 
     @Override
-    public List<MissionPostCommentVo> getMissionPostComment(Long missionPostId) {
+    public List<MissionPostCommentVo> getMissionPostComment(Long missionPostId, Long userId) {
 
         return queryFactory
-                .select(new QMissionPostCommentVo(missionPostComment, user))
+                .select(new QMissionPostCommentVo(missionPostComment, user, Expressions.constant(userId)))
                 .from(missionPostComment)
                 .join(missionPostComment.missionPost, missionPost)
                 .where(missionPost.id.eq(missionPostId))
