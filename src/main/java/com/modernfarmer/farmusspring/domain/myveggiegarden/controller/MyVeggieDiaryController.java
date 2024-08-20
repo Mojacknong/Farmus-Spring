@@ -38,7 +38,7 @@ public class MyVeggieDiaryController {
         return  myVeggieDiaryService.settingMyVeggieDiary(
                 multipartFile,
                 myVeggieDiaryInsert.getContent(),
-                myVeggieDiaryInsert.isOpen(),
+                myVeggieDiaryInsert.getIsOpen(),
                 myVeggieDiaryInsert.getState(),
                 myVeggieDiaryInsert.getMyVeggieId()
         );
