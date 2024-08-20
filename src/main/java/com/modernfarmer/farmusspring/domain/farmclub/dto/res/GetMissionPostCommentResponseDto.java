@@ -7,10 +7,12 @@ import java.util.List;
 
 @Builder
 public record GetMissionPostCommentResponseDto(
+    Boolean isMyPost,
     List<MissionPostCommentVo> comments
 ) {
-    public static GetMissionPostCommentResponseDto of(List<MissionPostCommentVo> comments) {
+    public static GetMissionPostCommentResponseDto of(Boolean isMyPost, List<MissionPostCommentVo> comments) {
         return GetMissionPostCommentResponseDto.builder()
+            .isMyPost(isMyPost)
             .comments(comments)
             .build();
     }

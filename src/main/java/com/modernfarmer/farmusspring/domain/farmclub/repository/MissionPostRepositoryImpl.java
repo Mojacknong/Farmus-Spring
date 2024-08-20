@@ -1,6 +1,7 @@
 package com.modernfarmer.farmusspring.domain.farmclub.repository;
 
 
+import com.modernfarmer.farmusspring.domain.farmclub.dto.res.GetMissionPostCommentResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.*;
 import com.modernfarmer.farmusspring.domain.history.vo.MissionPostHistoryVo;
 import com.modernfarmer.farmusspring.domain.history.vo.QMissionPostHistoryVo;
@@ -41,14 +42,21 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
     }
 
     @Override
-    public List<MissionPostCommentVo> getMissionPostComment(Long missionPostId, Long userId) {
-
-        return queryFactory
+    public GetMissionPostCommentResponseDto getMissionPostComment(Long missionPostId, Long userId) {
+        List<MissionPostCommentVo> comments = queryFactory
                 .select(new QMissionPostCommentVo(missionPostComment, user, Expressions.constant(userId)))
                 .from(missionPostComment)
                 .join(missionPostComment.missionPost, missionPost)
                 .where(missionPost.id.eq(missionPostId))
                 .fetch();
+
+        Boolean isMyPost = queryFactory
+                .select(missionPost.userFarmClub.userId.eq(userId))
+                .from(missionPost)
+                .where(missionPost.id.eq(missionPostId))
+                .fetchOne();
+
+        return GetMissionPostCommentResponseDto.of(isMyPost, comments);
     }
 
     @Override

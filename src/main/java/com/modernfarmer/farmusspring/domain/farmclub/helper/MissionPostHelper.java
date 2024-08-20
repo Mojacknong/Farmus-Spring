@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.farmclub.helper;
 
+import com.modernfarmer.farmusspring.domain.farmclub.dto.res.GetMissionPostCommentResponseDto;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.MissionPost;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.FarmClubErrorCode;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.custom.FarmClubEntityNotFoundException;
@@ -29,6 +30,10 @@ public class MissionPostHelper {
 
     public List<MissionPostVo> getMissionPostList(Long userId, Long missionPostId) {
         return missionPostRepository.getMissionPostList(userId, missionPostId);
+    }
+
+    public GetMissionPostCommentResponseDto getMissionPostComment(Long missionPostId, Long userId) {
+        return missionPostRepository.getMissionPostComment(missionPostId, userId);
     }
 
     @Transactional
