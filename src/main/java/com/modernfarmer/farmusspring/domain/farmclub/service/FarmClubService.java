@@ -157,14 +157,9 @@ public class FarmClubService {
     }
 
     // 팜클럽 탈퇴
-    public void withdrawFarmClub(Long farmClubId, Long userId, Boolean deleteVeggie) {
+    public void withdrawFarmClub(Long farmClubId, Long userId) {
         UserFarmClub userFarmClub = userFarmClubHelper.findByUserIdAndFarmClubId(userId, farmClubId);
         userFarmClubHelper.deleteUserFarmClub(userFarmClub);
-        if (deleteVeggie) {
-            Long myVeggieId = userFarmClub.getMyVeggie().getId();
-            myVeggieHelper.getMyVeggieEntity(myVeggieId);
-            myVeggieHelper.deleteMyVeggie(myVeggieId);
-        }
     }
 
     private String getRandomTip(List<StepVo> stepList, int currentStep) {

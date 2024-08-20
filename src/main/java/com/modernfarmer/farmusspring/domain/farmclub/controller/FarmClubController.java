@@ -149,13 +149,12 @@ public class FarmClubController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getHelpAll(farmClubId));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{farmClubId}")
     public BaseResponseDto<?> withdrawFarmClub(
-            @RequestParam Long farmClubId,
-            @RequestParam Boolean deleteVeggie,
+            @PathVariable Long farmClubId,
             @AuthenticationPrincipal CustomUser user
     ) {
-        farmClubService.withdrawFarmClub(farmClubId, user.getUserId(), deleteVeggie);
+        farmClubService.withdrawFarmClub(farmClubId, user.getUserId());
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
