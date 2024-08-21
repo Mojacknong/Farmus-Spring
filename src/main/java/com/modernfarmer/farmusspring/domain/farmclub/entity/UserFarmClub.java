@@ -30,6 +30,9 @@ public class UserFarmClub extends BaseEntity {
     @Column(nullable = false)
     private String currentStepName;
 
+    @Column(nullable = false)
+    private boolean isComplete;
+
     @OneToMany(mappedBy = "userFarmClub", cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<MissionPost> missionPosts = new ArrayList<>();
@@ -49,12 +52,17 @@ public class UserFarmClub extends BaseEntity {
                 .currentStepName(currentStepName)
                 .farmClub(farmClub)
                 .myVeggie(myVeggie)
+                .isComplete(false)
                 .build();
 
         farmClub.addUserFarmClub(newUserFarmClub);
         myVeggie.setUserFarmClub(newUserFarmClub);
 
         return newUserFarmClub;
+    }
+
+    public void updateComplete(){
+        this.isComplete = true;
     }
 
     public void updateStep(String nextStep){

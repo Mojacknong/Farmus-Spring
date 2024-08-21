@@ -67,7 +67,7 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
                 .select(new QGetMyFarmClubListResponseDto(farmClub))
                 .from(userFarmClub)
                 .join(userFarmClub.farmClub, farmClub)
-                .where(userFarmClub.userId.eq(userId))
+                .where(userFarmClub.userId.eq(userId).and(userFarmClub.isComplete.eq(false)))
                 .fetch();
     }
 

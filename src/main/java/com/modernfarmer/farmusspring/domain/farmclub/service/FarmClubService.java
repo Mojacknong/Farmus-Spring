@@ -116,8 +116,7 @@ public class FarmClubService {
     public void successFarmClub(Long farmClubId, Long userId) {
         UserFarmClub userFarmClub = userFarmClubHelper.findByUserIdAndFarmClubId(userId, farmClubId);
         historyHelper.createFarmClubHistoryDetail(userId, userFarmClub.getId(), userFarmClub.getFarmClub().getVeggieInfoId());
-        userFarmClub.getMyVeggie().setUserFarmClub(null);
-        userFarmClubHelper.deleteUserFarmClub(userFarmClub);
+        userFarmClub.updateComplete();
     }
 
     // 팜클럽으로부터 채소 정보 id, 이름, 이미지, 시작일, 전체 멤버 수 가져옴
@@ -138,7 +137,7 @@ public class FarmClubService {
     }
 
     public List<GetMyFarmClubListResponseDto> getMyFarmClubList(Long userId) {
-        return farmClubRepository.findMyFarmClubList(userId);
+        return farmClubHelper.getUserFarmClubList(userId);
     }
 
     public GetMyVeggieResponseDto getMyVeggieForRegister(Long userId, String veggieInfoId) {
