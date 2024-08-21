@@ -70,9 +70,8 @@ public class MissionPostService {
         return GetMissionPostListResponseDto.of(missionPosts);
     }
 
-    public GetMissionPostCommentResponseDto getMissionPostComment(Long missionPostId) {
-        List<MissionPostCommentVo> comments = missionPostRepository.getMissionPostComment(missionPostId);
-        return GetMissionPostCommentResponseDto.of(comments);
+    public GetMissionPostCommentResponseDto getMissionPostComment(Long missionPostId, Long userId) {
+        return missionPostHelper.getMissionPostComment(missionPostId, userId);
     }
 
     private MissionPost saveMissionPost(MissionPost missionPost) {

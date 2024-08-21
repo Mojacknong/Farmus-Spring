@@ -81,14 +81,18 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
                 .where(farmClub.id.eq(farmClubId))
                 .fetchOne();
 
-        List<Tuple> results = queryFactory
-                .select(userFarmClub.count(), userFarmClub.currentStep)
+        Long userFarmClubCount = queryFactory
+                .select(userFarmClub.count())
                 .from(userFarmClub)
                 .join(userFarmClub.farmClub, farmClub)
-                .fetch();
+                .where(farmClub.id.eq(farmClubId))
+                .fetchOne();
 
-        Long userFarmClubCount = results.get(0).get(userFarmClub.count());
-        Integer currentStep = results.get(0).get(userFarmClub.currentStep);
+        Integer currentStep = queryFactory
+                .select(userFarmClub.currentStep)
+                .from(userFarmClub)
+                .where(userFarmClub.userId.eq(userId).and(userFarmClub.farmClub.id.eq(farmClubId)))
+                .fetchOne();
 
         LocalDate userFarmClubCreatedDate = queryFactory
                 .select(farmClub.startedAt)

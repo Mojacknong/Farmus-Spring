@@ -120,11 +120,12 @@ public class FarmClubController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, missionPostService.getMissionPostList(user.getUserId(), farmClubId));
     }
 
-    @GetMapping("/mission/{id}")
+    @GetMapping("/mission/{missionPostId}")
     public BaseResponseDto<?> getMissionPostComments(
-            @PathVariable Long id
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable Long missionPostId
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, missionPostService.getMissionPostComment(id));
+        return BaseResponseDto.of(SuccessCode.SUCCESS, missionPostService.getMissionPostComment(missionPostId, user.getUserId()));
     }
 
     @GetMapping("/my-veggie")
@@ -149,13 +150,12 @@ public class FarmClubController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getHelpAll(farmClubId));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{farmClubId}")
     public BaseResponseDto<?> withdrawFarmClub(
-            @RequestParam Long farmClubId,
-            @RequestParam Boolean deleteVeggie,
+            @PathVariable Long farmClubId,
             @AuthenticationPrincipal CustomUser user
     ) {
-        farmClubService.withdrawFarmClub(farmClubId, user.getUserId(), deleteVeggie);
+        farmClubService.withdrawFarmClub(farmClubId, user.getUserId());
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
