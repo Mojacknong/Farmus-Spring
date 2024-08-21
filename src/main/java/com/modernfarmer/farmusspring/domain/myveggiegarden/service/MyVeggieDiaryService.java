@@ -109,6 +109,7 @@ public class MyVeggieDiaryService {
                     allDiary.getDiary().getDiaryLikes().size(),
                     allDiary.getDiary().getDiaryComments().size(),
                     allDiary.isMyLike(),
+                    allDiary.isMyDiary(),
                     allDiary.getDiary().getState()
                     );}).toList();
     }

@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 public class SortedMyLikeDiary {
 
     private Diary diary;
+    private boolean myDiary;
     private boolean myLike;
 
-    public SortedMyLikeDiary(Diary diary, boolean myLike) {
+    public SortedMyLikeDiary(Diary diary, boolean myDiary, boolean myLike) {
         this.diary = diary;
+        this.myDiary=myDiary;
         this.myLike = myLike;
     }
 

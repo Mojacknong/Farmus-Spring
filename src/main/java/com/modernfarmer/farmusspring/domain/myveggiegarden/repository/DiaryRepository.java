@@ -37,6 +37,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
              "WHERE d.id = :diaryId")
      List<DiaryComment> findDiaryById(@Param("diaryId") Long diaryId);
     @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary(d, " +
+            "CASE WHEN d.myVeggie.user.id = :userId THEN true ELSE false END, " +
             "CASE WHEN dl.user.id = :userId THEN true ELSE false END) " +
             "FROM diary AS d " +
             "JOIN FETCH d.myVeggie AS mv " +
@@ -44,7 +45,9 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "WHERE d.farmClub.id = :farmClubId AND d.isOpen = true "
           )
     List<SortedMyLikeDiary> findDiaryByFarmClub(@Param("farmClubId") Long farmClubId, @Param("userId") Long userId);
+
     @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary(d, " +
+            "CASE WHEN d.myVeggie.user.id = :userId THEN true ELSE false END, " +
             "CASE WHEN dl.user.id = :userId THEN true ELSE false END) " +
             "FROM diary AS d " +
             "JOIN FETCH d.myVeggie AS mv " +
