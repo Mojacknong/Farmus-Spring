@@ -61,6 +61,10 @@ public class UserFarmClub extends BaseEntity {
         return newUserFarmClub;
     }
 
+    public void updateComplete(){
+        this.isComplete = true;
+    }
+
     public void updateStep(String nextStep){
         this.currentStep = this.getCurrentStep() + 1;
         this.currentStepName = nextStep;
