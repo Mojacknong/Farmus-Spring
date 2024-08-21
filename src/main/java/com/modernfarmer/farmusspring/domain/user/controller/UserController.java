@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.user.controller;
 
 import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
 import com.modernfarmer.farmusspring.domain.user.dto.request.AlarmUpdate;
+import com.modernfarmer.farmusspring.domain.user.dto.request.UserNickname;
 import com.modernfarmer.farmusspring.domain.user.dto.request.UserNicknameDto;
 import com.modernfarmer.farmusspring.domain.user.dto.response.AlarmStatus;
 import com.modernfarmer.farmusspring.domain.user.dto.response.UserProfileResponse;
@@ -58,10 +59,10 @@ public class UserController {
     @PostMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public BaseResponseDto<Void> settingProfile(
             @AuthenticationPrincipal CustomUser user,
-            @RequestPart String nickname,
+            @RequestPart UserNickname userNickname,
             @RequestPart(value = "image", required = false) MultipartFile file
     ) throws IOException {
-        return  userService.settingProfile(user.getUserId(), file, nickname);
+        return  userService.settingProfile(user.getUserId(), file, userNickname.getNickname());
     }
 
     @PostMapping("/init/{userId}")

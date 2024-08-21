@@ -49,7 +49,7 @@ public class MyVeggieDiaryService {
     public BaseResponseDto<Void> settingMyVeggieDiary(
             MultipartFile multipartFile,
             String content,
-            boolean isOpen,
+            Boolean isOpen,
             String state,
             Long myVeggieId
     ) throws IOException {
@@ -221,7 +221,7 @@ public class MyVeggieDiaryService {
     }
     private void addMyyVeggieDiary(
             String content,
-            boolean isOpen,
+            Boolean isOpen,
             String image,
             String state,
             Long myVeggieId
