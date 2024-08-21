@@ -37,7 +37,7 @@ public record GetMyFarmClubResponseDto(
             long count = 0L;
             List<String> images = new ArrayList<>();
             for (GetMissionPostListVo mission: missionList) {
-                if (step.num() + 1 == mission.stepNum()) {
+                if (step.num() == mission.stepNum()) {
                     images.add(mission.image());
                     count++;
                 }
