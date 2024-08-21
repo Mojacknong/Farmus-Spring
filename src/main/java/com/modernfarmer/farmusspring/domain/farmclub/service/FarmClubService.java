@@ -138,7 +138,7 @@ public class FarmClubService {
     }
 
     public List<GetMyFarmClubListResponseDto> getMyFarmClubList(Long userId) {
-        return farmClubRepository.findMyFarmClubList(userId);
+        return farmClubHelper.getUserFarmClubList(userId);
     }
 
     public GetMyVeggieResponseDto getMyVeggieForRegister(Long userId, String veggieInfoId) {
