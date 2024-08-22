@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.farmclub.helper;
 
+import com.modernfarmer.farmusspring.domain.farmclub.vo.SuccessFarmClubVo;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.FarmClubErrorCode;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.custom.FarmClubEntityNotFoundException;
@@ -27,5 +28,9 @@ public class UserFarmClubHelper {
     public UserFarmClub findByUserIdAndFarmClubId(Long userId, Long farmClubId) {
         return userFarmClubRepository.findByUserIdAndFarmClubId(userId, farmClubId)
                 .orElseThrow(() -> new FarmClubEntityNotFoundException("해당 팜클럽에 가입한 유저가 아닙니다.", FarmClubErrorCode.USER_FARM_CLUB_NOT_FOUND));
+    }
+
+    public SuccessFarmClubVo getFarmClubRecord(Long userId, Long farmClubId) {
+        return userFarmClubRepository.getFarmClubRecord(userId, farmClubId);
     }
 }

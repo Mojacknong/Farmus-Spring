@@ -8,9 +8,9 @@ import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.UserFarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.FarmClubRepository;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.MissionPostRepository;
-import com.modernfarmer.farmusspring.domain.farmclub.repository.UserFarmClubRepository;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMissionPostListVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
+import com.modernfarmer.farmusspring.domain.farmclub.vo.SuccessFarmClubVo;
 import com.modernfarmer.farmusspring.domain.history.helper.HistoryHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,10 +114,12 @@ public class FarmClubService {
     }
 
     @Transactional
-    public void successFarmClub(Long farmClubId, Long userId) {
+    public SuccessFarmClubResponseDto successFarmClub(Long farmClubId, Long userId) {
         UserFarmClub userFarmClub = userFarmClubHelper.findByUserIdAndFarmClubId(userId, farmClubId);
-        historyHelper.createFarmClubHistoryDetail(userId, userFarmClub.getId(), userFarmClub.getFarmClub().getVeggieInfoId());
         userFarmClub.updateComplete();
+        SuccessFarmClubVo farmClubRecord = userFarmClubHelper.getFarmClubRecord(userId, farmClubId);
+        String period = historyHelper.createFarmClubHistoryDetail(userId, userFarmClub.getId(), userFarmClub.getFarmClub().getVeggieInfoId());
+        return SuccessFarmClubResponseDto.of(farmClubRecord, ChronoUnit.DAYS.between(userFarmClub.getCreatedDate().toLocalDate(), LocalDate.now()), period);
     }
 
     // 팜클럽으로부터 채소 정보 id, 이름, 이미지, 시작일, 전체 멤버 수 가져옴
@@ -156,9 +159,11 @@ public class FarmClubService {
     }
 
     // 팜클럽 탈퇴
+    @Transactional
     public void withdrawFarmClub(Long farmClubId, Long userId) {
         UserFarmClub userFarmClub = userFarmClubHelper.findByUserIdAndFarmClubId(userId, farmClubId);
-        userFarmClubHelper.deleteUserFarmClub(userFarmClub);
+        MyVeggie myVeggie = userFarmClub.getMyVeggie();
+        myVeggie.setUserFarmClub(null);
     }
 
     private String getRandomTip(List<StepVo> stepList, int currentStep) {
