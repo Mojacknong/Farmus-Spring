@@ -26,8 +26,6 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import static com.modernfarmer.farmusspring.domain.history.utils.StringUtil.getHistoryPeriod;
@@ -52,7 +50,7 @@ public class HistoryHelper {
         historyRepository.save(history);
     }
 
-    public void createFarmClubHistoryDetail(Long userId, Long userFarmClubId, String veggieInfoId) {
+    public String createFarmClubHistoryDetail(Long userId, Long userFarmClubId, String veggieInfoId) {
         List<MissionPostHistoryVo> missionPostHistoryList = missionPostHelper.getMissionPostHistory(userFarmClubId);
         List<StepVo> stepList = veggieInfoHelper.getStepList(veggieInfoId);
         VeggieInfoVo veggieInfo = veggieInfoHelper.getVeggieInfo(veggieInfoId);
@@ -72,6 +70,7 @@ public class HistoryHelper {
         history.getFarmClubHistoryDetails().add(historyDetail);
         history.getFarmClubHistoryIcons().add(icon);
         historyRepository.save(history);
+        return getHistoryPeriod(historyDetailVo.period(), LocalDate.now().toString());
     }
 
     @Transactional
