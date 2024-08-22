@@ -4,13 +4,14 @@ import lombok.Builder;
 
 @Builder
 public record CreateMissionPostResponseDto(
-
-        Long missionPostId
+        Long missionPostId,
+        Boolean isLastStep
 ) {
 
-    public static CreateMissionPostResponseDto of(Long missionPostId) {
+    public static CreateMissionPostResponseDto of(Long missionPostId, Boolean isLastStep) {
         return CreateMissionPostResponseDto.builder()
                 .missionPostId(missionPostId)
+                .isLastStep(isLastStep)
                 .build();
     }
 }
