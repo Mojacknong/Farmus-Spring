@@ -116,10 +116,10 @@ public class FarmClubService {
     @Transactional
     public SuccessFarmClubResponseDto successFarmClub(Long farmClubId, Long userId) {
         UserFarmClub userFarmClub = userFarmClubHelper.findByUserIdAndFarmClubId(userId, farmClubId);
-        String period = historyHelper.createFarmClubHistoryDetail(userId, userFarmClub.getId(), userFarmClub.getFarmClub().getVeggieInfoId());
         userFarmClub.updateComplete();
         SuccessFarmClubVo farmClubRecord = userFarmClubHelper.getFarmClubRecord(userId, farmClubId);
-        return SuccessFarmClubResponseDto.of(farmClubRecord, ChronoUnit.DAYS.between(userFarmClub.getCreatedDate(), LocalDate.now()), period);
+        String period = historyHelper.createFarmClubHistoryDetail(userId, userFarmClub.getId(), userFarmClub.getFarmClub().getVeggieInfoId());
+        return SuccessFarmClubResponseDto.of(farmClubRecord, ChronoUnit.DAYS.between(userFarmClub.getCreatedDate().toLocalDate(), LocalDate.now()), period);
     }
 
     // 팜클럽으로부터 채소 정보 id, 이름, 이미지, 시작일, 전체 멤버 수 가져옴
