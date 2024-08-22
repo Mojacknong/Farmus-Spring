@@ -19,6 +19,9 @@ public interface RoutineRepository extends JpaRepository<Routine, Long> {
     @Query("SELECT r FROM routine AS r  WHERE r.id = :routineId ")
     Optional<Routine> findRoutineById(@Param("routineId") Long routineId);
 
+    @Query("SELECT r FROM routine AS r  WHERE r.date = CURRENT_DATE - 1")
+    List<Routine> findRoutine();
+
 
     @Modifying
     @Query("UPDATE routine AS r SET r.content = :content, r.period = :period WHERE r.id = :routineId")
