@@ -79,24 +79,18 @@ public class MyVeggieRoutineService {
                 .map(myVeggie -> MyRoutineList.of(myVeggie, mappingRoutineListData(myVeggie, day)))
                 .toList();
     }
-
-
     private List<MyVeggieRoutine> mappingRoutineListData(MyVeggie myVeggie, Date day) {
         return myVeggie.getRoutines().stream()
                 .filter(routine -> Objects.equals(DateManager.formatDayDateToString(day), routine.getDate().toString()))
                 .map(MyVeggieRoutine::of)
                 .toList();
     }
-
     @Transactional
     public void checkVeggieRoutine(Long routineId) {
         Optional<Routine> routine = routineRepository.findRoutineById(routineId);
         verifyRoutine(routine);
-        Date addedDate = DateManager.addDate(routine.get().getDate(), routine.get().getPeriod());
         routineRepository.updateRoutineComplete(routine.get(), routineId);
-        addVeggieRoutine(routine.get().getMyVeggie().getId(), routine.get().getContent(), routine.get().getPeriod(), addedDate);
     }
-
     @Transactional
     public void addRoutineOneDay(Long routineId) {
         Optional<Routine> routine = routineRepository.findRoutineById(routineId);
@@ -104,12 +98,10 @@ public class MyVeggieRoutineService {
         Date addedDate = DateManager.addDate(routine.get().getDate(), 1);
         addVeggieRoutine(routine.get().getMyVeggie().getId(), routine.get().getContent(), routine.get().getPeriod(), addedDate);
     }
-
     public void verifyRoutine(Optional<Routine> routine){
         if(routine.isEmpty())
             throw new RoutineNotFoundException("존재하지 않는 루틴입니다.", MyVeggieGardenErrorCode.NOT_FOUND_ROUTINE);
     }
-
     private void addVeggieRoutine(Long veggieId, String content, int period, Date date){
         MyVeggie myVeggie = myVeggieGardenService.getMyVeggie(veggieId);
         Routine newRoutine = Routine.createRoutine(date,content,period, myVeggie, false);
