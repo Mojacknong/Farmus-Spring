@@ -171,7 +171,6 @@ public class FarmClubController {
             @PathVariable Long farmClubId,
             @AuthenticationPrincipal CustomUser user
     ) {
-        farmClubService.successFarmClub(farmClubId, user.getUserId());
-        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.successFarmClub(farmClubId, user.getUserId()));
     }
 }
