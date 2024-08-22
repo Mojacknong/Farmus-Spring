@@ -97,6 +97,14 @@ public class MyVeggieRoutineService {
         addVeggieRoutine(routine.get().getMyVeggie().getId(), routine.get().getContent(), routine.get().getPeriod(), addedDate);
     }
 
+    @Transactional
+    public void addRoutineOneDay(Long routineId) {
+        Optional<Routine> routine = routineRepository.findRoutineById(routineId);
+        verifyRoutine(routine);
+        Date addedDate = DateManager.addDate(routine.get().getDate(), 1);
+        addVeggieRoutine(routine.get().getMyVeggie().getId(), routine.get().getContent(), routine.get().getPeriod(), addedDate);
+    }
+
     public void verifyRoutine(Optional<Routine> routine){
         if(routine.isEmpty())
             throw new RoutineNotFoundException("존재하지 않는 루틴입니다.", MyVeggieGardenErrorCode.NOT_FOUND_ROUTINE);
