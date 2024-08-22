@@ -8,12 +8,12 @@ import lombok.Builder;
 public record SuccessFarmClubResponseDto(
         String farmClubName,
         String veggieImage,
-        String date,
+        Long date,
         String period,
         Long diaryCount,
         Long missionPostCount
 ) {
-    public static SuccessFarmClubResponseDto of(SuccessFarmClubVo info, String date, String period) {
+    public static SuccessFarmClubResponseDto of(SuccessFarmClubVo info, Long date, String period) {
         return SuccessFarmClubResponseDto.builder()
                 .farmClubName(info.farmClubName())
                 .veggieImage(info.veggieImage())
