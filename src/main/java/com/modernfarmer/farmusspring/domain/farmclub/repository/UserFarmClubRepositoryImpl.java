@@ -48,7 +48,7 @@ public class UserFarmClubRepositoryImpl implements UserFarmClubRepositoryCustom 
                                         .from(diary)
                                         .where(diary.farmClub.id.eq(userFarmClub.farmClub.id)
                                                 .and(diary.myVeggie.user.id.eq(userId))),
-                                userFarmClub.missionPosts.size()
+                                userFarmClub.missionPosts.size().longValue()
                         )
                 )
                 .from(userFarmClub)
