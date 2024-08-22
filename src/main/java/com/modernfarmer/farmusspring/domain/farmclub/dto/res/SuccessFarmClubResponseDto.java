@@ -1,6 +1,6 @@
 package com.modernfarmer.farmusspring.domain.farmclub.dto.res;
 
-import com.modernfarmer.farmusspring.domain.farmclub.vo.SuccessFarmClubInfo;
+import com.modernfarmer.farmusspring.domain.farmclub.vo.SuccessFarmClubVo;
 import lombok.AccessLevel;
 import lombok.Builder;
 
@@ -13,7 +13,7 @@ public record SuccessFarmClubResponseDto(
         Long diaryCount,
         Long missionPostCount
 ) {
-    public static SuccessFarmClubResponseDto of(SuccessFarmClubInfo info, String date, String period) {
+    public static SuccessFarmClubResponseDto of(SuccessFarmClubVo info, String date, String period) {
         return SuccessFarmClubResponseDto.builder()
                 .farmClubName(info.farmClubName())
                 .veggieImage(info.veggieImage())
