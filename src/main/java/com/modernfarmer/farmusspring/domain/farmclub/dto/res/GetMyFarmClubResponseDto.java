@@ -10,6 +10,7 @@ import java.util.List;
 
 @Builder
 public record GetMyFarmClubResponseDto(
+        Long farmClubId,
         String farmClubName,
         String farmClubImage,
         Long wholeMemberCount,
@@ -21,6 +22,7 @@ public record GetMyFarmClubResponseDto(
 
     public static GetMyFarmClubResponseDto of(GetMyFarmClubVo farmClubInfo, List<Step> steps, String advice) {
         return GetMyFarmClubResponseDto.builder()
+                .farmClubId(farmClubInfo.farmClubId())
                 .farmClubName(farmClubInfo.farmClubName())
                 .farmClubImage(farmClubInfo.farmClubImage())
                 .wholeMemberCount(farmClubInfo.wholeMemberCount())

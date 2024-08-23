@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public record GetMyFarmClubVo(
-
+        Long farmClubId,
         String farmClubName,
         String farmClubImage,
         String veggieInfoId,
@@ -18,6 +18,7 @@ public record GetMyFarmClubVo(
 ) {
     public static GetMyFarmClubVo of(BaseInfo baseInfo, Long wholeMemberCount, Integer currentStep,LocalDate dayRegister) {
         return new GetMyFarmClubVo(
+                baseInfo.farmClubId(),
                 baseInfo.farmClubName(),
                 baseInfo.farmClubImage(),
                 baseInfo.veggieInfoId(),
@@ -28,6 +29,7 @@ public record GetMyFarmClubVo(
     }
 
     public record BaseInfo(
+            Long farmClubId,
             String farmClubName,
             String farmClubImage,
             String veggieInfoId
@@ -36,6 +38,7 @@ public record GetMyFarmClubVo(
         @QueryProjection
         public BaseInfo(FarmClub farmClub) {
             this(
+                    farmClub.getId(),
                     farmClub.getName(),
                     farmClub.getVeggieImage(),
                     farmClub.getVeggieInfoId()
