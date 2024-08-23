@@ -4,8 +4,11 @@ import com.modernfarmer.farmusspring.domain.farmclub.entity.MissionPost;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.querydsl.core.annotations.QueryProjection;
 
+import static com.modernfarmer.farmusspring.domain.farmclub.util.DateUtil.localDateTimeFormat;
+
 public record MissionPostVo(
         Long missionPostId,
+        int stepNum,
         String nickname,
         String profileImage,
         String date,
@@ -20,9 +23,10 @@ public record MissionPostVo(
     {
         this(
                 missionPost.getId(),
+                missionPost.getStepNum(),
                 user.getNickname(),
                 user.getProfileImage(),
-                missionPost.getCreatedDate().toString(),
+                localDateTimeFormat(missionPost.getCreatedDate()),
                 missionPost.getImage(),
                 missionPost.getContent(),
                 likeCount,
