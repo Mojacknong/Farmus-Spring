@@ -1,20 +1,17 @@
 package com.modernfarmer.farmusspring.domain.user.service;
 
-import com.modernfarmer.farmusspring.domain.auth.entity.CustomUser;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.DiaryNotFoundException;
 import com.modernfarmer.farmusspring.domain.user.dto.response.AlarmStatus;
 import com.modernfarmer.farmusspring.domain.user.dto.response.UserProfileResponse;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
-import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
+import com.modernfarmer.farmusspring.domain.user.exception.UserErrorCode;
+import com.modernfarmer.farmusspring.domain.user.exception.custom.UserNotFoundException;
+import com.modernfarmer.farmusspring.domain.user.helper.UserHelper;
 import com.modernfarmer.farmusspring.domain.user.repository.UserRepository;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import com.modernfarmer.farmusspring.global.response.SuccessCode;
-import com.modernfarmer.farmusspring.infra.s3.S3Config;
 import com.modernfarmer.farmusspring.infra.s3.S3Service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +20,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
-import java.util.Random;
 
 @Slf4j
 @AllArgsConstructor
@@ -32,6 +28,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final S3Service s3Service;
+    private final UserHelper userHelper;
 
     @Transactional
     public BaseResponseDto<UserProfileResponse> selectUserProfile(Long userId) {
@@ -49,8 +46,13 @@ public class UserService {
     public BaseResponseDto<Void> deleteUser(Long userId) {
         Optional<User> user = userRepository.findUser(userId);
         // 유저 검증
+        verifyUser(user);
+
+
 
         // 유저 도메인 정보 삭제
+            // 1.0 유저 도메인 삭제
+            userHelper.deleteUser(userId);
             // 1.1 유저 id를 통한 성장일기 좋아요 삭제
             // 1.2 유저 id를 통한 성장일기 댓글 삭제
             // 1.3 유저 id를 통한 인증글 좋아요 삭제
@@ -96,9 +98,11 @@ public class UserService {
 
     public void checkUserData(User user){
         if(user == null) {
-            throw new UserNotFoundException("유저를 찾을 수 없습니다.");
+            throw  new UserNotFoundException("해당 유저가 존재하지 않습니다.",UserErrorCode.NOT_FOUND_USER);
         }
     }
+
+
 
     @Transactional
     public void initUser(Long userId) {
@@ -149,8 +153,14 @@ public class UserService {
     }
 
     public Optional<User> selectUser(Long userId){
-        Optional<User> user = Optional.ofNullable(userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다.")));
+        Optional<User> user = Optional.ofNullable(userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다.",UserErrorCode.NOT_FOUND_USER)));
         return user;
+    }
+
+    public void verifyUser(Optional<User> user){
+        if(user.isEmpty())
+            throw  new UserNotFoundException("유저가 존재하지 않습니다.", UserErrorCode.NOT_FOUND_USER);
+
     }
     private long calFromToday(LocalDateTime date){
         LocalDateTime currentDateTime = LocalDateTime.now();
