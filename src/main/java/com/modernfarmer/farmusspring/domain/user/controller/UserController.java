@@ -32,6 +32,11 @@ public class UserController {
         return userService.selectUserProfile(user.getUserId());
     }
 
+    @DeleteMapping()
+    public BaseResponseDto<?> deleteUser(@AuthenticationPrincipal CustomUser user)  {
+        return userService.selectUserProfile(user.getUserId());
+    }
+
 
     @PatchMapping(value = "/profile-image")
     public BaseResponseDto<Void> deleteProfleImage(@AuthenticationPrincipal CustomUser user)  {
