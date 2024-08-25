@@ -25,6 +25,10 @@ public class MyVeggieHelper {
                 new MyVeggieGardenBaseException("존재하지 않는 나의 채소입니다.", MyVeggieGardenErrorCode.NOT_FOUND_VEGGIE));
     }
 
+    public List<MyVeggie> getMyVeggieUserId(Long userId){
+        return myVeggieRepository.findMyVeggieUserId(userId);
+    }
+
     public MyVeggieVo getMyVeggieInfo(Long userId, String veggieInfoId) {
         return myVeggieRepository.findMyVeggieInfo(userId, veggieInfoId).orElse(MyVeggieVo.of(0L, "", ""));
     }

@@ -1,5 +1,6 @@
 package com.modernfarmer.farmusspring.domain.user.service;
 
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.DiaryCommentHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.DiaryLikeHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.MyVeggieHelper;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -56,8 +58,9 @@ public class UserService {
 
         // 팜클럽 도메인 정보 삭제
             // 유저의 채소 엔티티 조회
-
+            List<MyVeggie> myVeggieList = myVeggieHelper.getMyVeggieUserId(userId);
             // 내 채소 id를 통한 유저 팜클럽 삭제
+
 
         // 채소 도메인 정보 삭제
             // 유저 id를 통한 내 채소 삭제
