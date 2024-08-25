@@ -35,11 +35,8 @@ public class UserService {
 
     @Transactional
     public BaseResponseDto<UserProfileResponse> selectUserProfile(Long userId) {
-
         Optional<User> userData = selectUser(userId);
-
         long dDay = calFromToday(userData.get().getCreatedDate());
-
         return BaseResponseDto.of(SuccessCode.SUCCESS,
                 UserProfileResponse.of(
                         userData.get().getNickname(),
@@ -47,6 +44,33 @@ public class UserService {
                         dDay
         ));
     }
+
+    @Transactional
+    public BaseResponseDto<Void> deleteUser(Long userId) {
+        Optional<User> user = userRepository.findUser(userId);
+        // 유저 검증
+
+        // 유저 도메인 정보 삭제
+            // 1.1 유저 id를 통한 성장일기 좋아요 삭제
+            // 1.2 유저 id를 통한 성장일기 댓글 삭제
+            // 1.3 유저 id를 통한 인증글 좋아요 삭제
+            // 1.4 유저 id를 통한 인증글 댓글 삭제
+
+
+        // 채소 도메인 정보 삭제
+            // 유저 id를 통한 내 채소 삭제
+
+
+
+        // 팜클럽 도메인 정보 삭제
+            // 내 채소 id를 통한 유저 팜클럽 삭제
+
+
+
+        return null;
+    }
+
+
 
     @Transactional
     public BaseResponseDto<Void> deleteProfleImage(Long userId) {
@@ -129,7 +153,6 @@ public class UserService {
         return user;
     }
     private long calFromToday(LocalDateTime date){
-
         LocalDateTime currentDateTime = LocalDateTime.now();
         long daysDifference = ChronoUnit.DAYS.between(date.toLocalDate(), currentDateTime.toLocalDate());
         return daysDifference;
@@ -138,6 +161,9 @@ public class UserService {
     private void updateProfileImage(Long userId){
         userRepository.updateProfileImage(userId);
     }
+
+
+
 
 
 }
