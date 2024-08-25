@@ -4,7 +4,7 @@ import com.modernfarmer.farmusspring.domain.auth.dto.LoginResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.repository.RedisManager;
 import com.modernfarmer.farmusspring.domain.auth.util.social.dto.SocialUserResponseDto;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
-import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
+import com.modernfarmer.farmusspring.domain.user.exception.custom.UserNotFoundException;
 import com.modernfarmer.farmusspring.domain.user.repository.UserRepository;
 import com.modernfarmer.farmusspring.global.common.security.JwtTokenProvider;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -13,7 +13,6 @@ import com.modernfarmer.farmusspring.domain.user.exception.UserErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -44,7 +43,7 @@ abstract public class SocialLogin {
                     return null;
                 });
 
-        Optional<User> userLoginData = Optional.ofNullable(userRepository.findByUserNumber(String.valueOf(socialUserData.getId())).orElseThrow(() -> new UserNotFoundException("해당 유저의 정보가 존재하지 않습니다.")));
+        Optional<User> userLoginData = Optional.ofNullable(userRepository.findByUserNumber(String.valueOf(socialUserData.getId())).orElseThrow(() ->  new UserNotFoundException("해당 유저의 정보가 존재하지 않습니다.", UserErrorCode.NOT_FOUND_USER)));
 
         String refreshToken = jwtTokenProvider.createRefreshToken(userLoginData.get().getId());
         String accessToken = jwtTokenProvider.createAccessToken(

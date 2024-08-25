@@ -1,19 +1,16 @@
 package com.modernfarmer.farmusspring.domain.user.service;
 
-import com.modernfarmer.farmusspring.domain.user.dto.request.SetLevelRequest;
-import com.modernfarmer.farmusspring.domain.user.dto.request.SetMotivationRequest;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 
 import com.modernfarmer.farmusspring.domain.user.entity.UserFirebaseToken;
-import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
+import com.modernfarmer.farmusspring.domain.user.exception.UserErrorCode;
+import com.modernfarmer.farmusspring.domain.user.exception.custom.UserNotFoundException;
 import com.modernfarmer.farmusspring.domain.user.repository.FirebaseTokenRepository;
 import com.modernfarmer.farmusspring.domain.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 
 @Slf4j
@@ -40,7 +37,7 @@ public class FirebaseTokenService {
 
     public void validateUser(User user){
         if(user == null)
-            throw new UserNotFoundException("해당 유저는 존재하지 않습니다.");
+            throw new UserNotFoundException("해당 유저는 존재하지 않습니다.", UserErrorCode.NOT_FOUND_USER);
     }
 
 
