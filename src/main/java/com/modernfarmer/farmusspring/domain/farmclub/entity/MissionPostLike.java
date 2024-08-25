@@ -29,7 +29,7 @@ public class MissionPostLike extends BaseEntity {
     private MissionPost missionPost;
 
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

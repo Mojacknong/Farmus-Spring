@@ -34,7 +34,6 @@ public class DiaryComment extends BaseEntity {
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

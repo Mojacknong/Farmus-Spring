@@ -45,7 +45,6 @@ public class UserFarmClub extends BaseEntity {
     private FarmClub farmClub;
 
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "my_veggie_id")
     private MyVeggie myVeggie;

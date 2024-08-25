@@ -42,7 +42,6 @@ public class MyVeggie extends BaseEntity {
     @Column(name = "veggie_image")
     private String veggieImage;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -57,7 +56,7 @@ public class MyVeggie extends BaseEntity {
     @Builder.Default
     private List<Diary> diaries = new ArrayList<>();
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_farm_club_id")
     private UserFarmClub userFarmClub;

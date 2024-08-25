@@ -31,7 +31,6 @@ public class MissionPostComment extends BaseEntity {
     @JoinColumn(name = "mission_post_id")
     private MissionPost missionPost;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
