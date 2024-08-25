@@ -31,15 +31,15 @@ public class MissionPost extends BaseEntity {
     @Column(nullable = false)
     private String image;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "missionPost", cascade = CascadeType.ALL)
     @Builder.Default
     private List<MissionPostLike> missionPostLikes = new ArrayList<>();
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     @OneToMany(mappedBy = "missionPost", cascade = CascadeType.ALL)
     @Builder.Default
     private List<MissionPostComment> missionPostComments = new ArrayList<>();
+
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)

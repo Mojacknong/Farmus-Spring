@@ -46,12 +46,12 @@ public class MyVeggie extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     @OneToMany(mappedBy = "myVeggie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Routine> routines = new ArrayList<>();
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     @OneToMany(mappedBy = "myVeggie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Diary> diaries = new ArrayList<>();

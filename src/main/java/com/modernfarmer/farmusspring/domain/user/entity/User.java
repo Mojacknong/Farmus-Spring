@@ -51,12 +51,11 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Boolean notificationStatus;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserFirebaseToken> userFirebaseTokens = new ArrayList<>();
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserMotivation> userMotivations = new ArrayList<>();

@@ -43,13 +43,13 @@ public class Diary extends BaseEntity {
     @JoinColumn(name = "my_veggie_id")
     private MyVeggie myVeggie;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
     @Builder.Default
     private List<DiaryComment> diaryComments = new ArrayList<>();
 
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<DiaryLike> diaryLikes = new ArrayList<>();

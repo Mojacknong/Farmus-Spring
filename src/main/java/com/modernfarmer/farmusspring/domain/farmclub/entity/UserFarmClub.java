@@ -35,7 +35,7 @@ public class UserFarmClub extends BaseEntity {
     @Column(nullable = false)
     private boolean isComplete;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     @OneToMany(mappedBy = "userFarmClub", cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<MissionPost> missionPosts = new ArrayList<>();
