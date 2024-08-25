@@ -4,6 +4,8 @@ import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +31,17 @@ public class MissionPost extends BaseEntity {
     @Column(nullable = false)
     private String image;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "missionPost", cascade = CascadeType.ALL)
     @Builder.Default
     private List<MissionPostLike> missionPostLikes = new ArrayList<>();
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "missionPost", cascade = CascadeType.ALL)
     @Builder.Default
     private List<MissionPostComment> missionPostComments = new ArrayList<>();
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_farm_club_id")
     private UserFarmClub userFarmClub;

@@ -9,6 +9,8 @@ import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 import java.time.LocalDateTime;
@@ -49,31 +51,37 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Boolean notificationStatus;
 
-
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserFirebaseToken> userFirebaseTokens = new ArrayList<>();
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserMotivation> userMotivations = new ArrayList<>();
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<MyVeggie> myVeggies = new ArrayList<>();
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<DiaryComment> diaryComments = new ArrayList<>();
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<DiaryLike> diaryLikes = new ArrayList<>();
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<MissionPostComment> missionPostComments = new ArrayList<>();
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<MissionPostLike> missionPostLikes = new ArrayList<>();

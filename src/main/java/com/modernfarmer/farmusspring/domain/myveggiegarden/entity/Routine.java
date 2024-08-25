@@ -8,7 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 import java.util.Date;
@@ -39,7 +40,7 @@ public class Routine extends BaseEntity {
     @Column(name = "complete")
     private boolean complete;
 
-
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "my_veggie_id")
     private MyVeggie myVeggie;
@@ -56,6 +57,5 @@ public class Routine extends BaseEntity {
 
         myVeggie.addRoutine(newRoutine);
         return newRoutine;
-
     }
 }
