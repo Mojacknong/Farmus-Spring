@@ -143,6 +143,10 @@ public class FarmClubService {
         return farmClubHelper.getUserFarmClubList(userId);
     }
 
+    public GetFarmClubUserListResponseDto getFarmClubUserList(Long farmClubId) {
+        return farmClubHelper.getFarmClubUserList(farmClubId);
+    }
+
     public GetMyVeggieResponseDto getMyVeggieForRegister(Long userId, String veggieInfoId) {
         MyVeggieVo myVeggie = myVeggieHelper.getMyVeggieInfo(userId, veggieInfoId);
         return GetMyVeggieResponseDto.of(myVeggie.myVeggieId(), myVeggie.nickname());

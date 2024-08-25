@@ -5,11 +5,13 @@ import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.QFarmClub;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.FarmClubErrorCode;
 import com.modernfarmer.farmusspring.domain.farmclub.exception.custom.FarmClubEntityNotFoundException;
+import com.modernfarmer.farmusspring.domain.farmclub.vo.GetFarmClubUserVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.GetMyFarmClubVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.QGetMyFarmClubVo_BaseInfo;
 import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
 import com.modernfarmer.farmusspring.domain.history.vo.QHistoryDetailVo;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -105,6 +107,26 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
         log.info("userFarmClubCreatedDate: {}", userFarmClubCreatedDate);
 
         return GetMyFarmClubVo.of(baseInfo, userFarmClubCount, currentStep, userFarmClubCreatedDate);
+    }
+
+    @Override
+    public List<GetFarmClubUserVo> findFarmClubUserList(Long farmClubId) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+
+        return queryFactory
+                .select(Projections.constructor(
+                        GetFarmClubUserVo.class,
+                        user.nickname,
+                        user.profileImage))
+                .from(user)
+                .where(user.id.in(
+                        JPAExpressions
+                                .select(userFarmClub.userId)
+                                .from(userFarmClub)
+                                .join(userFarmClub.farmClub, farmClub)
+                                .where(farmClub.id.eq(farmClubId))
+                ))
+                .fetch();
     }
 
     public HistoryDetailVo getFarmClubDetail(Long userFarmClubId) {
