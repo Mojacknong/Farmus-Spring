@@ -34,7 +34,8 @@ public class UserController {
 
     @DeleteMapping()
     public BaseResponseDto<?> deleteUser(@AuthenticationPrincipal CustomUser user)  {
-        return userService.deleteUser(user.getUserId());
+        userService.deleteUser(user.getUserId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
 
