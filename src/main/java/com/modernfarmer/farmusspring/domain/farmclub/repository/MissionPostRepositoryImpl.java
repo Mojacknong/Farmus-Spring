@@ -112,4 +112,20 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                         .and(missionPostLike.missionPost.id.eq(missionPostId)))
                 .execute();
     }
+
+    @Override
+    public void deleteMissionPostComments(Long userId){
+        queryFactory
+                .delete(missionPostComment)
+                .where(missionPostComment.user.id.eq(userId))
+                .execute();
+    }
+
+    @Override
+    public void deleteMissionPostLikes(Long userId){
+        queryFactory
+                .delete(missionPostLike)
+                .where(missionPostLike.user.id.eq(userId))
+                .execute();
+    }
 }

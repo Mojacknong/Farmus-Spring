@@ -16,4 +16,7 @@ public interface MissionPostRepositoryCustom {
     List<MissionPostVo> getMissionPostList(Long userId, Long missionPostId);
     List<MissionPostHistoryVo> getMissionPostHistory(Long missionPostId);
     void deleteMissionPostLike(Long userId, Long missionPostId);
+    void deleteMissionPostComments(Long userId);
+    void deleteMissionPostLikes(Long userId);
+
 }
