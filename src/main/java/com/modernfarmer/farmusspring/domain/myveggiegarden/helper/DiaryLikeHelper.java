@@ -13,7 +13,7 @@ public class DiaryLikeHelper {
 
     private final DiaryLikeRepository diaryLikeRepository;
 
-    public void deleteLikesByUserId(Long userId){
+    public void deleteLikes(Long userId){
         diaryLikeRepository.deleteDiaryLikesByUserId(userId);
     }
 }

@@ -13,7 +13,7 @@ public class DiaryCommentHelper {
 
     private final DiaryCommentRepository diaryCommentRepository;
 
-    public void deleteCommentsByUserId(Long userId){
+    public void deleteComments(Long userId){
         diaryCommentRepository.deleteDiaryCommentsByUserId(userId);
     }
 }
