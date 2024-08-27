@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.user.service;
 
 import com.modernfarmer.farmusspring.domain.farmclub.helper.FarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.MissionPostHelper;
+import com.modernfarmer.farmusspring.domain.history.helper.HistoryHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.DiaryCommentHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.DiaryLikeHelper;
@@ -41,6 +42,7 @@ public class UserService {
     private final MyVeggieHelper myVeggieHelper;
     private final FarmClubHelper farmClubHelper;
     private final MissionPostHelper missionPostHelper;
+    private final HistoryHelper historyHelper;
 
     @Transactional
     public BaseResponseDto<UserProfileResponse> selectUserProfile(Long userId) {
@@ -79,6 +81,10 @@ public class UserService {
             missionPostHelper.deleteMissionPostLikes(userId);
             // 1.4 유저 id를 통한 인증글 댓글 삭제
             missionPostHelper.deleteMissionPostComments(userId);
+
+        // 히스토리 도메인 정보 삭제
+            // 유저 id를 통한 히스토리 삭제
+            historyHelper.deleteHistory(userId);
 
         // 1.0 유저 도메인 삭제
         userHelper.deleteUser(userId);
