@@ -50,6 +50,11 @@ public class HistoryHelper {
         historyRepository.save(history);
     }
 
+    public void deleteHistory(Long userId) {
+        History history = getUserHistory(userId);
+        historyRepository.delete(history);
+    }
+
     public String createFarmClubHistoryDetail(Long userId, Long userFarmClubId, String veggieInfoId) {
         List<MissionPostHistoryVo> missionPostHistoryList = missionPostHelper.getMissionPostHistory(userFarmClubId);
         List<StepVo> stepList = veggieInfoHelper.getStepList(veggieInfoId);
