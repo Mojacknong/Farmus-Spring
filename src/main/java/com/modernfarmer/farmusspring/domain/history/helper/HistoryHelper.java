@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static com.modernfarmer.farmusspring.domain.history.utils.StringUtil.getHistoryPeriod;
 import static com.modernfarmer.farmusspring.domain.history.utils.StringUtil.getPostFormattedDate;
@@ -48,6 +49,11 @@ public class HistoryHelper {
     public void createUserHistory(Long userId) {
         History history = History.createHistory(userId);
         historyRepository.save(history);
+    }
+
+    public void deleteHistory(Long userId) {
+        Optional<History> historyOptional = historyRepository.findByUserId(userId);
+        historyOptional.ifPresent(historyRepository::delete);
     }
 
     public String createFarmClubHistoryDetail(Long userId, Long userFarmClubId, String veggieInfoId) {

@@ -5,6 +5,8 @@ import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,7 @@ public class UserFarmClub extends BaseEntity {
     @Column(nullable = false)
     private boolean isComplete;
 
+
     @OneToMany(mappedBy = "userFarmClub", cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<MissionPost> missionPosts = new ArrayList<>();
@@ -40,6 +43,7 @@ public class UserFarmClub extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "farm_club_id")
     private FarmClub farmClub;
+
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "my_veggie_id")

@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.farmclub.repository;
 
 import com.modernfarmer.farmusspring.domain.farmclub.vo.SuccessFarmClubVo;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +55,14 @@ public class UserFarmClubRepositoryImpl implements UserFarmClubRepositoryCustom 
                 .from(userFarmClub)
                 .where(userFarmClub.farmClub.id.eq(farmClubId).and(userFarmClub.userId.eq(userId)))
                 .fetchOne();
+    }
+
+
+    @Override
+    public void deleteFarmClubDomain(List<MyVeggie> myVeggieList){
+        queryFactory
+                .delete(userFarmClub)
+                .where(userFarmClub.myVeggie.id.in(myVeggieList.stream().map(MyVeggie::getId).toList()))
+                .execute();
     }
 }

@@ -40,4 +40,11 @@ public class MissionPostHelper {
     public void deleteMissionPostLike(Long userId, Long missionPostId) {
         missionPostRepository.deleteMissionPostLike(userId, missionPostId);
     }
+
+    public void deleteMissionPostComments(Long userId){
+        missionPostRepository.deleteMissionPostComments(userId);
+    }
+    public void deleteMissionPostLikes(Long userId){
+        missionPostRepository.deleteMissionPostLikes(userId);
+    }
 }

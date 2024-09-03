@@ -4,6 +4,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -19,5 +20,9 @@ public interface DiaryLikeRepository extends JpaRepository<DiaryLike, Long> {
     @Query("SELECT dl FROM diary_like as dl WHERE dl.diary.id = :diaryId AND dl.user.id = :userId")
     Optional<DiaryLike> findDiaryLikeByDiaryIdAndUserId(@Param("diaryId") Long diaryId, @Param("userId") Long userId);
 
+
+    @Modifying
+    @Query("delete from diary_like  as dl where dl.user.id = :userId")
+    void deleteDiaryLikesByUserId(@Param("userId") Long userId);
 
 }

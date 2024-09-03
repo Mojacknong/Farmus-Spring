@@ -7,7 +7,8 @@ import com.modernfarmer.farmusspring.domain.user.dto.response.EncouragementMessa
 import com.modernfarmer.farmusspring.domain.user.dto.response.SetLevelResponse;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.entity.UserMotivation;
-import com.modernfarmer.farmusspring.domain.user.exception.UserNotFoundException;
+import com.modernfarmer.farmusspring.domain.user.exception.UserErrorCode;
+import com.modernfarmer.farmusspring.domain.user.exception.custom.UserNotFoundException;
 import com.modernfarmer.farmusspring.domain.user.repository.UserMotivationRepository;
 import com.modernfarmer.farmusspring.domain.user.repository.UserRepository;
 import com.modernfarmer.farmusspring.domain.user.util.EncouragementMessages;
@@ -17,11 +18,9 @@ import com.modernfarmer.farmusspring.global.response.SuccessCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
@@ -107,7 +106,7 @@ public class OnBoardingService {
         return "알 수 없음";
     }
     public User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 없습니다."));
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 없습니다.", UserErrorCode.NOT_FOUND_USER));
     }
 
 }

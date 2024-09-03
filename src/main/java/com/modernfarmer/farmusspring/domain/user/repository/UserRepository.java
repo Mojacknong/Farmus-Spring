@@ -15,6 +15,9 @@ import java.util.Optional;
 public interface UserRepository  extends JpaRepository<User, Long> {
 
     Optional<User> findByUserNumber(String usernumber);
+
+    @Query("SELECT a FROM user AS a  WHERE a.id = :userId")
+    Optional<User> findUser(@Param("userId") Long userId);
     @Query("SELECT a FROM user AS a  WHERE a.id = :userId")
     User findUserData(@Param("userId") Long userId);
     User findUserById(Long userId);
@@ -36,6 +39,10 @@ public interface UserRepository  extends JpaRepository<User, Long> {
     @Modifying
     @Query("update user as u set u.nickname = :nickName where u.id = :userId")
     void updateNickname(@Param("userId") Long userId, @Param("nickName") String nickName);
+
+    @Modifying
+    @Query("delete from user  as u where u.id = :userId")
+    void deleteUser(@Param("userId") Long userId);
 
 
 }

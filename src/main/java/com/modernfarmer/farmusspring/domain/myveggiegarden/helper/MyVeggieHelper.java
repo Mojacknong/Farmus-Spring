@@ -8,6 +8,7 @@ import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRe
 import com.modernfarmer.farmusspring.domain.myveggiegarden.vo.MyVeggieVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,6 +23,10 @@ public class MyVeggieHelper {
     public MyVeggie getMyVeggieEntity(Long id) {
         return myVeggieRepository.findById(id).orElseThrow(() ->
                 new MyVeggieGardenBaseException("존재하지 않는 나의 채소입니다.", MyVeggieGardenErrorCode.NOT_FOUND_VEGGIE));
+    }
+
+    public List<MyVeggie> getMyVeggieUserId(Long userId){
+        return myVeggieRepository.findMyVeggieUserId(userId);
     }
 
     public MyVeggieVo getMyVeggieInfo(Long userId, String veggieInfoId) {
@@ -39,6 +44,11 @@ public class MyVeggieHelper {
     public void deleteMyVeggie(Long id) {
         myVeggieRepository.deleteById(id);
     }
+
+    public void deleteMyVeggiesByUserId(Long userId){
+        myVeggieRepository.deleteMyVeggiesByUserId(userId);
+    }
+
 
     public List<Diary> getDiariesByMyVeggie(MyVeggie myVeggie) {
         return myVeggieRepository.findDiariesByMyVeggie(myVeggie);

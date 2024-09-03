@@ -6,7 +6,8 @@ import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 import java.util.ArrayList;
@@ -41,18 +42,20 @@ public class MyVeggie extends BaseEntity {
     @Column(name = "veggie_image")
     private String veggieImage;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
 
     @OneToMany(mappedBy = "myVeggie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Routine> routines = new ArrayList<>();
 
+
     @OneToMany(mappedBy = "myVeggie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Diary> diaries = new ArrayList<>();
+
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_farm_club_id")

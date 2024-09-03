@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice(basePackages = "com.modernfarmer.farmusspring.domain.test")
 public class UserExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public BaseResponseDto<?> handleUserNotFoundException(TestException e, HttpServletRequest request) {
-        log.error("UserException : {} {} errMessage={}\n",
-                request.getMethod(),
-                request.getRequestURI(),
-                e.getMessage());
-        return BaseResponseDto.of(UserErrorCode.NOT_FOUND_USER, e);
-    }
+//    @ExceptionHandler(UserNotFoundException.class)
+//    public BaseResponseDto<?> handleUserNotFoundException(TestException e, HttpServletRequest request) {
+//        log.error("UserException : {} {} errMessage={}\n",
+//                request.getMethod(),
+//                request.getRequestURI(),
+//                e.getMessage());
+//        return BaseResponseDto.of(UserErrorCode.NOT_FOUND_USER, e);
+//    }
 }

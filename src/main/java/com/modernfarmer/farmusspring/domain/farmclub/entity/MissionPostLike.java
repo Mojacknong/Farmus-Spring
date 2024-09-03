@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,9 +23,12 @@ public class MissionPostLike extends BaseEntity {
     @Column(name = "mission_post_like_id")
     private Long id;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_post_id")
     private MissionPost missionPost;
+
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

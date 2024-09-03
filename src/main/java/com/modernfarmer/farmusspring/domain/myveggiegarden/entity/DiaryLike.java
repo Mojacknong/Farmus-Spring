@@ -26,7 +26,6 @@ public class DiaryLike extends BaseEntity {
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

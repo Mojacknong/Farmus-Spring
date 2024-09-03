@@ -10,6 +10,7 @@ import com.modernfarmer.farmusspring.domain.farmclub.exception.custom.FarmClubEn
 import com.modernfarmer.farmusspring.domain.farmclub.repository.FarmClubRepository;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.UserFarmClubRepository;
 import com.modernfarmer.farmusspring.domain.history.vo.HistoryDetailVo;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -47,5 +48,9 @@ public class FarmClubHelper {
 
     public List<Long> findFarmClubIdsByUserId(Long userId) {
         return userFarmClubRepository.findFarmClubIdsByUserId(userId);
+    }
+
+    public void deleteFarmClubDomain(List<MyVeggie> myVeggieList){
+        userFarmClubRepository.deleteFarmClubDomain(myVeggieList);
     }
 }

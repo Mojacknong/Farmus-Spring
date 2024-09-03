@@ -9,6 +9,8 @@ import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 import java.time.LocalDateTime;
@@ -49,22 +51,25 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Boolean notificationStatus;
 
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserFirebaseToken> userFirebaseTokens = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserMotivation> userMotivations = new ArrayList<>();
 
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<MyVeggie> myVeggies = new ArrayList<>();
 
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<DiaryComment> diaryComments = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
