@@ -59,34 +59,15 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId) {
         Optional<User> user = userRepository.findUser(userId);
-        // 유저 검증
         verifyUser(user);
-
-        // 팜클럽 도메인 정보 삭제
-            // 유저의 채소 엔티티 조회
-            List<MyVeggie> myVeggieList = myVeggieHelper.getMyVeggieUserId(userId);
-            // 내 채소 id를 통한 유저 팜클럽 삭제
-            farmClubHelper.deleteFarmClubDomain(myVeggieList);
-
-        // 채소 도메인 정보 삭제
-            // 유저 id를 통한 내 채소 삭제
-            myVeggieHelper.deleteMyVeggiesByUserId(userId);
-
-        // 유저 도메인 정보 삭제
-            // 1.1 유저 id를 통한 성장일기 좋아요 삭제
-            diaryLikeHelper.deleteLikes(userId);
-            // 1.2 유저 id를 통한 성장일기 댓글 삭제
-            diaryCommentHelper.deleteComments(userId);
-            // 1.3 유저 id를 통한 인증글 좋아요 삭제
-            missionPostHelper.deleteMissionPostLikes(userId);
-            // 1.4 유저 id를 통한 인증글 댓글 삭제
-            missionPostHelper.deleteMissionPostComments(userId);
-
-        // 히스토리 도메인 정보 삭제
-            // 유저 id를 통한 히스토리 삭제
-            historyHelper.deleteHistory(userId);
-
-        // 1.0 유저 도메인 삭제
+        List<MyVeggie> myVeggieList = myVeggieHelper.getMyVeggieUserId(userId);
+        farmClubHelper.deleteFarmClubDomain(myVeggieList);
+        myVeggieHelper.deleteMyVeggiesByUserId(userId);
+        diaryLikeHelper.deleteLikes(userId);
+        diaryCommentHelper.deleteComments(userId);
+        missionPostHelper.deleteMissionPostLikes(userId);
+        missionPostHelper.deleteMissionPostComments(userId);
+        historyHelper.deleteHistory(userId);
         userHelper.deleteUser(userId);
     }
 
