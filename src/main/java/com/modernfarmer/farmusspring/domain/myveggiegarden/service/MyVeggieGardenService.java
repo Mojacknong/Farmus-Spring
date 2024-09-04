@@ -107,7 +107,7 @@ public class MyVeggieGardenService {
     }
 
     public int checkFarmClubAffiliation(MyVeggie myVeggie){
-        if(myVeggie.getUserFarmClub() == null)
+        if(myVeggie.getUserFarmClub() == null || myVeggie.getUserFarmClub().isComplete())
             return -1;
         return myVeggie.getUserFarmClub().getCurrentStep();
     }
