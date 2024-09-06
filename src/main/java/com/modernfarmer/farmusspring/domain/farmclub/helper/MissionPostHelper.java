@@ -49,6 +49,12 @@ public class MissionPostHelper {
         missionPostRepository.deleteMissionPostLike(userId, missionPostId);
     }
 
+    public void deleteMissionPost(MissionPost missionPost){
+        missionPostRepository.delete(missionPost);
+    }
+    public void deleteMissionPostComment(MissionPostComment missionPostComment){
+        missionPostCommentRepository.delete(missionPostComment);
+    }
     public void deleteMissionPostComments(Long userId){
         missionPostRepository.deleteMissionPostComments(userId);
     }
