@@ -79,13 +79,27 @@ public class MissionPostService {
     @Transactional
     public void reportMissionPost(Long userId, Long missionPostId) {
         MissionPost missionPost = missionPostHelper.getMissionPost(missionPostId);
-
+        MissionPostReport.createMissionPostReport(missionPost, userHelper.getUserEntity(userId));
+        int userCount = missionPost.getUserFarmClub().getFarmClub().getUserFarmClubs().size();
+        int reportCount = missionPost.getMissionPostReports().size();
+        if (userCount < 4 && reportCount >= 2) {
+            missionPostHelper.deleteMissionPost(missionPost);
+        } else if (reportCount >= 3) {
+            missionPostHelper.deleteMissionPost(missionPost);
+        }
     }
 
     @Transactional
     public void reportMissionPostComment(Long userId, Long missionPostCommentId) {
         MissionPostComment missionPostComment = missionPostHelper.getMissionPostComment(missionPostCommentId);
-
+        MissionPostCommentReport.createMissionPostCommentReport(missionPostComment, userHelper.getUserEntity(userId));
+        int userCount = missionPostComment.getMissionPost().getUserFarmClub().getFarmClub().getUserFarmClubs().size();
+        int reportCount = missionPostComment.getMissionPostCommentReports().size();
+        if (userCount < 4 && reportCount >= 2) {
+            missionPostHelper.deleteMissionPostComment(missionPostComment);
+        } else if (reportCount >= 3) {
+            missionPostHelper.deleteMissionPostComment(missionPostComment);
+        }
     }
 
     private MissionPost saveMissionPost(MissionPost missionPost) {
