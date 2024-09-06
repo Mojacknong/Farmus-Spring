@@ -10,7 +10,8 @@ public enum FarmClubErrorCode implements ResponseCode {
 
     FARM_CLUB_NOT_FOUND(3001, "해당 팜클럽을 찾을 수 없습니다."),
     USER_FARM_CLUB_NOT_FOUND(3002, "해당 등록 정보를 찾을 수 없습니다."),
-    MISSION_POST_NOT_FOUND(3003, "해당 미션 포스트를 찾을 수 없습니다.");
+    MISSION_POST_NOT_FOUND(3003, "해당 미션 포스트를 찾을 수 없습니다."),
+    MISSION_POST_COMMENT_NOT_FOUND(3004, "해당 미션 포스트 댓글을 찾을 수 없습니다.");
 
     private final int code;
     private final String message;
