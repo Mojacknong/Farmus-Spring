@@ -16,7 +16,9 @@ import java.util.List;
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QFarmClub.farmClub;
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QMissionPost.missionPost;
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QMissionPostComment.missionPostComment;
+import static com.modernfarmer.farmusspring.domain.farmclub.entity.QMissionPostCommentReport.missionPostCommentReport;
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QMissionPostLike.missionPostLike;
+import static com.modernfarmer.farmusspring.domain.farmclub.entity.QMissionPostReport.missionPostReport;
 import static com.modernfarmer.farmusspring.domain.farmclub.entity.QUserFarmClub.userFarmClub;
 import static com.modernfarmer.farmusspring.domain.myveggiegarden.entity.QMyVeggie.myVeggie;
 import static com.modernfarmer.farmusspring.domain.user.entity.QUser.user;
@@ -43,11 +45,17 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
 
     @Override
     public GetMissionPostCommentResponseDto getMissionPostComment(Long missionPostId, Long userId) {
+        List<Long> reportCommentIds = queryFactory
+                .select(missionPostCommentReport.missionPostComment.id)
+                .from(missionPostCommentReport)
+                .where(missionPostCommentReport.user.id.eq(userId))
+                .fetch();
+
         List<MissionPostCommentVo> comments = queryFactory
                 .select(new QMissionPostCommentVo(missionPostComment, user, Expressions.constant(userId)))
                 .from(missionPostComment)
                 .join(missionPostComment.missionPost, missionPost)
-                .where(missionPost.id.eq(missionPostId))
+                .where(missionPost.id.eq(missionPostId).and(missionPostComment.id.notIn(reportCommentIds)))
                 .fetch();
 
         Boolean isMyPost = queryFactory
@@ -61,6 +69,12 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
 
     @Override
     public List<MissionPostVo> getMissionPostList(Long userId, Long farmClubId) {
+
+        List<Long> reportMissionPostIds = queryFactory
+                .select(missionPostReport.missionPost.id)
+                .from(missionPostReport)
+                .where(missionPostReport.user.id.eq(userId))
+                .fetch();
 
         return queryFactory
                 .select(new QMissionPostVo(
@@ -82,7 +96,7 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .join(missionPost.userFarmClub, userFarmClub)
                 .join(userFarmClub.myVeggie, myVeggie)
                 .join(myVeggie.user, user)
-                .where(farmClub.id.eq(farmClubId))
+                .where(farmClub.id.eq(farmClubId).and(missionPost.id.notIn(reportMissionPostIds)))
                 .orderBy(missionPost.createdDate.desc())
                 .fetch();
     }
