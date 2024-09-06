@@ -3,13 +3,13 @@ package com.modernfarmer.farmusspring.domain.farmclub.entity;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -35,6 +35,10 @@ public class MissionPostComment extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "missionPostComment", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<MissionPostCommentReport> missionPostCommentReports = new ArrayList<>();
+
     public static MissionPostComment createMissionPostComment(String comment, MissionPost missionPost, User user){
         MissionPostComment newMissionPostComment = MissionPostComment.builder()
                 .comment(comment)
@@ -46,5 +50,9 @@ public class MissionPostComment extends BaseEntity {
         user.addMissionPostComment(newMissionPostComment);
 
         return newMissionPostComment;
+    }
+
+    public void addReport(MissionPostCommentReport missionPostCommentReport){
+        this.missionPostCommentReports.add(missionPostCommentReport);
     }
 }
