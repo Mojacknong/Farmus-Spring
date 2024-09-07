@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class DiaryCommentReportDto {
 
     @NotNull(message = "null 값을 가지면 안됩니다.")
-    private Long diaryCommentId;
+    private Long commentId;
 
     private String reason;
 }

@@ -79,7 +79,7 @@ public class MyVeggieDiaryService {
     @Transactional
     public BaseResponseDto<Void> reportDiaryComment(DiaryCommentReportDto diaryCommentReportDto, Long userId) {
         User user = userHelper.getUserEntity(userId);
-        DiaryComment diaryComment = diaryCommentHelper.getDiaryCommentEntity(diaryCommentReportDto.getDiaryCommentId());
+        DiaryComment diaryComment = diaryCommentHelper.getDiaryCommentEntity(diaryCommentReportDto.getCommentId());
         DiaryCommentReport.createDiaryReport(diaryComment,user, diaryCommentReportDto.getReason());
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
