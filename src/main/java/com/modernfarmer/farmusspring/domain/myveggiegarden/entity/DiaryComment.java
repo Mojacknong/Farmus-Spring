@@ -4,13 +4,13 @@ import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,6 +34,10 @@ public class DiaryComment extends BaseEntity {
     @JoinColumn(name = "diary_id")
     private Diary diary;
 
+    @OneToMany(mappedBy = "diaryComment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<DiaryCommentReport> diaryCommentReports = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -49,6 +53,9 @@ public class DiaryComment extends BaseEntity {
         return newDiaryComment;
     }
 
+    public void addReport(DiaryCommentReport diaryCommentReport){
+        diaryCommentReports.add(diaryCommentReport);
+    }
 
 
 }

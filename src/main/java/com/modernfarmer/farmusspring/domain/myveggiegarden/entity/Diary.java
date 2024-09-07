@@ -2,6 +2,7 @@ package com.modernfarmer.farmusspring.domain.myveggiegarden.entity;
 
 
 import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
+import com.modernfarmer.farmusspring.domain.farmclub.entity.MissionPostCommentReport;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -48,7 +49,9 @@ public class Diary extends BaseEntity {
     @Builder.Default
     private List<DiaryComment> diaryComments = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<DiaryReport> diaryReports = new ArrayList<>();
 
     @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
@@ -79,5 +82,8 @@ public class Diary extends BaseEntity {
         diaryLikes.add(diaryLike);
     }
 
+    public void addReport(DiaryReport diaryReport){
+        diaryReports.add(diaryReport);
+    }
 
 }

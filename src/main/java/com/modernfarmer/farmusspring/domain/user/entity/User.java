@@ -2,9 +2,7 @@ package com.modernfarmer.farmusspring.domain.user.entity;
 
 import com.modernfarmer.farmusspring.domain.farmclub.entity.MissionPostComment;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.MissionPostLike;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.*;
 import com.modernfarmer.farmusspring.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -78,6 +76,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<MissionPostComment> missionPostComments = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @Builder.Default
