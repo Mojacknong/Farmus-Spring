@@ -97,6 +97,24 @@ public class MyVeggieDiaryController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
+    @PostMapping(value = "/report")
+    public BaseResponseDto<?> reportDiary(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody DiaryReportDto diaryReportDto
+    ){
+        myVeggieDiaryService.reportDiary(diaryReportDto, user.getUserId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @PostMapping(value = "/comment/report")
+    public BaseResponseDto<?> reportDiaryComment(
+            @AuthenticationPrincipal CustomUser user,
+            @Validated @RequestBody DiaryCommentReportDto diaryCommentReportDto
+    ){
+        myVeggieDiaryService.reportDiaryComment(diaryCommentReportDto, user.getUserId());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
     @DeleteMapping(value = "/like")
     public BaseResponseDto<?> cancelLike(
             @AuthenticationPrincipal CustomUser user,

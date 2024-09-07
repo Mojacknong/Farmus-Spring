@@ -1,22 +1,24 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DiaryCommentReportDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DiaryDeleteDto;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DiaryReportDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.response.*;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.Diary;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryComment;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.DiaryLike;
-import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.MyVeggie;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.entity.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.*;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.DiaryAccessDeniedException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.LikeNotFoundException;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.LikeAlreadyExistExcpetion;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.exception.custom.MyVeggieNotFoundException;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.DiaryCommentHelper;
+import com.modernfarmer.farmusspring.domain.myveggiegarden.helper.DiaryHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryCommentRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryLikeRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.DiaryRepository;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.repository.MyVeggieRepository;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
+import com.modernfarmer.farmusspring.domain.user.helper.UserHelper;
 import com.modernfarmer.farmusspring.domain.user.service.UserService;
 import com.modernfarmer.farmusspring.domain.user.util.DateManager;
 import com.modernfarmer.farmusspring.global.response.BaseResponseDto;
@@ -44,6 +46,9 @@ public class MyVeggieDiaryService {
     private final DiaryRepository diaryRepository;
     private final DiaryCommentRepository diaryCommentRepository;
     private final DiaryLikeRepository diaryLikeRepository;
+    private final UserHelper userHelper;
+    private final DiaryCommentHelper diaryCommentHelper;
+    private final DiaryHelper diaryHelper;
 
     @Transactional
     public BaseResponseDto<Void> settingMyVeggieDiary(
@@ -61,6 +66,21 @@ public class MyVeggieDiaryService {
                 state,
                 myVeggieId
         );
+        return BaseResponseDto.of(SuccessCode.SUCCESS,null);
+    }
+    @Transactional
+    public BaseResponseDto<Void> reportDiary(DiaryReportDto diaryReportDto, Long userId) {
+        User user = userHelper.getUserEntity(userId);
+        Diary diary = diaryHelper.getDiaryEntity(diaryReportDto.getDiaryId());
+        DiaryReport.createDiaryReport(diary,user, diaryReportDto.getReason());
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @Transactional
+    public BaseResponseDto<Void> reportDiaryComment(DiaryCommentReportDto diaryCommentReportDto, Long userId) {
+        User user = userHelper.getUserEntity(userId);
+        DiaryComment diaryComment = diaryCommentHelper.getDiaryCommentEntity(diaryCommentReportDto.getDiaryCommentId());
+        DiaryCommentReport.createDiaryReport(diaryComment,user, diaryCommentReportDto.getReason());
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
     @Transactional
