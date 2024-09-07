@@ -180,4 +180,22 @@ public class FarmClubController {
     ) {
         return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.successFarmClub(farmClubId, user.getUserId()));
     }
+
+    @PostMapping("/report/mission/{missionPostId}")
+    public BaseResponseDto<?> reportMissionPost(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable Long missionPostId
+    ) {
+        missionPostService.reportMissionPost(user.getUserId(), missionPostId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @PostMapping("/report/comment/{commentId}")
+    public BaseResponseDto<?> reportMissionPostComment(
+            @AuthenticationPrincipal CustomUser user,
+            @PathVariable Long commentId
+    ) {
+        missionPostService.reportMissionPostComment(user.getUserId(), commentId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
 }

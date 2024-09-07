@@ -40,6 +40,9 @@ public class MissionPost extends BaseEntity {
     @Builder.Default
     private List<MissionPostComment> missionPostComments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "missionPost", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<MissionPostReport> missionPostReports = new ArrayList<>();
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -65,5 +68,9 @@ public class MissionPost extends BaseEntity {
 
     public void addComment(MissionPostComment missionPostComment) {
         missionPostComments.add(missionPostComment);
+    }
+
+    public void addReport(MissionPostReport missionPostReport){
+        this.missionPostReports.add(missionPostReport);
     }
 }

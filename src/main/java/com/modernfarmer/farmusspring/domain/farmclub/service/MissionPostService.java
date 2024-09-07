@@ -7,7 +7,6 @@ import com.modernfarmer.farmusspring.domain.farmclub.entity.*;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.MissionPostHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.helper.UserFarmClubHelper;
 import com.modernfarmer.farmusspring.domain.farmclub.repository.MissionPostRepository;
-import com.modernfarmer.farmusspring.domain.farmclub.vo.MissionPostCommentVo;
 import com.modernfarmer.farmusspring.domain.farmclub.vo.MissionPostVo;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.helper.UserHelper;
@@ -74,7 +73,33 @@ public class MissionPostService {
     }
 
     public GetMissionPostCommentResponseDto getMissionPostComment(Long missionPostId, Long userId) {
-        return missionPostHelper.getMissionPostComment(missionPostId, userId);
+        return missionPostHelper.getMissionPostComments(missionPostId, userId);
+    }
+
+    @Transactional
+    public void reportMissionPost(Long userId, Long missionPostId) {
+        MissionPost missionPost = missionPostHelper.getMissionPost(missionPostId);
+        MissionPostReport.createMissionPostReport(missionPost, userHelper.getUserEntity(userId));
+        int userCount = missionPost.getUserFarmClub().getFarmClub().getUserFarmClubs().size();
+        int reportCount = missionPost.getMissionPostReports().size();
+        if (userCount < 4 && reportCount >= 2) {
+            missionPostHelper.deleteMissionPost(missionPost);
+        } else if (reportCount >= 3) {
+            missionPostHelper.deleteMissionPost(missionPost);
+        }
+    }
+
+    @Transactional
+    public void reportMissionPostComment(Long userId, Long missionPostCommentId) {
+        MissionPostComment missionPostComment = missionPostHelper.getMissionPostComment(missionPostCommentId);
+        MissionPostCommentReport.createMissionPostCommentReport(missionPostComment, userHelper.getUserEntity(userId));
+        int userCount = missionPostComment.getMissionPost().getUserFarmClub().getFarmClub().getUserFarmClubs().size();
+        int reportCount = missionPostComment.getMissionPostCommentReports().size();
+        if (userCount < 4 && reportCount >= 2) {
+            missionPostHelper.deleteMissionPostComment(missionPostComment);
+        } else if (reportCount >= 3) {
+            missionPostHelper.deleteMissionPostComment(missionPostComment);
+        }
     }
 
     private MissionPost saveMissionPost(MissionPost missionPost) {
