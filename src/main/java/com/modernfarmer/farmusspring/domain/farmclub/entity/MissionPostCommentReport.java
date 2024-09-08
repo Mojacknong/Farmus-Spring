@@ -22,6 +22,9 @@ public class MissionPostCommentReport {
     @Column(name = "mission_post_comment_report_id")
     private Long id;
 
+    @Column(name = "reason")
+    private String reason;
+
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_post_comment_id")
@@ -31,10 +34,11 @@ public class MissionPostCommentReport {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static MissionPostCommentReport createMissionPostCommentReport(MissionPostComment missionPostComment, User user){
+    public static MissionPostCommentReport createMissionPostCommentReport(MissionPostComment missionPostComment, User user, String reason){
         MissionPostCommentReport report = MissionPostCommentReport.builder()
                 .missionPostComment(missionPostComment)
                 .user(user)
+                .reason(reason)
                 .build();
 
         missionPostComment.addReport(report);
