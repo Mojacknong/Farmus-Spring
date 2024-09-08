@@ -1,6 +1,8 @@
 package com.modernfarmer.farmusspring.domain.farmclub.service;
 
+import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateMissionPostCommentReportRequestDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateMissionPostCommentRequestDto;
+import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateMissionPostReportRequestDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.req.CreateMissionPostRequestDto;
 import com.modernfarmer.farmusspring.domain.farmclub.dto.res.*;
 import com.modernfarmer.farmusspring.domain.farmclub.entity.*;
@@ -77,9 +79,9 @@ public class MissionPostService {
     }
 
     @Transactional
-    public void reportMissionPost(Long userId, Long missionPostId) {
-        MissionPost missionPost = missionPostHelper.getMissionPost(missionPostId);
-        MissionPostReport.createMissionPostReport(missionPost, userHelper.getUserEntity(userId));
+    public void reportMissionPost(Long userId, CreateMissionPostReportRequestDto requestDto) {
+        MissionPost missionPost = missionPostHelper.getMissionPost(requestDto.missionPostId());
+        MissionPostReport.createMissionPostReport(missionPost, userHelper.getUserEntity(userId), requestDto.reason());
         int userCount = missionPost.getUserFarmClub().getFarmClub().getUserFarmClubs().size();
         int reportCount = missionPost.getMissionPostReports().size();
         if (userCount < 4 && reportCount >= 2) {
@@ -90,9 +92,9 @@ public class MissionPostService {
     }
 
     @Transactional
-    public void reportMissionPostComment(Long userId, Long missionPostCommentId) {
-        MissionPostComment missionPostComment = missionPostHelper.getMissionPostComment(missionPostCommentId);
-        MissionPostCommentReport.createMissionPostCommentReport(missionPostComment, userHelper.getUserEntity(userId));
+    public void reportMissionPostComment(Long userId, CreateMissionPostCommentReportRequestDto requestDto) {
+        MissionPostComment missionPostComment = missionPostHelper.getMissionPostComment(requestDto.missionPostCommentId());
+        MissionPostCommentReport.createMissionPostCommentReport(missionPostComment, userHelper.getUserEntity(userId), requestDto.reason());
         int userCount = missionPostComment.getMissionPost().getUserFarmClub().getFarmClub().getUserFarmClubs().size();
         int reportCount = missionPostComment.getMissionPostCommentReports().size();
         if (userCount < 4 && reportCount >= 2) {
