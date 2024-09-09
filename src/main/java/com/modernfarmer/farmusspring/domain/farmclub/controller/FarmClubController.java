@@ -190,7 +190,7 @@ public class FarmClubController {
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 
-    @PostMapping("/report/comment/{commentId}")
+    @PostMapping("/report/comment")
     public BaseResponseDto<?> reportMissionPostComment(
             @AuthenticationPrincipal CustomUser user,
             @RequestBody CreateMissionPostCommentReportRequestDto requestDto
