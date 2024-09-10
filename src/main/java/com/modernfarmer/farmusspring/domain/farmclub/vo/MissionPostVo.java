@@ -8,6 +8,7 @@ import static com.modernfarmer.farmusspring.domain.farmclub.util.DateUtil.localD
 
 public record MissionPostVo(
         Long missionPostId,
+        Long userId,
         int stepNum,
         String nickname,
         String profileImage,
@@ -23,6 +24,7 @@ public record MissionPostVo(
     {
         this(
                 missionPost.getId(),
+                user.getId(),
                 missionPost.getStepNum(),
                 user.getNickname(),
                 user.getProfileImage(),
