@@ -198,4 +198,20 @@ public class FarmClubController {
         missionPostService.reportMissionPostComment(user.getUserId(), requestDto);
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
+
+    @DeleteMapping("/mission/{missionPostId}")
+    public BaseResponseDto<?> deleteMissionPost(
+            @PathVariable Long missionPostId
+    ) {
+        missionPostService.deleteMissionPost(missionPostId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @DeleteMapping("/mission/comment/{missionPostCommentId}")
+    public BaseResponseDto<?> deleteMissionPostComment(
+            @PathVariable Long missionPostCommentId
+    ) {
+        missionPostService.deleteMissionPostComment(missionPostCommentId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
 }
