@@ -143,8 +143,8 @@ public class FarmClubService {
         return farmClubHelper.getUserFarmClubList(userId);
     }
 
-    public GetFarmClubUserListResponseDto getFarmClubUserList(Long farmClubId) {
-        return farmClubHelper.getFarmClubUserList(farmClubId);
+    public GetFarmClubUserListResponseDto getFarmClubUserList(Long userId, Long farmClubId) {
+        return farmClubHelper.getFarmClubUserList(userId, farmClubId);
     }
 
     public GetMyVeggieResponseDto getMyVeggieForRegister(Long userId, String veggieInfoId) {

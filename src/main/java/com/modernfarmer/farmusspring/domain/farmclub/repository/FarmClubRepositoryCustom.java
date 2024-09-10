@@ -15,6 +15,6 @@ public interface FarmClubRepositoryCustom {
     List<GetMyFarmClubListResponseDto> findMyFarmClubList(Long userId);
     GetMyFarmClubVo findMyFarmClub(Long farmClubId, Long userId);
     HistoryDetailVo getFarmClubDetail(Long userFarmClubId);
-    List<GetFarmClubUserVo> findFarmClubUserList(Long farmClubId);
+    List<GetFarmClubUserVo> findFarmClubUserList(Long userId, Long farmClubId);
     List<FarmClub> getRecommendedFarmClubList(String level);
 }
