@@ -110,23 +110,40 @@ public class FarmClubRepositoryImpl implements FarmClubRepositoryCustom {
     }
 
     @Override
-    public List<GetFarmClubUserVo> findFarmClubUserList(Long farmClubId) {
+    public List<GetFarmClubUserVo> findFarmClubUserList(Long userId, Long farmClubId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-        return queryFactory
+        // 내 유저 정보
+        List<GetFarmClubUserVo> userList = queryFactory
                 .select(Projections.constructor(
                         GetFarmClubUserVo.class,
+                        user.id,
                         user.nickname,
                         user.profileImage))
                 .from(user)
-                .where(user.id.in(
-                        JPAExpressions
-                                .select(userFarmClub.userId)
-                                .from(userFarmClub)
-                                .join(userFarmClub.farmClub, farmClub)
-                                .where(farmClub.id.eq(farmClubId))
-                ))
+                .where(user.id.eq(userId))  // 내 유저 id를 먼저 조회
                 .fetch();
+
+        // 나머지 유저 정보
+        userList.addAll(
+                queryFactory
+                        .select(Projections.constructor(
+                                GetFarmClubUserVo.class,
+                                user.id,
+                                user.nickname,
+                                user.profileImage))
+                        .from(user)
+                        .where(user.id.in(
+                                JPAExpressions
+                                        .select(userFarmClub.userId)
+                                        .from(userFarmClub)
+                                        .join(userFarmClub.farmClub, farmClub)
+                                        .where(farmClub.id.eq(farmClubId))
+                        ).and(user.id.ne(userId)))  // 내 유저 id를 제외하고 조회
+                        .fetch()
+        );
+
+        return userList;
     }
 
     public HistoryDetailVo getFarmClubDetail(Long userFarmClubId) {

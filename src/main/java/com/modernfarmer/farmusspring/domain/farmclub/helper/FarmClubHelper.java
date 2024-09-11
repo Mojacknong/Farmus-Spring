@@ -38,8 +38,8 @@ public class FarmClubHelper {
         return farmClubRepository.findMyFarmClubList(userId);
     }
 
-    public GetFarmClubUserListResponseDto getFarmClubUserList(Long farmClubId) {
-        return GetFarmClubUserListResponseDto.of(farmClubRepository.findFarmClubUserList(farmClubId));
+    public GetFarmClubUserListResponseDto getFarmClubUserList(Long userId, Long farmClubId) {
+        return GetFarmClubUserListResponseDto.of(farmClubRepository.findFarmClubUserList(userId, farmClubId));
     }
 
     public List<FarmClub> getRecommendedFarmClubList(String level) {

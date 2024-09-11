@@ -104,6 +104,16 @@ public class MissionPostService {
         }
     }
 
+    public void deleteMissionPost(Long missionPostId) {
+        MissionPost missionPost = missionPostHelper.getMissionPost(missionPostId);
+        missionPostHelper.deleteMissionPost(missionPost);
+    }
+
+    public void deleteMissionPostComment(Long missionPostCommentId) {
+        MissionPostComment missionPostComment = missionPostHelper.getMissionPostComment(missionPostCommentId);
+        missionPostHelper.deleteMissionPostComment(missionPostComment);
+    }
+
     private MissionPost saveMissionPost(MissionPost missionPost) {
         return missionPostRepository.save(missionPost);
     }

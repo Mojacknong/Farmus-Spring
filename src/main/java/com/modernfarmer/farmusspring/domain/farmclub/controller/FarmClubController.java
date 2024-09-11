@@ -122,9 +122,10 @@ public class FarmClubController {
 
     @GetMapping("/{farmClubId}/user")
     public BaseResponseDto<?> getFarmClubUserList(
+            @AuthenticationPrincipal CustomUser user,
             @PathVariable Long farmClubId
     ) {
-        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getFarmClubUserList(farmClubId));
+        return BaseResponseDto.of(SuccessCode.SUCCESS, farmClubService.getFarmClubUserList(user.getUserId(), farmClubId));
     }
 
     @GetMapping("/mission/{missionPostId}")
@@ -196,6 +197,22 @@ public class FarmClubController {
             @RequestBody CreateMissionPostCommentReportRequestDto requestDto
     ) {
         missionPostService.reportMissionPostComment(user.getUserId(), requestDto);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @DeleteMapping("/mission/{missionPostId}")
+    public BaseResponseDto<?> deleteMissionPost(
+            @PathVariable Long missionPostId
+    ) {
+        missionPostService.deleteMissionPost(missionPostId);
+        return BaseResponseDto.of(SuccessCode.SUCCESS, null);
+    }
+
+    @DeleteMapping("/mission/comment/{missionPostCommentId}")
+    public BaseResponseDto<?> deleteMissionPostComment(
+            @PathVariable Long missionPostCommentId
+    ) {
+        missionPostService.deleteMissionPostComment(missionPostCommentId);
         return BaseResponseDto.of(SuccessCode.SUCCESS, null);
     }
 }

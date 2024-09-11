@@ -5,11 +5,13 @@ import lombok.Builder;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record GetFarmClubUserVo(
+        Long userId,
         String nickname,
         String profileImage
 ) {
-    public static GetFarmClubUserVo of(String nickname, String profileImage) {
+    public static GetFarmClubUserVo of(Long userId, String nickname, String profileImage) {
         return GetFarmClubUserVo.builder()
+                .userId(userId)
                 .nickname(nickname)
                 .profileImage(profileImage)
                 .build();
