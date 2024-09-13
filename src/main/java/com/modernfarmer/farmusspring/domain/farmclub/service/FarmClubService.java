@@ -132,7 +132,7 @@ public class FarmClubService {
         List<StepVo> stepList = veggieInfoHelper.getStepList(veggieInfoId);
         String randomTip = getRandomTip(stepList, farmClubInfo.currentStep());
         List<GetMissionPostListVo> missionList =
-                missionPostRepository.getMissionPostStepNumAndImage(farmClubId);
+                missionPostRepository.getMissionPostStepNumAndImage(userId, farmClubId);
 
         log.info("missionList: {}", missionList);
 

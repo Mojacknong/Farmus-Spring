@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MissionPostRepositoryCustom {
 
-    List<GetMissionPostListVo> getMissionPostStepNumAndImage(Long farmClubId);
+    List<GetMissionPostListVo> getMissionPostStepNumAndImage(Long userId, Long farmClubId);
     GetMissionPostCommentResponseDto getMissionPostComment(Long missionPostId, Long userId);
     List<MissionPostVo> getMissionPostList(Long userId, Long missionPostId);
     List<MissionPostHistoryVo> getMissionPostHistory(Long missionPostId);
