@@ -29,7 +29,13 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<GetMissionPostListVo> getMissionPostStepNumAndImage(Long farmClubId) {
+    public List<GetMissionPostListVo> getMissionPostStepNumAndImage(Long userId, Long farmClubId) {
+
+        List<Long> reportMissionPostIds = queryFactory
+                .select(missionPostReport.missionPost.id)
+                .from(missionPostReport)
+                .where(missionPostReport.user.id.eq(userId))
+                .fetch();
 
         return queryFactory
                 .select(Projections.constructor(
@@ -39,7 +45,7 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .from(missionPost)
                 .join(missionPost.userFarmClub, userFarmClub)
                 .join(userFarmClub.farmClub, farmClub)
-                .where(farmClub.id.eq(farmClubId))
+                .where(farmClub.id.eq(farmClubId).and(missionPost.id.notIn(reportMissionPostIds)))
                 .fetch();
     }
 
@@ -75,6 +81,11 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .from(missionPostReport)
                 .where(missionPostReport.user.id.eq(userId))
                 .fetch();
+        List<Long> reportCommentIds = queryFactory
+                .select(missionPostCommentReport.missionPostComment.id)
+                .from(missionPostCommentReport)
+                .where(missionPostCommentReport.user.id.eq(userId))
+                .fetch();
 
         return queryFactory
                 .select(new QMissionPostVo(
@@ -85,7 +96,8 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                                 .where(missionPostLike.missionPost.eq(missionPost)),
                         JPAExpressions.select(missionPostComment.count())
                                 .from(missionPostComment)
-                                .where(missionPostComment.missionPost.eq(missionPost)),
+                                .where(missionPostComment.missionPost.eq(missionPost)
+                                        .and(missionPostComment.id.notIn(reportCommentIds))),
                         JPAExpressions.selectOne()
                                 .from(missionPostLike)
                                 .where(missionPostLike.missionPost.eq(missionPost)
