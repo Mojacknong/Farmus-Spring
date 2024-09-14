@@ -40,17 +40,11 @@ public class AuthService {
 
     @Transactional
     public BaseResponseDto<LoginResponseDto> googleLogin(String googleAccessToken) {
-
-        return BaseResponseDto.of(SuccessCode.SUCCESS,
-                googleLogin.loginMethod(googleAccessToken));
+        return BaseResponseDto.of(SuccessCode.SUCCESS, googleLogin.loginMethod(googleAccessToken));
     }
     @Transactional
     public BaseResponseDto<LoginResponseDto> kakaoLogin(String kakaoAccessToken) {
-
-        return BaseResponseDto.of(SuccessCode.SUCCESS,
-                kakaoLogin.loginMethod(kakaoAccessToken));
-
-
+        return BaseResponseDto.of(SuccessCode.SUCCESS, kakaoLogin.loginMethod(kakaoAccessToken));
     }
     @Transactional
     public BaseResponseDto<Void> logout(Long userId) {

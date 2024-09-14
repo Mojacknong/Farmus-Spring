@@ -22,8 +22,6 @@ public class GoogleLogin extends SocialLogin{
                 socialToken,
                 "https://www.googleapis.com/oauth2/v2/userinfo",
                 GoogleUserResponseDto.class);
-
-
         return login(socialUserData);
     }
 

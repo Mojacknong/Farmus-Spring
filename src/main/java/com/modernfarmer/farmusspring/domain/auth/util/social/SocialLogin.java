@@ -35,23 +35,17 @@ abstract public class SocialLogin {
     public  LoginResponseDto login(SocialUserResponseDto socialUserData){
 
         verifySocialUserData(socialUserData);
-
         userRepository.findByUserNumber(String.valueOf(socialUserData.getId()))
                 .orElseGet(() -> {
-
                     socialSignUp(socialUserData);
                     return null;
                 });
-
         Optional<User> userLoginData = Optional.ofNullable(userRepository.findByUserNumber(String.valueOf(socialUserData.getId())).orElseThrow(() ->  new UserNotFoundException("해당 유저의 정보가 존재하지 않습니다.", UserErrorCode.NOT_FOUND_USER)));
-
         String refreshToken = jwtTokenProvider.createRefreshToken(userLoginData.get().getId());
         String accessToken = jwtTokenProvider.createAccessToken(
                 userLoginData.get().getId(),
                 String.valueOf(userLoginData.get().getRole()));
-
         redisManager.setValueByKey(String.valueOf(userLoginData.get().getId()), refreshToken);
-
         return LoginResponseDto.of(
                         accessToken,
                         refreshToken,
@@ -60,33 +54,27 @@ abstract public class SocialLogin {
     }
 
     private  <T> void verifySocialUserData(T data){
-
         if(data == null){
-
             BaseResponseDto.of(UserErrorCode.NOT_FOUND_USER, "요청한 소셜 유저 정보가 없습니다.");
         }
     }
 
     private  <T extends SocialUserResponseDto> void socialSignUp(T socialUserData) {
-
         User user = User.createUser(
                 "USER",
                 String.valueOf(socialUserData.getId()),
                 true
         );
         userRepository.save(user);
-
     }
 
     public  <T> T  getUserData(String accessToken, String apiUrl, Class<T> responseType){
-
         Mono<T> userInfoMono = webClient
                                     .get()
                                     .uri(apiUrl)
                                     .headers(headers -> headers.set("Authorization", accessToken))
                                     .retrieve()
                                     .bodyToMono(responseType);
-
         return userInfoMono.block();
     }
 

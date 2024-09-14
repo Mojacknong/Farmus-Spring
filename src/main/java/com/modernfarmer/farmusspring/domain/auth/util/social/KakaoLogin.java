@@ -23,8 +23,6 @@ public class KakaoLogin extends SocialLogin {
                 socialToken,
                 "https://kapi.kakao.com/v2/user/me",
                 KakaoUserResponseDto.class);
-
-
         return login(socialUserData);
     }
 }
