@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 
-@AllArgsConstructor
-@Getter
-public class SelectMyVeggieListDto {
-
-    public static List<SelectMyVeggieListResponse> processData(List<MyVeggie> myVeggieList){
-        return myVeggieList.stream()
-                .map(myVeggie -> SelectMyVeggieListResponse.of(myVeggie.getId(),myVeggie.getNickname()))
-                .toList();
-    }
-}
+//@AllArgsConstructor
+//@Getter
+//public class SelectMyVeggieListDto {
+//
+//    public static List<SelectMyVeggieListResponse> processData(List<MyVeggie> myVeggieList){
+//        return myVeggieList.stream()
+//                .map(myVeggie -> SelectMyVeggieListResponse.of(myVeggie.getId(),myVeggie.getNickname()))
+//                .toList();
+//    }
+//}
