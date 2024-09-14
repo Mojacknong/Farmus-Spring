@@ -58,10 +58,15 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .fetch();
 
         List<MissionPostCommentVo> comments = queryFactory
-                .select(new QMissionPostCommentVo(missionPostComment, user, Expressions.constant(userId)))
+                .select(new QMissionPostCommentVo(
+                        missionPostComment,
+                        user,
+                        Expressions.constant(userId),
+                        missionPostComment.id.in(reportCommentIds)
+                        ))
                 .from(missionPostComment)
                 .join(missionPostComment.missionPost, missionPost)
-                .where(missionPost.id.eq(missionPostId).and(missionPostComment.id.notIn(reportCommentIds)))
+                .where(missionPost.id.eq(missionPostId))
                 .fetch();
 
         Boolean isMyPost = queryFactory
