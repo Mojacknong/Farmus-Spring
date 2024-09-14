@@ -3,6 +3,7 @@ package com.modernfarmer.farmusspring.domain.auth.util.social;
 import com.modernfarmer.farmusspring.domain.auth.dto.LoginResponseDto;
 import com.modernfarmer.farmusspring.domain.auth.repository.RedisManager;
 import com.modernfarmer.farmusspring.domain.auth.util.social.dto.SocialUserResponseDto;
+import com.modernfarmer.farmusspring.domain.history.helper.HistoryHelper;
 import com.modernfarmer.farmusspring.domain.user.entity.User;
 import com.modernfarmer.farmusspring.domain.user.exception.custom.UserNotFoundException;
 import com.modernfarmer.farmusspring.domain.user.repository.UserRepository;
@@ -28,6 +29,7 @@ abstract public class SocialLogin {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisManager redisManager;
     private final UserRepository userRepository;
+    private final HistoryHelper historyHelper;
 
 
     public abstract LoginResponseDto loginMethod(String socialToken);
@@ -42,10 +44,9 @@ abstract public class SocialLogin {
                 });
         Optional<User> userLoginData = Optional.ofNullable(userRepository.findByUserNumber(String.valueOf(socialUserData.getId())).orElseThrow(() ->  new UserNotFoundException("해당 유저의 정보가 존재하지 않습니다.", UserErrorCode.NOT_FOUND_USER)));
         String refreshToken = jwtTokenProvider.createRefreshToken(userLoginData.get().getId());
-        String accessToken = jwtTokenProvider.createAccessToken(
-                userLoginData.get().getId(),
-                String.valueOf(userLoginData.get().getRole()));
+        String accessToken = jwtTokenProvider.createAccessToken(userLoginData.get().getId(), String.valueOf(userLoginData.get().getRole()));
         redisManager.setValueByKey(String.valueOf(userLoginData.get().getId()), refreshToken);
+        historyHelper.createUserHistory(userLoginData.get().getId());
         return LoginResponseDto.of(
                         accessToken,
                         refreshToken,
