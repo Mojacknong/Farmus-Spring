@@ -41,11 +41,12 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .select(Projections.constructor(
                         GetMissionPostListVo.class,
                         missionPost.stepNum,
-                        missionPost.image))
+                        missionPost.image,
+                        missionPost.id.in(reportMissionPostIds)))
                 .from(missionPost)
                 .join(missionPost.userFarmClub, userFarmClub)
                 .join(userFarmClub.farmClub, farmClub)
-                .where(farmClub.id.eq(farmClubId).and(missionPost.id.notIn(reportMissionPostIds)))
+                .where(farmClub.id.eq(farmClubId))
                 .fetch();
     }
 
@@ -58,10 +59,15 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .fetch();
 
         List<MissionPostCommentVo> comments = queryFactory
-                .select(new QMissionPostCommentVo(missionPostComment, user, Expressions.constant(userId)))
+                .select(new QMissionPostCommentVo(
+                        missionPostComment,
+                        user,
+                        Expressions.constant(userId),
+                        missionPostComment.id.in(reportCommentIds)
+                        ))
                 .from(missionPostComment)
                 .join(missionPostComment.missionPost, missionPost)
-                .where(missionPost.id.eq(missionPostId).and(missionPostComment.id.notIn(reportCommentIds)))
+                .where(missionPost.id.eq(missionPostId))
                 .fetch();
 
         Boolean isMyPost = queryFactory
@@ -81,11 +87,6 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .from(missionPostReport)
                 .where(missionPostReport.user.id.eq(userId))
                 .fetch();
-        List<Long> reportCommentIds = queryFactory
-                .select(missionPostCommentReport.missionPostComment.id)
-                .from(missionPostCommentReport)
-                .where(missionPostCommentReport.user.id.eq(userId))
-                .fetch();
 
         return queryFactory
                 .select(new QMissionPostVo(
@@ -96,8 +97,7 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                                 .where(missionPostLike.missionPost.eq(missionPost)),
                         JPAExpressions.select(missionPostComment.count())
                                 .from(missionPostComment)
-                                .where(missionPostComment.missionPost.eq(missionPost)
-                                        .and(missionPostComment.id.notIn(reportCommentIds))),
+                                .where(missionPostComment.missionPost.eq(missionPost)),
                         JPAExpressions.selectOne()
                                 .from(missionPostLike)
                                 .where(missionPostLike.missionPost.eq(missionPost)
