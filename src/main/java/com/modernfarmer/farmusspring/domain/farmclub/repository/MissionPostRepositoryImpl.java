@@ -41,11 +41,12 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .select(Projections.constructor(
                         GetMissionPostListVo.class,
                         missionPost.stepNum,
-                        missionPost.image))
+                        missionPost.image,
+                        missionPost.id.in(reportMissionPostIds)))
                 .from(missionPost)
                 .join(missionPost.userFarmClub, userFarmClub)
                 .join(userFarmClub.farmClub, farmClub)
-                .where(farmClub.id.eq(farmClubId).and(missionPost.id.notIn(reportMissionPostIds)))
+                .where(farmClub.id.eq(farmClubId))
                 .fetch();
     }
 
