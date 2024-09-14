@@ -42,8 +42,10 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "FROM diary AS d " +
             "JOIN FETCH d.myVeggie AS mv " +
             "LEFT JOIN  diary_like  AS dl ON dl.diary.id = d.id AND dl.user.id = :userId " +
-            "WHERE d.farmClub.id = :farmClubId AND d.isOpen = true "
-          )
+            "LEFT JOIN diary_report AS dr ON dr.diary.id = d.id AND dr.user.id = :userId " +
+            "WHERE d.farmClub.id = :farmClubId AND d.isOpen = true "+
+            "AND dr.id IS NULL"
+    )
     List<SortedMyLikeDiary> findDiaryByFarmClub(@Param("farmClubId") Long farmClubId, @Param("userId") Long userId);
 
     @Query("SELECT new com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary(d, " +
