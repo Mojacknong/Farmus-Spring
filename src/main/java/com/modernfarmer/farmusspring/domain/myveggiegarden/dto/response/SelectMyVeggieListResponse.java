@@ -15,6 +15,7 @@ public class SelectMyVeggieListResponse {
    // List<SelectMyVeggieListDto> simpleMyVeggieList;
    public Long myVeggieId;
    public String nickname;
+   public int userFarmClubId;
 
 
 }

@@ -54,9 +54,17 @@ public class MyVeggieGardenService {
     @Transactional
     public BaseResponseDto<List<SelectMyVeggieListResponse>> selectMyVeggieList(Long userId) {
         List<MyVeggie> myVeggieList = bringMyVeggieData(userId);
-        List<SelectMyVeggieListResponse> selectMyVeggieLists = SelectMyVeggieListDto.processData(myVeggieList);
+        List<SelectMyVeggieListResponse> selectMyVeggieLists = processSimpleVeggieData(myVeggieList);
         return BaseResponseDto.of(SuccessCode.SUCCESS,selectMyVeggieLists);
     }
+
+    public List<SelectMyVeggieListResponse> processSimpleVeggieData(List<MyVeggie> myVeggieList){
+        return myVeggieList.stream()
+                .map(myVeggie -> SelectMyVeggieListResponse.of(myVeggie.getId(),myVeggie.getNickname(), checkFarmClubAffiliation(myVeggie)))
+                .toList();
+    }
+
+
 
     @Transactional
     public BaseResponseDto<Void> deleteMyVeggie(DeleteMyVeggieRequest deleteMyVeggieRequest) {
@@ -83,7 +91,6 @@ public class MyVeggieGardenService {
 
     @Transactional
     public BaseResponseDto<List<MyDetailMyVeggie>> selectDetailMyVeggieList(Long userId) {
-
         List<MyVeggie> myVeggieList = bringMyVeggieData(userId);
         List<MyDetailMyVeggie> selectMyVeggieList = myDetailMyVeggieDto.processData(myVeggieList);
         return BaseResponseDto.of(SuccessCode.SUCCESS,selectMyVeggieList);
