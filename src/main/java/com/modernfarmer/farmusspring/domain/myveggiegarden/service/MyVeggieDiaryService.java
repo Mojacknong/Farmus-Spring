@@ -116,8 +116,7 @@ public class MyVeggieDiaryService {
     @Transactional
     public List<FarmClubDiary> findDiaryAccordingToFarmClub(Long farmClubId, Long userId) {
         List<SortedMyLikeDiary> diaryList = diaryRepository.findDiaryByFarmClub(farmClubId, userId);
-        List<FarmClubDiary> proccessData = proccessFarmClubData(diaryList);
-        return proccessData;
+        return proccessFarmClubData(diaryList);
     }
     private List<FarmClubDiary> proccessFarmClubData(List<SortedMyLikeDiary> diaryAllList){
         return diaryAllList.stream().map(allDiary -> {
@@ -195,7 +194,7 @@ public class MyVeggieDiaryService {
     }
     @Transactional
     public DiaryInteractionsDto selectComment(Long userId, Long diaryId)  {
-        List<DiaryComment> diaryCommentList = diaryRepository.findDiaryById(diaryId);
+        List<DiaryComment> diaryCommentList = diaryRepository.findDiaryByIdWithUserId(diaryId, userId);
         List<DiaryCommentContent> diaryCommentContent = DiaryCommentContent.processData(diaryCommentList, userId);
         int likeCount = diaryLikeRepository.findDiaryLikeCountById(diaryId);
         int commentCount = diaryCommentRepository.findDiaryCommentCountById(diaryId);
