@@ -63,8 +63,6 @@ public class MyVeggieDiaryService {
     ) throws IOException {
         String imageUrl = getImageUrl(multipartFile);
         Optional<UserFarmClub> userFarmClub = userFarmClubHelper.findFarmClubByMyVeggieId(myVeggieId);
-        log.info(String.valueOf(userFarmClub.map(UserFarmClub::getFarmClub).orElse(null)));
-
         userFarmClub.ifPresentOrElse(
                 farmClub -> addMyyVeggieDiary(
                         content,
