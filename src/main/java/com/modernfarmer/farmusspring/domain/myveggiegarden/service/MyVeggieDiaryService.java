@@ -126,11 +126,18 @@ public class MyVeggieDiaryService {
                     user,
                     DateManager.dotDateTime(allDiary.getDiary().getCreatedDate()),
                     allDiary.getDiary().getDiaryLikes().size(),
-                    allDiary.getDiary().getDiaryComments().size(),
+                    distinguishReportComment(allDiary.getDiary().getDiaryComments(), user.getId()),
                     allDiary.isMyLike(),
                     allDiary.isMyDiary(),
                     allDiary.getDiary().getState()
                     );}).toList();
+    }
+
+    private int distinguishReportComment(List<DiaryComment> diaryCommentList, Long userId) {
+        return (int) diaryCommentList.stream()
+                .filter(comment -> comment.getDiaryCommentReports().stream()
+                        .noneMatch(report -> report.getUser().getId().equals(userId)))
+                .count();
     }
     @Transactional
     public List<AllDairy> selectDiaryAll(MyVeggie myVeggie, Long userId) {
