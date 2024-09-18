@@ -21,7 +21,7 @@ public class RoutineScheduler {
     private final RoutineRepository routineRepository;
     private final MyVeggieRoutineService myVeggieRoutineService;
 
-    @Scheduled(cron = "2 0 0 * * *")
+    @Scheduled(cron =  "2 0 0 * * *")
     public void run() {
         List<Routine> routineList = routineRepository.findRoutine();
         addRoutine(routineList);
@@ -38,14 +38,14 @@ public class RoutineScheduler {
     private void complete(List<Routine> routineList){
         if (routineList != null && !routineList.isEmpty()) {
             routineList
-                    .forEach(routine -> myVeggieRoutineService.checkVeggieRoutine(routine.getId()));
+                    .forEach(routine -> myVeggieRoutineService.addRoutine(routine.getId(), routine.getPeriod()));
         }
     }
 
     private void notComplete(List<Routine> routineList){
         if (routineList != null && !routineList.isEmpty()) {
             routineList
-                    .forEach(routine -> myVeggieRoutineService.addRoutineOneDay(routine.getId()));
+                    .forEach(routine -> myVeggieRoutineService.addRoutine(routine.getId(),1));
         }
     }
 }
