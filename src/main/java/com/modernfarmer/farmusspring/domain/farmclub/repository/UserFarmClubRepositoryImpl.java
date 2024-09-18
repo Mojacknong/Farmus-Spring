@@ -59,10 +59,20 @@ public class UserFarmClubRepositoryImpl implements UserFarmClubRepositoryCustom 
 
 
     @Override
-    public void deleteFarmClubDomain(List<MyVeggie> myVeggieList){
+    public void deleteFarmClubDomain(List<MyVeggie> myVeggieList) {
         queryFactory
                 .delete(userFarmClub)
                 .where(userFarmClub.myVeggie.id.in(myVeggieList.stream().map(MyVeggie::getId).toList()))
                 .execute();
     }
+
+    @Override
+    public Optional<UserFarmClub> findFarmClubByMyVeggieId(Long myVeggieId) {
+        return Optional.ofNullable(queryFactory
+                .select(userFarmClub)
+                .from(userFarmClub)
+                .where(userFarmClub.myVeggie.id.eq(myVeggieId))
+                .fetchOne());
+    }
 }
+
