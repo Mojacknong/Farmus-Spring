@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -28,6 +30,10 @@ public class UserFarmClubHelper {
     public UserFarmClub findByUserIdAndFarmClubId(Long userId, Long farmClubId) {
         return userFarmClubRepository.findByUserIdAndFarmClubId(userId, farmClubId)
                 .orElseThrow(() -> new FarmClubEntityNotFoundException("해당 팜클럽에 가입한 유저가 아닙니다.", FarmClubErrorCode.USER_FARM_CLUB_NOT_FOUND));
+    }
+
+    public Optional<UserFarmClub> findFarmClubByMyVeggieId(Long myVeggieId){
+        return userFarmClubRepository.findFarmClubByMyVeggieId(myVeggieId);
     }
 
     public SuccessFarmClubVo getFarmClubRecord(Long userId, Long farmClubId) {

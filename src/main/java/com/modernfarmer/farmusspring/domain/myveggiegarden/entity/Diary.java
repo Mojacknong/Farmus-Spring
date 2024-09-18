@@ -61,13 +61,14 @@ public class Diary extends BaseEntity {
     @JoinColumn(name = "farm_club_id")
     private FarmClub farmClub;
 
-    public static Diary createDiary(String content, Boolean isOpen, String image, String state, MyVeggie myVeggie){
+    public static Diary createDiary(String content, Boolean isOpen, String image, String state, MyVeggie myVeggie, FarmClub farmClubId){
         Diary newDiary = Diary.builder()
                 .content(content)
                 .isOpen(isOpen)
                 .image(image)
                 .state(state)
                 .myVeggie(myVeggie)
+                .farmClub(farmClubId)
                 .build();
 
         myVeggie.addDiary(newDiary);

@@ -15,4 +15,6 @@ public interface UserFarmClubRepositoryCustom {
     SuccessFarmClubVo getFarmClubRecord(Long userId, Long farmClubId);
 
     void deleteFarmClubDomain(List<MyVeggie> myVeggieList);
+
+    Optional<UserFarmClub> findFarmClubByMyVeggieId(Long myVeggieId);
 }

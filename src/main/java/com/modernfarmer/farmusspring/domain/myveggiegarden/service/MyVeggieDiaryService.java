@@ -1,5 +1,8 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
+import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
+import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
+import com.modernfarmer.farmusspring.domain.farmclub.helper.UserFarmClubHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DiaryCommentReportDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DiaryDeleteDto;
@@ -44,7 +47,7 @@ public class MyVeggieDiaryService {
     private final MyVeggieRepository myVeggieRepository;
     private final UserService userService;
     private final DiaryRepository diaryRepository;
-    private final DiaryCommentRepository diaryCommentRepository;
+    private final UserFarmClubHelper userFarmClubHelper;
     private final DiaryLikeRepository diaryLikeRepository;
     private final UserHelper userHelper;
     private final DiaryCommentHelper diaryCommentHelper;
@@ -59,12 +62,24 @@ public class MyVeggieDiaryService {
             Long myVeggieId
     ) throws IOException {
         String imageUrl = getImageUrl(multipartFile);
-        addMyyVeggieDiary(
-                content,
-                isOpen,
-                imageUrl,
-                state,
-                myVeggieId
+        Optional<UserFarmClub> userFarmClub = userFarmClubHelper.findFarmClubByMyVeggieId(myVeggieId);
+        userFarmClub.ifPresentOrElse(
+                farmClub -> addMyyVeggieDiary(
+                        content,
+                        isOpen,
+                        imageUrl,
+                        state,
+                        myVeggieId,
+                        farmClub.getFarmClub()
+                ),
+                () -> addMyyVeggieDiary(
+                        content,
+                        isOpen,
+                        imageUrl,
+                        state,
+                        myVeggieId,
+                        null
+                )
         );
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
@@ -126,11 +141,18 @@ public class MyVeggieDiaryService {
                     user,
                     DateManager.dotDateTime(allDiary.getDiary().getCreatedDate()),
                     allDiary.getDiary().getDiaryLikes().size(),
-                    allDiary.getDiary().getDiaryComments().size(),
+                    distinguishReportComment(allDiary.getDiary().getDiaryComments(), user.getId()),
                     allDiary.isMyLike(),
                     allDiary.isMyDiary(),
                     allDiary.getDiary().getState()
                     );}).toList();
+    }
+
+    private int distinguishReportComment(List<DiaryComment> diaryCommentList, Long userId) {
+        return (int) diaryCommentList.stream()
+                .filter(comment -> comment.getDiaryCommentReports().stream()
+                        .noneMatch(report -> report.getUser().getId().equals(userId)))
+                .count();
     }
     @Transactional
     public List<AllDairy> selectDiaryAll(MyVeggie myVeggie, Long userId) {
@@ -197,10 +219,11 @@ public class MyVeggieDiaryService {
         List<DiaryComment> diaryCommentList = diaryRepository.findDiaryByIdWithUserId(diaryId, userId);
         List<DiaryCommentContent> diaryCommentContent = DiaryCommentContent.processData(diaryCommentList, userId);
         int likeCount = diaryLikeRepository.findDiaryLikeCountById(diaryId);
-        int commentCount = diaryCommentRepository.findDiaryCommentCountById(diaryId);
         Optional<DiaryLike> diaryLike = diaryLikeRepository.findDiaryLikeByDiaryIdAndUserId(diaryId, userId);
-        return DiaryInteractionsDto.of(diaryCommentContent,likeCount,commentCount, diaryLike.isPresent());
+        return DiaryInteractionsDto.of(diaryCommentContent,likeCount,diaryCommentList.size(), diaryLike.isPresent());
     }
+
+
     public void insertComment(String content, User user, Diary diary){
         DiaryComment diaryComment = DiaryComment.createDiaryComment(content, diary, user);
         diary.addDiaryComment(diaryComment);
@@ -244,7 +267,8 @@ public class MyVeggieDiaryService {
             Boolean isOpen,
             String image,
             String state,
-            Long myVeggieId
+            Long myVeggieId,
+            FarmClub farmClub
     ){
         MyVeggie myVeggie = myVeggieGardenService.getMyVeggie(myVeggieId);
         Diary newDiary = Diary.createDiary(
@@ -252,7 +276,8 @@ public class MyVeggieDiaryService {
                 isOpen,
                 image,
                 state,
-                myVeggie
+                myVeggie,
+                farmClub
         );
         myVeggie.addDiary(newDiary);
     }
