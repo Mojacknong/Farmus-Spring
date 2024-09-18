@@ -92,10 +92,10 @@ public class MyVeggieRoutineService {
         routineRepository.updateRoutineComplete(routine.get(), routineId);
     }
     @Transactional
-    public void addRoutineOneDay(Long routineId) {
+    public void addRoutine(Long routineId, int day) {
         Optional<Routine> routine = routineRepository.findRoutineById(routineId);
         verifyRoutine(routine);
-        Date addedDate = DateManager.addDate(routine.get().getDate(), 1);
+        Date addedDate = DateManager.addDate(routine.get().getDate(), day);
         addVeggieRoutine(routine.get().getMyVeggie().getId(), routine.get().getContent(), routine.get().getPeriod(), addedDate);
     }
     public void verifyRoutine(Optional<Routine> routine){
