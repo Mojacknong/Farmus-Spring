@@ -204,10 +204,11 @@ public class MyVeggieDiaryService {
         List<DiaryComment> diaryCommentList = diaryRepository.findDiaryByIdWithUserId(diaryId, userId);
         List<DiaryCommentContent> diaryCommentContent = DiaryCommentContent.processData(diaryCommentList, userId);
         int likeCount = diaryLikeRepository.findDiaryLikeCountById(diaryId);
-        int commentCount = diaryCommentRepository.findDiaryCommentCountById(diaryId);
         Optional<DiaryLike> diaryLike = diaryLikeRepository.findDiaryLikeByDiaryIdAndUserId(diaryId, userId);
-        return DiaryInteractionsDto.of(diaryCommentContent,likeCount,commentCount, diaryLike.isPresent());
+        return DiaryInteractionsDto.of(diaryCommentContent,likeCount,diaryCommentList.size(), diaryLike.isPresent());
     }
+
+
     public void insertComment(String content, User user, Diary diary){
         DiaryComment diaryComment = DiaryComment.createDiaryComment(content, diary, user);
         diary.addDiaryComment(diaryComment);
