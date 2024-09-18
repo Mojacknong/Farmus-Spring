@@ -1,5 +1,8 @@
 package com.modernfarmer.farmusspring.domain.myveggiegarden.service;
 
+import com.modernfarmer.farmusspring.domain.farmclub.entity.FarmClub;
+import com.modernfarmer.farmusspring.domain.farmclub.entity.UserFarmClub;
+import com.modernfarmer.farmusspring.domain.farmclub.helper.UserFarmClubHelper;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.SortedMyLikeDiary;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DiaryCommentReportDto;
 import com.modernfarmer.farmusspring.domain.myveggiegarden.dto.request.DiaryDeleteDto;
@@ -44,7 +47,7 @@ public class MyVeggieDiaryService {
     private final MyVeggieRepository myVeggieRepository;
     private final UserService userService;
     private final DiaryRepository diaryRepository;
-    private final DiaryCommentRepository diaryCommentRepository;
+    private final UserFarmClubHelper userFarmClubHelper;
     private final DiaryLikeRepository diaryLikeRepository;
     private final UserHelper userHelper;
     private final DiaryCommentHelper diaryCommentHelper;
@@ -59,12 +62,26 @@ public class MyVeggieDiaryService {
             Long myVeggieId
     ) throws IOException {
         String imageUrl = getImageUrl(multipartFile);
-        addMyyVeggieDiary(
-                content,
-                isOpen,
-                imageUrl,
-                state,
-                myVeggieId
+        Optional<UserFarmClub> userFarmClub = userFarmClubHelper.findFarmClubByMyVeggieId(myVeggieId);
+        log.info(String.valueOf(userFarmClub.map(UserFarmClub::getFarmClub).orElse(null)));
+
+        userFarmClub.ifPresentOrElse(
+                farmClub -> addMyyVeggieDiary(
+                        content,
+                        isOpen,
+                        imageUrl,
+                        state,
+                        myVeggieId,
+                        farmClub.getFarmClub()
+                ),
+                () -> addMyyVeggieDiary(
+                        content,
+                        isOpen,
+                        imageUrl,
+                        state,
+                        myVeggieId,
+                        null
+                )
         );
         return BaseResponseDto.of(SuccessCode.SUCCESS,null);
     }
@@ -252,7 +269,8 @@ public class MyVeggieDiaryService {
             Boolean isOpen,
             String image,
             String state,
-            Long myVeggieId
+            Long myVeggieId,
+            FarmClub farmClub
     ){
         MyVeggie myVeggie = myVeggieGardenService.getMyVeggie(myVeggieId);
         Diary newDiary = Diary.createDiary(
@@ -260,7 +278,8 @@ public class MyVeggieDiaryService {
                 isOpen,
                 image,
                 state,
-                myVeggie
+                myVeggie,
+                farmClub
         );
         myVeggie.addDiary(newDiary);
     }
