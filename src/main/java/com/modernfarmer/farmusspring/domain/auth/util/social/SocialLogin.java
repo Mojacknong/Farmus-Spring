@@ -40,13 +40,14 @@ abstract public class SocialLogin {
         userRepository.findByUserNumber(String.valueOf(socialUserData.getId()))
                 .orElseGet(() -> {
                     socialSignUp(socialUserData);
+
                     return null;
                 });
         Optional<User> userLoginData = Optional.ofNullable(userRepository.findByUserNumber(String.valueOf(socialUserData.getId())).orElseThrow(() ->  new UserNotFoundException("해당 유저의 정보가 존재하지 않습니다.", UserErrorCode.NOT_FOUND_USER)));
         String refreshToken = jwtTokenProvider.createRefreshToken(userLoginData.get().getId());
         String accessToken = jwtTokenProvider.createAccessToken(userLoginData.get().getId(), String.valueOf(userLoginData.get().getRole()));
         redisManager.setValueByKey(String.valueOf(userLoginData.get().getId()), refreshToken);
-        historyHelper.createUserHistory(userLoginData.get().getId());
+
         return LoginResponseDto.of(
                         accessToken,
                         refreshToken,
@@ -67,6 +68,7 @@ abstract public class SocialLogin {
                 true
         );
         userRepository.save(user);
+        historyHelper.createUserHistory(user.getId());
     }
 
     public  <T> T  getUserData(String accessToken, String apiUrl, Class<T> responseType){
