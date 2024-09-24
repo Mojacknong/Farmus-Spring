@@ -11,11 +11,10 @@ public record MissionPostCommentVo(
         String profileImage,
         String date,
         String content,
-        Boolean isMyComment,
-        Boolean isReported
+        Boolean isMyComment
 ) {
     @QueryProjection
-    public MissionPostCommentVo(MissionPostComment missionPostComment, User user, Long myId, Boolean isReported)
+    public MissionPostCommentVo(MissionPostComment missionPostComment, User user, Long myId)
     {
         this(
                 missionPostComment.getId(),
@@ -23,8 +22,7 @@ public record MissionPostCommentVo(
                 user.getProfileImage(),
                 missionPostComment.getCreatedDate().toString(),
                 missionPostComment.getComment(),
-                user.getId().equals(myId),
-                isReported
+                user.getId().equals(myId)
         );
     }
 }
