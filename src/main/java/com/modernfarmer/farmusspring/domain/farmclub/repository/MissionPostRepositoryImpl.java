@@ -62,12 +62,11 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .select(new QMissionPostCommentVo(
                         missionPostComment,
                         user,
-                        Expressions.constant(userId),
-                        missionPostComment.id.in(reportCommentIds)
+                        Expressions.constant(userId)
                         ))
                 .from(missionPostComment)
                 .join(missionPostComment.missionPost, missionPost)
-                .where(missionPost.id.eq(missionPostId))
+                .where(missionPost.id.eq(missionPostId).and(missionPostComment.id.notIn(reportCommentIds)))
                 .fetch();
 
         Boolean isMyPost = queryFactory
@@ -88,6 +87,12 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                 .where(missionPostReport.user.id.eq(userId))
                 .fetch();
 
+        List<Long> reportCommentIds = queryFactory
+                .select(missionPostCommentReport.missionPostComment.id)
+                .from(missionPostCommentReport)
+                .where(missionPostCommentReport.user.id.eq(userId))
+                .fetch();
+
         return queryFactory
                 .select(new QMissionPostVo(
                         missionPost,
@@ -97,7 +102,8 @@ public class MissionPostRepositoryImpl implements MissionPostRepositoryCustom {
                                 .where(missionPostLike.missionPost.eq(missionPost)),
                         JPAExpressions.select(missionPostComment.count())
                                 .from(missionPostComment)
-                                .where(missionPostComment.missionPost.eq(missionPost)),
+                                .where(missionPostComment.missionPost.eq(missionPost)
+                                        .and(missionPostComment.id.notIn(reportCommentIds))),
                         JPAExpressions.selectOne()
                                 .from(missionPostLike)
                                 .where(missionPostLike.missionPost.eq(missionPost)

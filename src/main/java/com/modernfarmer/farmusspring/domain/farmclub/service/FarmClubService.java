@@ -116,6 +116,7 @@ public class FarmClubService {
     @Transactional
     public SuccessFarmClubResponseDto successFarmClub(Long farmClubId, Long userId) {
         UserFarmClub userFarmClub = userFarmClubHelper.findByUserIdAndFarmClubId(userId, farmClubId);
+        userFarmClubHelper.checkUserFarmClubComplete(userFarmClub);
         userFarmClub.updateComplete();
         SuccessFarmClubVo farmClubRecord = userFarmClubHelper.getFarmClubRecord(userId, farmClubId);
         String period = historyHelper.createFarmClubHistoryDetail(userId, userFarmClub.getId(), userFarmClub.getFarmClub().getVeggieInfoId());

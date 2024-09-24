@@ -39,4 +39,10 @@ public class UserFarmClubHelper {
     public SuccessFarmClubVo getFarmClubRecord(Long userId, Long farmClubId) {
         return userFarmClubRepository.getFarmClubRecord(userId, farmClubId);
     }
+
+    public void checkUserFarmClubComplete(UserFarmClub userFarmClub) {
+        if (userFarmClub.isComplete()) {
+            throw new FarmClubEntityNotFoundException("이미 완료된 팜클럽입니다.", FarmClubErrorCode.USER_FARM_CLUB_COMPLETE);
+        }
+    }
 }
