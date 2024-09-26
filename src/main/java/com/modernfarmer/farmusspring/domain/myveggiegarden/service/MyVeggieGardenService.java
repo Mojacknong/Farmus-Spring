@@ -60,7 +60,7 @@ public class MyVeggieGardenService {
 
     public List<SelectMyVeggieListResponse> processSimpleVeggieData(List<MyVeggie> myVeggieList){
         return myVeggieList.stream()
-                .map(myVeggie -> SelectMyVeggieListResponse.of(myVeggie.getId(),myVeggie.getNickname(), checkFarmClubAffiliation(myVeggie)))
+                .map(myVeggie -> SelectMyVeggieListResponse.of(myVeggie.getId(),myVeggie.getNickname(), checkFarmClubAffiliationAndFarmClubId(myVeggie)))
                 .toList();
     }
 
@@ -83,7 +83,7 @@ public class MyVeggieGardenService {
                         myVeggie.getVeggieImage(),
                         DateManager.parsingDotDate(myVeggie.getBirth()),
                         DateManager.calculateDay(myVeggie.getBirth(), new Date()),
-                        checkFarmClubAffiliation(myVeggie),
+                        checkFarmClubAffiliationAndCurrentStop(myVeggie),
                         veggieInfo.getSteps().size()
                         ));
     }
@@ -113,10 +113,16 @@ public class MyVeggieGardenService {
         myVeggieHelper.deleteMyVeggie(requestDto.myVeggieId());
     }
 
-    public int checkFarmClubAffiliation(MyVeggie myVeggie){
+    public int checkFarmClubAffiliationAndCurrentStop(MyVeggie myVeggie){
         if(myVeggie.getUserFarmClub() == null || myVeggie.getUserFarmClub().isComplete())
             return -1;
         return myVeggie.getUserFarmClub().getCurrentStep();
+    }
+
+    public Long checkFarmClubAffiliationAndFarmClubId(MyVeggie myVeggie){
+        if(myVeggie.getUserFarmClub() == null || myVeggie.getUserFarmClub().isComplete())
+            return (long) -1;
+        return myVeggie.getUserFarmClub().getFarmClub().getId();
     }
 
 
